@@ -1,5 +1,6 @@
 using Dapper.API.Data.Dapper;
 using Dapper.API.Logging;
+using Dapper.API.Middlewares;
 using Dapper.API.Models.AppSettings;
 using Serilog;
 
@@ -27,6 +28,8 @@ try
 
     #region Data Access Dependency Injection
     builder.Services.AddSingleton<IDapperHandler, DapperHandler>();
+
+    builder.Services.AddTransient<ExceptionHandlerMiddleware>();
     #endregion
 
 
@@ -34,6 +37,8 @@ try
     builder.Services.AddSwaggerGen();
 
     var app = builder.Build();
+
+    app.UseMiddleware<ExceptionHandlerMiddleware>();
 
     // Configure the HTTP request pipeline.
     if (app.Environment.IsDevelopment())
@@ -43,6 +48,7 @@ try
     }
 
     app.UseHttpsRedirection();
+
 
     app.UseAuthorization();
 
