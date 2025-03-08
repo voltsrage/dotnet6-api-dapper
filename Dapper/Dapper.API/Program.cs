@@ -1,3 +1,6 @@
+using Autofac.Extensions.DependencyInjection;
+using Autofac;
+using Dapper.API.Configure;
 using Dapper.API.Data.Dapper;
 using Dapper.API.Logging;
 using Dapper.API.Middlewares;
@@ -38,8 +41,12 @@ try
     builder.Services.AddSingleton<IDapperHandler, DapperHandler>();
 
     builder.Services.AddTransient<CustomExceptionsHandlerMiddleware>();
+    #endregion
 
-    builder.Services.AddScoped<IRedisService,RedisService>();
+    #region AutoFac
+    builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+
+    builder.Host.ConfigureContainer<ContainerBuilder>(builder => builder.RegisterModule(new AutofacModuleRegister()));
     #endregion
 
 
