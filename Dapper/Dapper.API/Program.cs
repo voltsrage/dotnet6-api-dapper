@@ -5,10 +5,12 @@ using Dapper.API.Data.Dapper;
 using Dapper.API.Logging;
 using Dapper.API.Middlewares;
 using Dapper.API.Models.AppSettings;
-using Dapper.API.Services;
-using Dapper.API.Services.Interfaces;
 using Serilog;
 using StackExchange.Redis;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
 
 Log.Logger = new LoggerConfiguration()
     .CreateBootstrapLogger();
@@ -21,6 +23,25 @@ try
 
     builder.Services.AddControllers();
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+    #region JWT  
+    JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+    builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        .AddJwtBearer(options =>
+        {
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = false,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
+                ValidateLifetime = true,
+                ClockSkew = TimeSpan.Zero,
+                IssuerSigningKey = new SymmetricSecurityKey(
+                    Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:SecretForKey"]))
+            };
+        });
+    #endregion
 
     #region Serilog
     builder.Host.UseSerilog(SeriLogger.Configure);
@@ -41,6 +62,8 @@ try
     builder.Services.AddSingleton<IDapperHandler, DapperHandler>();
 
     builder.Services.AddTransient<CustomExceptionsHandlerMiddleware>();
+
+    builder.Services.AddSingleton<ICreateToken,CreateToken>();
     #endregion
 
     #region AutoFac
@@ -48,7 +71,6 @@ try
 
     builder.Host.ConfigureContainer<ContainerBuilder>(builder => builder.RegisterModule(new AutofacModuleRegister()));
     #endregion
-
 
     #region Swagger
     builder.Services.AddEndpointsApiExplorer();
