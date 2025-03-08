@@ -71,6 +71,93 @@
             - userId: The user ID extracted from the token if valid
             </returns>
         </member>
+        <member name="M:Dapper.API.Data.Repositories.HotelRepository.AddHotel(Dapper.API.Entities.HotelEntity)">
+            <summary>
+            Add a new hotel
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.HotelRepository.DeleteHotel(System.Int32)">
+            <summary>
+            Delete a hotel
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.HotelRepository.GetAll">
+            <summary>
+            Get all the hotels
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.HotelRepository.GetHotelById(System.Int32)">
+            <summary>
+            Get a hotel by it's id
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.HotelRepository.GetHotelByName(System.String)">
+            <summary>
+            Get a hotel by it's name
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.HotelRepository.UpdateHotel(Dapper.API.Entities.HotelEntity)">
+            <summary>
+            Update a hotel
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Dapper.API.Data.Repositories.Interfaces.IHotelRepository">
+            <summary>
+            Repository Interface for the hotels
+            </summary>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.IHotelRepository.AddHotel(Dapper.API.Entities.HotelEntity)">
+            <summary>
+            Add a new hotel
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.IHotelRepository.GetAll">
+            <summary>
+            Get all the hotels
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.IHotelRepository.DeleteHotel(System.Int32)">
+            <summary>
+            Delete a hotel
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.IHotelRepository.GetHotelById(System.Int32)">
+            <summary>
+            Get a hotel by it's id
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.IHotelRepository.GetHotelByName(System.String)">
+            <summary>
+            Get a hotel by it's name
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.IHotelRepository.UpdateHotel(Dapper.API.Entities.HotelEntity)">
+            <summary>
+            Update a hotel
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
         <member name="T:Dapper.API.Dtos.Common.BaseModel">
             <summary>
             Base model for dtos
