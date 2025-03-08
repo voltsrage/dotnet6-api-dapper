@@ -50,8 +50,10 @@ try
     #endregion
 
 
+    #region Swagger
     builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen();
+    builder.Services.ConfigureSwagger(builder.Configuration);
+    #endregion Swagger
 
     var app = builder.Build();
 
