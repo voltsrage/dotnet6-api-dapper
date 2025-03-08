@@ -1,0 +1,399 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Dapper.API</name>
+    </assembly>
+    <members>
+        <member name="M:Dapper.API.Configure.CreateToken.CreateTokenMethod(System.String,Dapper.API.Models.TokenData)">
+            <summary>
+            User specific token
+            </summary>
+            <param name="userId"></param>
+            <param name="data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Configure.CreateToken.CreateTokenMethod(System.String,System.Nullable{System.Int32},Dapper.API.Models.TokenData)">
+            <summary>
+            Device specific token
+            </summary>
+            <param name="userId"></param>
+            <param name="deviceId"></param>
+            <param name="data"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Dapper.API.Configure.ICreateToken">
+            <summary>
+            Interface for token creation and validation operations.
+            Provides methods to create, read, and validate JWT tokens for authentication and authorization.
+            </summary>
+        </member>
+        <member name="M:Dapper.API.Configure.ICreateToken.CreateTokenMethod(System.String,Dapper.API.Models.TokenData)">
+            <summary>
+            Creates a JWT token for a user with optional custom claims data.
+            </summary>
+            <param name="userId">The unique identifier of the user for whom the token is created.</param>
+            <param name="data">Optional additional data to include in the token claims.</param>
+            <returns>A JWT token string that can be used for authentication.</returns>
+        </member>
+        <member name="M:Dapper.API.Configure.ICreateToken.CreateTokenMethod(System.String,System.Nullable{System.Int32},Dapper.API.Models.TokenData)">
+            <summary>
+            Creates a JWT token for a user on a specific device with optional custom claims data.
+            Useful for scenarios requiring device-specific authentication.
+            </summary>
+            <param name="userId">The unique identifier of the user for whom the token is created.</param>
+            <param name="deviceId">The identifier of the device from which the user is authenticating.</param>
+            <param name="data">Optional additional data to include in the token claims.</param>
+            <returns>A JWT token string that can be used for authentication.</returns>
+        </member>
+        <member name="M:Dapper.API.Configure.ICreateToken.GetPrincipal(System.String)">
+            <summary>
+            Extracts the claims principal from a JWT token.
+            This can be used to access the claims within the token for authorization decisions.
+            </summary>
+            <param name="token">The JWT token string to parse.</param>
+            <returns>A ClaimsPrincipal object containing the claims from the token.</returns>
+        </member>
+        <member name="M:Dapper.API.Configure.ICreateToken.ReadToken(System.String)">
+            <summary>
+            Decodes a JWT token to access its raw information without validating it.
+            </summary>
+            <param name="token">The JWT token string to read.</param>
+            <returns>A JwtSecurityToken object representing the decoded token.</returns>
+        </member>
+        <member name="M:Dapper.API.Configure.ICreateToken.ValidateToken(System.String)">
+            <summary>
+            Validates a JWT token to ensure it is properly signed and not expired.
+            </summary>
+            <param name="token">The JWT token string to validate.</param>
+            <returns>
+            A tuple containing:
+            - isValid: Boolean indicating if the token is valid
+            - userId: The user ID extracted from the token if valid
+            </returns>
+        </member>
+        <member name="T:Dapper.API.Enums.SystemCodeEnum">
+            <summary>
+            Allows developer to create error codes for system logic in a central place
+            </summary>
+        </member>
+        <member name="T:Dapper.API.Exceptions.BaseException">
+            <summary>
+            Base exception for all exceptions 
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Exceptions.BaseException.ErrorCode">
+            <summary>
+            The error code for the exception
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Exceptions.BaseException.Component">
+            <summary>
+            The component that the exception occurred in
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Exceptions.BaseException.Function">
+            <summary>
+            The function that the exception occurred in
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Exceptions.BaseException.TraceId">
+            <summary>
+            The trace ID for the exception
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Exceptions.BaseException.AdditionalData">
+            <summary>
+            Optional additional data for the exception
+            </summary>
+        </member>
+        <member name="M:Dapper.API.Exceptions.BaseException.#ctor(System.String,System.String,System.String,System.String,System.Exception,System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            Used to create an instance of the AuthBaseException
+            </summary>
+            <param name="message"></param>
+            <param name="errorCode"></param>
+            <param name="component"></param>
+            <param name="function"></param>
+            <param name="innerException"></param>
+            <param name="additionalData"></param>
+        </member>
+        <member name="T:Dapper.API.Exceptions.RepositoryException">
+            <summary>
+            Repository Layer Exceptions
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Exceptions.RepositoryException.Repository">
+            <summary>
+            The repository that the exception occurred in
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Exceptions.RepositoryException.Operation">
+            <summary>
+            The operation that the exception occurred in
+            </summary>
+        </member>
+        <member name="M:Dapper.API.Exceptions.RepositoryException.#ctor(System.String,System.String,System.String,System.String,System.Exception,System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            Used to create an instance of the RepositoryException
+            </summary>
+            <param name="message"></param>
+            <param name="repository"></param>
+            <param name="function"></param>
+            <param name="operation"></param>
+            <param name="innerException"></param>
+            <param name="additionalData"></param>
+        </member>
+        <member name="T:Dapper.API.Exceptions.ValidationException">
+            <summary>
+            Validation exception
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Exceptions.ValidationException.Errors">
+            <summary>
+            The validation errors
+            </summary>
+        </member>
+        <member name="M:Dapper.API.Exceptions.ValidationException.#ctor(System.String,System.String,System.String,System.Collections.Generic.IEnumerable{Dapper.API.Models.ValidationError},System.Exception)">
+            <summary>
+            Used to create a new instance of the <see cref="T:Dapper.API.Exceptions.ValidationException"/> class
+            </summary>
+            <param name="message"></param>
+            <param name="validator"></param>
+            <param name="function"></param>
+            <param name="errors"></param>
+            <param name="innerException"></param>
+        </member>
+        <member name="T:Dapper.API.Helpers.DateTimeHelper">
+            <summary>
+            Helper class for date and time operations
+            </summary>
+        </member>
+        <member name="M:Dapper.API.Helpers.DateTimeHelper.GetCurrentTimestamp">
+            <summary>
+            Converts the current date and time to a Unix timestamp
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Helpers.DateTimeHelper.TimestampToDateTime(System.Int64)">
+            <summary>
+            Converts a Unix timestamp to a DateTime object
+            </summary>
+            <param name="timestamp"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Helpers.DateTimeHelper.FormatDateTimeInvariant(System.DateTime)">
+            <summary>
+            Formats a DateTime object to a string in the format "yyyy-MM-dd HH:mm:ss"
+            </summary>
+            <param name="dateTime"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Dapper.API.Models.ErrorDetail">
+            <summary>
+            Provides detailed information about an error that occurred in the application.
+            Used for structured error responses in API calls.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Models.ErrorDetail.Code">
+            <summary>
+            A unique code identifying the error type, often corresponding to system error codes.
+            Can be used for error classification and client-side handling logic.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Models.ErrorDetail.Message">
+            <summary>
+            A human-readable description of the error.
+            Should be clear and informative without exposing sensitive system details.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Models.ErrorDetail.Component">
+            <summary>
+            The component or module where the error occurred.
+            Helps in identifying the subsystem responsible for the error.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Models.ErrorDetail.Function">
+            <summary>
+            The specific function or operation that was being performed when the error occurred.
+            Provides context for where in the execution flow the error happened.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Models.ErrorDetail.AdditionalData">
+            <summary>
+            A dictionary containing additional context-specific information about the error.
+            Can include timestamps, request IDs, or other diagnostic information.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Models.ErrorDetail.ValidationErrors">
+            <summary>
+            A collection of validation errors when the error is related to invalid input.
+            Each error specifies which property failed validation and why.
+            Only populated for validation-related errors.
+            </summary>
+        </member>
+        <member name="T:Dapper.API.Models.ErrorResponse">
+            <summary>
+            Error response model
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Models.ErrorResponse.Error">
+            <summary>
+            Error details
+            </summary>
+        </member>
+        <member name="T:Dapper.API.Models.Response">
+            <summary>
+            Response wrapper for API Endpoints
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Models.Response.IsSuccess">
+            <summary>
+            是否成功回傳
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Models.Response.ErrorMessage">
+            <summary>
+            IsSuccess為false，顯示錯誤訊息
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Models.Response.SuccessMessage">
+            <summary>
+            IsSuccess為true，顯示訊息
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Models.Response.ErrorCode">
+            <summary>
+            Custom error code
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Models.Response.StatusCode">
+            <summary>
+            Http Status Code
+            </summary>
+        </member>
+        <member name="T:Dapper.API.Models.Response`1">
+            <summary>
+            回傳資料格式，泛型
+            </summary>
+            <typeparam name="T">資料內容</typeparam>
+        </member>
+        <member name="P:Dapper.API.Models.Response`1.Content">
+            <summary>
+            資料內容
+            </summary>
+        </member>
+        <member name="T:Dapper.API.Models.TokenData">
+            <summary>
+            Properties returned in the token
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Models.TokenData.Email">
+            <summary>
+            Gets or sets the user's email address. This is often used as the username for login.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Models.TokenData.AdditionalProperties">
+            <summary>
+            Adtional properties that can be added to the token.
+            </summary>
+        </member>
+        <member name="T:Dapper.API.Models.ValidationError">
+            <summary>
+            Represents a validation error for a specific property in a model or entity.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Models.ValidationError.Property">
+            <summary>
+            The name of the property that failed validation.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Models.ValidationError.Error">
+            <summary>
+            The validation error message describing why the property is invalid.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Models.ValidationError.AttemptedValue">
+            <summary>
+            The value that was attempted to be assigned to the property but failed validation.
+            This helps in debugging by showing what was actually submitted.
+            </summary>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.IRedisService.AddValueToRedis(System.String,System.String,System.TimeSpan)">
+            <summary>
+            Add entry to redis
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+            <param name="expiryTime"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.IRedisService.GetValueFromRedis(System.String)">
+            <summary>
+            Get value from redis if exists
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.IRedisService.UpsertRedisValue(System.String,System.String,System.TimeSpan)">
+            <summary>
+            Create new redis entry if not exist, update if already there
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+            <param name="expiryTime"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.IRedisService.DeleteRedisEntry(System.String)">
+            <summary>
+            Delete redis entry by key
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.IRedisService.AddToRedisList(System.String,System.String)">
+            <summary>
+            Add value to redis list
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.IRedisService.RemoveFromRedisList(System.String,System.String)">
+            <summary>
+            Remove value from redis list
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.IRedisService.CheckRedisListContainsValue(System.String,System.String)">
+            <summary>
+            Check if value exists in redis list
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.IRedisService.GetListOfValuesByPattern(System.String)">
+            <summary>
+            Use pattern to get list of values from redis
+            </summary>
+            <param name="pattern"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.IRedisService.GetValuesFromRedisList(System.String)">
+            <summary>
+            Get values from redis list
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.IRedisService.GetKeysAsync(System.String)">
+            <summary>
+            Get list of keys from redis using pattern
+            </summary>
+            <param name="pattern"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
