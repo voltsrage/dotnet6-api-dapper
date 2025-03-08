@@ -71,6 +71,168 @@
             - userId: The user ID extracted from the token if valid
             </returns>
         </member>
+        <member name="T:Dapper.API.Dtos.Common.BaseModel">
+            <summary>
+            Base model for dtos
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Common.BaseModel.Id">
+            <summary>
+            Numeric Id of the entity/model
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Common.BaseModel.EntityStatusId">
+            <summary>
+            The status of the entity
+            1 = Active, 2 = Inactive, 3 = DeletedForEveryone, 4 = Pending, 5 = Archived, 6 = Suspended, 7 = DeletedForMe
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Common.BaseModel.CreateAt">
+            <summary>
+            The datetime the record was created
+            </summary>
+        </member>
+        <member name="T:Dapper.API.Dtos.Hotels.AddEditHotel">
+            <summary>
+            Use for adding or editing a hotel.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Hotels.AddEditHotel.Name">
+            <summary>
+            Gets or sets the name of the hotel.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Hotels.AddEditHotel.Address">
+            <summary>
+            Gets or sets the address of the hotel.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Hotels.AddEditHotel.City">
+            <summary>
+            Gets or sets the city where the hotel is located.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Hotels.AddEditHotel.Country">
+            <summary>
+            Gets or sets the country where the hotel is located.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Hotels.AddEditHotel.PhoneNumber">
+            <summary>
+            Gets or sets the phone number of the hotel.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Hotels.AddEditHotel.Email">
+            <summary>
+            Gets or sets the email address of the hotel.
+            </summary>
+        </member>
+        <member name="T:Dapper.API.Dtos.Hotels.Hotel">
+            <summary>
+            Represents a hotel data transfer object.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Hotels.Hotel.Name">
+            <summary>
+            Gets or sets the name of the hotel.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Hotels.Hotel.Address">
+            <summary>
+            Gets or sets the address of the hotel.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Hotels.Hotel.City">
+            <summary>
+            Gets or sets the city where the hotel is located.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Hotels.Hotel.Country">
+            <summary>
+            Gets or sets the country where the hotel is located.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Hotels.Hotel.PhoneNumber">
+            <summary>
+            Gets or sets the phone number of the hotel.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Hotels.Hotel.Email">
+            <summary>
+            Gets or sets the email address of the hotel.
+            </summary>
+        </member>
+        <member name="T:Dapper.API.Entities.Common.BaseModel">
+            <summary>
+            Contains common properties for all entities
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Entities.Common.BaseModel.Id">
+            <summary>
+            Numeric Id of the entity/model
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Entities.Common.BaseModel.EntityStatusId">
+            <summary>
+            The status of the entity
+            1 = Active, 2 = Inactive, 3 = DeletedForEveryone, 4 = Pending, 5 = Archived, 6 = Suspended, 7 = DeletedForMe
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Entities.Common.BaseModel.CreateAt">
+            <summary>
+            The datetime the record was created
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Entities.Common.BaseModel.CreateBy">
+            <summary>
+            The person who created the record
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Entities.Common.BaseModel.UpdateAt">
+            <summary>
+            The datetime the record was updated
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Entities.Common.BaseModel.UpdateBy">
+            <summary>
+            The person who last updated the record
+            </summary>
+        </member>
+        <member name="T:Dapper.API.Entities.HotelEntity">
+            <summary>
+            Represents a hotel entity.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Entities.HotelEntity.Name">
+            <summary>
+            Gets or sets the name of the hotel.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Entities.HotelEntity.Address">
+            <summary>
+            Gets or sets the address of the hotel.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Entities.HotelEntity.City">
+            <summary>
+            Gets or sets the city where the hotel is located.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Entities.HotelEntity.Country">
+            <summary>
+            Gets or sets the country where the hotel is located.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Entities.HotelEntity.PhoneNumber">
+            <summary>
+            Gets or sets the phone number of the hotel.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Entities.HotelEntity.Email">
+            <summary>
+            Gets or sets the email address of the hotel.
+            </summary>
+        </member>
         <member name="T:Dapper.API.Enums.SystemCodeEnum">
             <summary>
             Allows developer to create error codes for system logic in a central place
