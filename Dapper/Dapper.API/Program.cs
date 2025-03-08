@@ -29,7 +29,7 @@ try
     #region Data Access Dependency Injection
     builder.Services.AddSingleton<IDapperHandler, DapperHandler>();
 
-    builder.Services.AddTransient<ExceptionHandlerMiddleware>();
+    builder.Services.AddTransient<CustomExceptionsHandlerMiddleware>();
     #endregion
 
 
@@ -38,7 +38,7 @@ try
 
     var app = builder.Build();
 
-    app.UseMiddleware<ExceptionHandlerMiddleware>();
+    app.UseMiddleware<CustomExceptionsHandlerMiddleware>();
 
     // Configure the HTTP request pipeline.
     if (app.Environment.IsDevelopment())
