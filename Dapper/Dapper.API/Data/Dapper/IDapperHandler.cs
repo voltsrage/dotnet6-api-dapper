@@ -40,5 +40,15 @@ namespace Dapper.API.Data.Dapper
         Task<T> ReturnRowSql<T>(string sql, DynamicParameters? param = null, string conString = "MSSQLConnectionLocal", CancellationToken cancellationToken = default);
 
         Task<T> ReturnRowSqlInTransaction<T>(string sql, IDbTransaction transaction, DynamicParameters? param = null, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Executes a SQL query that returns multiple result sets
+        /// </summary>
+        /// <param name="sql">The SQL query to execute</param>
+        /// <param name="param">The parameters for the query</param>
+        /// <param name="conString">Optional connection string name</param>
+        /// <param name="cancellationToken">Optional cancellation token</param>
+        /// <returns>A GridReader for reading multiple result sets</returns>
+        Task<SqlMapper.GridReader> QueryMultipleAsync(string sql, DynamicParameters param, string conString = "MSSQLConnectionLocal", CancellationToken cancellationToken = default);
     }
 }

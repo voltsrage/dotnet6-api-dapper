@@ -1,5 +1,6 @@
 ﻿using Dapper.API.Dtos.Hotels;
 using Dapper.API.Entities;
+using Dapper.API.Models;
 
 namespace Dapper.API.Data.Repositories.Interfaces
 {
@@ -16,10 +17,13 @@ namespace Dapper.API.Data.Repositories.Interfaces
         Task<int> AddHotel(HotelEntity model);
 
         /// <summary>
-        /// Get all the hotels
+        /// Gets paginated list of hotels
         /// </summary>
-        /// <returns></returns>
-        Task<List<Hotel>> GetAll();
+        /// <param name="page">Current page (1-based indexing)</param>
+        /// <param name="pageSize">Number of records per page</param>
+        /// <param name="cancellationToken">Cancellation token for async operations</param>
+        /// <returns>Paginated result containing hotels and metadata</returns>
+        Task<PaginatedResult<Hotel>> GetAll(int page = 1, int pageSize = 10, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Delete a hotel

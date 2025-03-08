@@ -3,6 +3,7 @@ using Dapper.API.Data.Repositories.Interfaces;
 using Dapper.API.Dtos.Hotels;
 using Dapper.API.Entities;
 using Dapper.API.Exceptions;
+using Dapper.API.Models;
 using System.Text;
 
 namespace Dapper.API.Data.Repositories
@@ -137,37 +138,69 @@ namespace Dapper.API.Data.Repositories
         }
 
         /// <summary>
-        /// Get all the hotels
+        /// Gets paginated list of hotels
         /// </summary>
-        /// <returns></returns>
-        public async Task<List<Hotel>> GetAll()
+        /// <param name="page">Current page (1-based indexing)</param>
+        /// <param name="pageSize">Number of records per page</param>
+        /// <param name="cancellationToken">Cancellation token for async operations</param>
+        /// <returns>Paginated result containing hotels and metadata</returns>
+        public async Task<PaginatedResult<Hotel>> GetAll(int page = 1, int pageSize = 10, CancellationToken cancellationToken = default)
         {
             try
             {
                 _logger.LogInformation($"Processing HotelBooking.API.Data.HotelRepository {nameof(GetAll)}");
 
-                DynamicParameters param = new DynamicParameters();
+                // Validate and normalize pagination parameters
+                page = Math.Max(1, page);
+                pageSize = Math.Clamp(pageSize, 1, 100); // Limiting maximum page size
+
+                // Calculate pagination offset
+                int offset = (page - 1) * pageSize;
+
+                // Parameters for the query
+                var parameters = new DynamicParameters();
+                parameters.Add("@Offset", offset);
+                parameters.Add("@PageSize", pageSize);
 
                 StringBuilder sql = new StringBuilder();
 
-                sql.Append(@"SELECT Id, Name, Address, Country, PhoneNumber, Email, CreateAt FROM Hotels");
+                sql.Append(@"SELECT Id, Name, Address, Country, PhoneNumber, Email, CreatedAt
+                                FROM Hotels
+                                ORDER BY Id
+                                OFFSET @Offset ROWS
+                                FETCH NEXT @PageSize ROWS ONLY; ");
 
-                var res = await _dataAccess.ReturnListSql<Hotel>(sql.ToString(), param);
+                sql.Append(@"SELECT COUNT(Id) FROM Hotels;");
 
-                return res.ToList();
+                // Using connection pooling implicitly through Dapper
+                using var multiQuery = await _dataAccess.QueryMultipleAsync(
+                    sql.ToString(),
+                    parameters,
+                    cancellationToken: cancellationToken);
+
+                // Read both result sets
+                var hotels = (await multiQuery.ReadAsync<Hotel>()).ToList();
+                var totalCount = await multiQuery.ReadFirstOrDefaultAsync<int>();
+
+                // Create paginated result with metadata
+                return new PaginatedResult<Hotel>(
+                    items: hotels,
+                    totalCount: totalCount,
+                    page: page,
+                    pageSize: pageSize);
 
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Something went wrong in the HotelBooking.API.Data.HotelRepository {nameof(GetAll)}");
+                _logger.LogError(ex, "Error retrieving paginated hotels - Page: {Page}, PageSize: {PageSize}", page, pageSize);
 
+                // Using a more specific exception type with structured information
                 throw new RepositoryException(
-                    "Failed to get all Hotels",
+                    message: "Failed to retrieve paginated hotels",
                     nameof(HotelRepository),
-                    nameof(GetAll),
-                    "GetAll",
-                    ex,
-                    null);
+                   nameof(GetAll),
+                    operation: "GetAllHotels",
+                    innerException: ex);
             }
         }
 

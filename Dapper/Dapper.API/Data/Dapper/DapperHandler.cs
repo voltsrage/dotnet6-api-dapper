@@ -1,4 +1,5 @@
-﻿using Dapper.API.Models.AppSettings;
+﻿using Dapper.API.Exceptions.Scheduler.API.Exceptions;
+using Dapper.API.Models.AppSettings;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -326,5 +327,45 @@ namespace Dapper.API.Data.Dapper
         }
 
         #endregion
+
+        /// <summary>
+        /// Executes a SQL query that returns multiple result sets
+        /// </summary>
+        /// <param name="sql">The SQL query to execute</param>
+        /// <param name="parameters">The parameters for the query</param>
+        /// <param name="connectionName">Optional connection string name</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>A grid reader for accessing multiple result sets</returns>
+        public async Task<SqlMapper.GridReader> QueryMultipleAsync(
+            string sql,
+            DynamicParameters parameters = null,
+            string connectionName = "DefaultConnection",
+            CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                using var connection = GetConnection(connectionName);
+
+                // Using OpenAsync to respect cancellation token
+                await connection.OpenAsync(cancellationToken);
+
+                // Create a command definition with the cancellation token
+                var commandDefinition = new CommandDefinition(
+                    commandText: sql,
+                    parameters: parameters,
+                    commandType: CommandType.Text,
+                    cancellationToken: cancellationToken);
+
+                // Return the GridReader (note: caller must dispose)
+                return await connection.QueryMultipleAsync(commandDefinition);
+            }
+            catch (Exception ex) when (ex is not OperationCanceledException)
+            {
+                throw new DataAccessException(
+                    "Database query operation failed",
+                    "QueryMultiple",
+                    ex);
+            }
+        }
     }
 }
