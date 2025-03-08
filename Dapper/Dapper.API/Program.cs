@@ -2,7 +2,10 @@ using Dapper.API.Data.Dapper;
 using Dapper.API.Logging;
 using Dapper.API.Middlewares;
 using Dapper.API.Models.AppSettings;
+using Dapper.API.Services;
+using Dapper.API.Services.Interfaces;
 using Serilog;
+using StackExchange.Redis;
 
 Log.Logger = new LoggerConfiguration()
     .CreateBootstrapLogger();
@@ -20,6 +23,11 @@ try
     builder.Host.UseSerilog(SeriLogger.Configure);
     #endregion Serilog
 
+    #region Redis
+    var RedisHost = builder.Configuration["ConnectionStrings:RedisHost"];
+    builder.Services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(RedisHost));
+    #endregion
+
     #region AppSettings Configuration
     var connectionStrings = new ConnectionStrings();
     builder.Configuration.Bind(key: nameof(ConnectionStrings), connectionStrings);
@@ -30,6 +38,8 @@ try
     builder.Services.AddSingleton<IDapperHandler, DapperHandler>();
 
     builder.Services.AddTransient<CustomExceptionsHandlerMiddleware>();
+
+    builder.Services.AddScoped<IRedisService,RedisService>();
     #endregion
 
 
