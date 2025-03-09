@@ -1,8 +1,13 @@
-﻿namespace Dapper.API.Models.Pagination
+﻿
+
+using Swashbuckle.AspNetCore.Annotations;
+using System.Text.Json.Serialization;
+
+namespace Dapper.API.Models.Pagination
 {
     /// <summary>
     /// Represents a request for paginated data
-    /// </summary>
+    /// </summary>   
     public class PaginationRequest
     {
         private int _page = 1;
@@ -30,5 +35,17 @@
         /// Optional search term to filter results
         /// </summary>
         public string? SearchTerm { get; set; }
+
+        /// <summary>
+        /// Number of records to skip
+        /// </summary>
+        [JsonIgnore]
+        public int Skip => (Page - 1) * PageSize;
+
+        /// <summary>
+        /// Indicates if a search term is provided
+        /// </summary>
+        [JsonIgnore]
+        public bool HasSearch => !string.IsNullOrWhiteSpace(SearchTerm);
     }
 }
