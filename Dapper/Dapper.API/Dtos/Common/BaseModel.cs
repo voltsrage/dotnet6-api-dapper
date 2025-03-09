@@ -19,6 +19,6 @@
         /// <summary>
         /// The datetime the record was created
         /// </summary>
-        public DateTime? CreateAt { get; set; }
+        public DateTime? CreatedAt { get; set; }
     }
 }

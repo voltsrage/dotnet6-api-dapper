@@ -19,24 +19,24 @@
         /// <summary>
         /// The datetime the record was created
         /// </summary>
-        public DateTime? CreateAt { get; set; }
+        public DateTime? CreatedAt { get; set; }
 
         /// <summary>
         /// The person who created the record
         /// </summary>
 
-        public int CreateBy { get; set; }
+        public int CreatedBy { get; set; }
 
 
         /// <summary>
         /// The datetime the record was updated
         /// </summary>
-        public DateTime? UpdateAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
 
         /// <summary>
         /// The person who last updated the record
         /// </summary>
 
-        public int UpdateBy { get; set; }
+        public int UpdatedBy { get; set; }
     }
 }

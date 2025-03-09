@@ -39,10 +39,10 @@ namespace Dapper.API.Data.Repositories
                 param.Add("Country", model.Country);
                 param.Add("PhoneNumber", model.PhoneNumber);
                 param.Add("Email", model.Email);
-                param.Add("CreateAt", DateTime.UtcNow);
+                param.Add("CreatedAt", DateTime.UtcNow);
 
                 // When authentication is added 0 while be the UserId of the user who created the Hotel
-                param.Add("CreateBy", 0);
+                param.Add("CreatedBy", 0);
 
                 StringBuilder sql = new StringBuilder();
 
@@ -55,8 +55,8 @@ namespace Dapper.API.Data.Repositories
                         Country, 
                         PhoneNumber, 
                         Email, 
-                        CreateAt, 
-                        CreateBy
+                        CreatedAt, 
+                        CreatedBy
                     ) 
                     Values 
                     (
@@ -66,8 +66,8 @@ namespace Dapper.API.Data.Repositories
                         @Country, 
                         @PhoneNumber, 
                         @Email, 
-                        @CreateAt, 
-                        @CreateBy
+                        @CreatedAt, 
+                        @CreatedBy
                     );  
                     SELECT CAST(SCOPE_IDENTITY() as int)");
                 // The last query tells SQL Server to return id of the recently created Hotel
@@ -112,7 +112,7 @@ namespace Dapper.API.Data.Repositories
 
                 StringBuilder sql = new StringBuilder();
 
-                sql.Append(@"DELETE FROM Hotels WHERE Id = @Id");
+                sql.Append(@"UPDATE Hotels SET EntityStatusId = 3 WHERE Id = @Id");
 
                 var deleteResult = await _dataAccess.ExecuteWithoutReturnSql(sql.ToString(), param);
 
@@ -164,7 +164,7 @@ namespace Dapper.API.Data.Repositories
 
                 StringBuilder sql = new StringBuilder();
 
-                sql.Append(@"SELECT Id, Name, Address, Country, PhoneNumber, Email, CreatedAt
+                sql.Append(@"SELECT Id, Name, Address, City, Country, PhoneNumber, Email, CreatedAt, EntityStatusId
                                 FROM Hotels
                                 ORDER BY Id
                                 OFFSET @Offset ROWS
@@ -173,21 +173,21 @@ namespace Dapper.API.Data.Repositories
                 sql.Append(@"SELECT COUNT(Id) FROM Hotels;");
 
                 // Using connection pooling implicitly through Dapper
-                using var multiQuery = await _dataAccess.QueryMultipleAsync(
+                using (var multiQuery = await _dataAccess.QueryMultipleAsync(
                     sql.ToString(),
                     parameters,
-                    cancellationToken: cancellationToken);
-
-                // Read both result sets
-                var hotels = (await multiQuery.ReadAsync<Hotel>()).ToList();
-                var totalCount = await multiQuery.ReadFirstOrDefaultAsync<int>();
-
-                // Create paginated result with metadata
-                return new PaginatedResult<Hotel>(
-                    items: hotels,
-                    totalCount: totalCount,
-                    page: page,
-                    pageSize: pageSize);
+                    cancellationToken: cancellationToken))
+                {
+                    // Read both result sets
+                    var hotels = (await multiQuery.ReadAsync<Hotel>()).ToList();
+                    var totalCount = await multiQuery.ReadFirstOrDefaultAsync<int>();
+                    // Create paginated result with metadata
+                    return new PaginatedResult<Hotel>(
+                        items: hotels,
+                        totalCount: totalCount,
+                        page: page,
+                        pageSize: pageSize);
+                }
 
             }
             catch (Exception ex)
@@ -221,7 +221,7 @@ namespace Dapper.API.Data.Repositories
 
                 StringBuilder sql = new StringBuilder();
 
-                sql.Append(@"SELECT Id, Name, Address, Country, PhoneNumber, Email, CreateAt FROM Hotels WHERE Id = @Id");
+                sql.Append(@"SELECT Id, Name, Address, City, Country, PhoneNumber, Email, CreatedAt, EntityStatusId FROM Hotels WHERE Id = @Id");
 
                 var res = await _dataAccess.ReturnRowSql<Hotel>(sql.ToString(), param);
 
@@ -259,7 +259,7 @@ namespace Dapper.API.Data.Repositories
 
                 StringBuilder sql = new StringBuilder();
 
-                sql.Append(@"SELECT Id, Name, Address, Country, PhoneNumber, Email, CreateAt FROM Hotels WHERE Name = @Name");
+                sql.Append(@"SELECT Id, Name, Address, City, Country, PhoneNumber, Email, CreatedAt, EntityStatusId FROM Hotels WHERE Name = @Name");
 
                 var res = await _dataAccess.ReturnRowSql<Hotel>(sql.ToString(), param);
 
@@ -300,10 +300,10 @@ namespace Dapper.API.Data.Repositories
                 param.Add("Country", model.Country);
                 param.Add("PhoneNumber", model.PhoneNumber);
                 param.Add("Email", model.Email);
-                param.Add("UpdateAt", DateTime.UtcNow);
+                param.Add("UpdatedAt", DateTime.UtcNow);
 
                 // When authentication is added 0 while be the UserId of the user who created the Hotel
-                param.Add("UpdateBy", 0);
+                param.Add("UpdatedBy", 0);
 
                 StringBuilder sql = new StringBuilder();
 
@@ -314,8 +314,8 @@ namespace Dapper.API.Data.Repositories
                       ,[Country] = @Country
                       ,[PhoneNumber] = @PhoneNumber
                       ,[Email] = @Email
-                      ,[UpdateAt] = @UpdateAt
-                      ,[UpdateBy] = @UpdateBy
+                      ,[UpdatedAt] = @UpdatedAt
+                      ,[UpdatedBy] = @UpdatedBy
                  WHERE Id = @Id");
 
                 var updateResult = await _dataAccess.ExecuteWithoutReturnSql(sql.ToString(), param);

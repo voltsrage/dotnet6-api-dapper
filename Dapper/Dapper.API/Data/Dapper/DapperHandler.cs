@@ -339,12 +339,12 @@ namespace Dapper.API.Data.Dapper
         public async Task<SqlMapper.GridReader> QueryMultipleAsync(
             string sql,
             DynamicParameters parameters = null,
-            string connectionName = "DefaultConnection",
+            string connectionName = "MSSQLConnectionLocal",
             CancellationToken cancellationToken = default)
         {
             try
             {
-                using var connection = GetConnection(connectionName);
+                var connection = GetConnection(connectionName);
 
                 // Using OpenAsync to respect cancellation token
                 await connection.OpenAsync(cancellationToken);

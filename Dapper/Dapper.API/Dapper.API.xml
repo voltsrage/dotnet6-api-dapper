@@ -71,6 +71,36 @@
             - userId: The user ID extracted from the token if valid
             </returns>
         </member>
+        <member name="M:Dapper.API.Controllers.HotelsController.GetHotels(System.Int32,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Get all hotels
+            </summary>
+            <param name="page"></param>
+            <param name="pageSize"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Controllers.HotelsController.GetHotelById(System.Int32)">
+            <summary>
+            Get hotel by id
+            </summary>
+            <param name="hotelId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Controllers.HotelsController.GetHotelByName(System.String)">
+            <summary>
+            Get hotel by name
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Controllers.HotelsController.DeleteHotelById(System.Int32)">
+            <summary>
+            Delete hotel by id
+            </summary>
+            <param name="hotelId"></param>
+            <returns></returns>
+        </member>
         <member name="M:Dapper.API.Data.Dapper.DapperHandler.QueryMultipleAsync(System.String,Dapper.DynamicParameters,System.String,System.Threading.CancellationToken)">
             <summary>
             Executes a SQL query that returns multiple result sets
@@ -200,7 +230,7 @@
             1 = Active, 2 = Inactive, 3 = DeletedForEveryone, 4 = Pending, 5 = Archived, 6 = Suspended, 7 = DeletedForMe
             </summary>
         </member>
-        <member name="P:Dapper.API.Dtos.Common.BaseModel.CreateAt">
+        <member name="P:Dapper.API.Dtos.Common.BaseModel.CreatedAt">
             <summary>
             The datetime the record was created
             </summary>
@@ -291,22 +321,22 @@
             1 = Active, 2 = Inactive, 3 = DeletedForEveryone, 4 = Pending, 5 = Archived, 6 = Suspended, 7 = DeletedForMe
             </summary>
         </member>
-        <member name="P:Dapper.API.Entities.Common.BaseModel.CreateAt">
+        <member name="P:Dapper.API.Entities.Common.BaseModel.CreatedAt">
             <summary>
             The datetime the record was created
             </summary>
         </member>
-        <member name="P:Dapper.API.Entities.Common.BaseModel.CreateBy">
+        <member name="P:Dapper.API.Entities.Common.BaseModel.CreatedBy">
             <summary>
             The person who created the record
             </summary>
         </member>
-        <member name="P:Dapper.API.Entities.Common.BaseModel.UpdateAt">
+        <member name="P:Dapper.API.Entities.Common.BaseModel.UpdatedAt">
             <summary>
             The datetime the record was updated
             </summary>
         </member>
-        <member name="P:Dapper.API.Entities.Common.BaseModel.UpdateBy">
+        <member name="P:Dapper.API.Entities.Common.BaseModel.UpdatedBy">
             <summary>
             The person who last updated the record
             </summary>
