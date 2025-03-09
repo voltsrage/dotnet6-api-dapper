@@ -15,6 +15,8 @@ using Microsoft.AspNetCore.ResponseCompression;
 using System.IO.Compression;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Serialization;
+using System.Reflection;
+using Dapper.API.Helpers;
 
 Log.Logger = new LoggerConfiguration()
     .CreateBootstrapLogger();
@@ -111,6 +113,8 @@ try
     builder.Services.AddTransient<CustomExceptionsHandlerMiddleware>();
 
     builder.Services.AddSingleton<ICreateToken,CreateToken>();
+
+    builder.Services.AddScoped<IHelperFunctions, HelperFunctions>();
     #endregion
 
     #region AutoFac
@@ -126,6 +130,8 @@ try
 
     builder.Services.AddHttpClient();
     builder.Services.AddHttpContextAccessor();
+
+    builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
     var app = builder.Build();
 

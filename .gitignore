@@ -10,6 +10,8 @@
 *.userosscache
 *.sln.docstates
 
+appsettings.json
+
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
@@ -362,3 +364,4 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /.vs/Industreet/FileContentIndex/a2ca7ad0-8080-49cb-be3e-f2956647dcc1.vsidx
+/Dapper/Dapper.API/appsettings.json
