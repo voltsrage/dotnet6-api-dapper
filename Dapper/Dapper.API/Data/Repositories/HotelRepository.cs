@@ -2,6 +2,7 @@
 using Dapper.API.Data.Repositories.Interfaces;
 using Dapper.API.Dtos.Hotels;
 using Dapper.API.Entities;
+using Dapper.API.Enums.StandardEnums;
 using Dapper.API.Exceptions;
 using Dapper.API.Models.Pagination;
 using System.Text;
@@ -142,9 +143,10 @@ namespace Dapper.API.Data.Repositories
         /// </summary>
         /// <param name="page">Current page (1-based indexing)</param>
         /// <param name="pageSize">Number of records per page</param>
+        /// <param name="searchTerm"></param>
         /// <param name="cancellationToken">Cancellation token for async operations</param>
         /// <returns>Paginated result containing hotels and metadata</returns>
-        public async Task<PaginatedResult<Hotel>> GetAll(int page = 1, int pageSize = 10, CancellationToken cancellationToken = default)
+        public async Task<PaginatedResult<Hotel>> GetAll(int page = 1, int pageSize = 10, string? searchTerm = null, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -164,13 +166,41 @@ namespace Dapper.API.Data.Repositories
 
                 StringBuilder sql = new StringBuilder();
 
-                sql.Append(@"SELECT Id, Name, Address, City, Country, PhoneNumber, Email, CreatedAt, EntityStatusId
-                                FROM Hotels
-                                ORDER BY Id
+                string baseCondition = $" EntityStatusId = {(int)EntityStatusEnum.Active} ";
+
+                string searchCondition = string.Empty;
+                if (!string.IsNullOrEmpty(searchTerm))
+                {
+                    // Use consistent parameter name and add parameter only once
+                    parameters.Add("@SearchTerm", $"%{searchTerm.ToLower()}%");
+
+                    searchCondition = @" AND (
+                        LOWER(Name) LIKE @SearchTerm OR 
+                        LOWER(Address) LIKE @SearchTerm OR
+                        LOWER(City) LIKE @SearchTerm OR
+                        LOWER(Country) LIKE @SearchTerm OR
+                        LOWER(Email) LIKE @SearchTerm
+                    )";
+                }
+
+                sql.Append(@$"SELECT Id, Name, Address, City, Country, PhoneNumber, Email, CreatedAt, EntityStatusId
+                                FROM Hotels WHERE {baseCondition} ");
+
+                if (!string.IsNullOrEmpty(searchTerm))
+                {
+                    sql.Append(searchCondition);
+                }        
+
+                sql.Append(@" ORDER BY Id
                                 OFFSET @Offset ROWS
                                 FETCH NEXT @PageSize ROWS ONLY; ");
 
-                sql.Append(@"SELECT COUNT(Id) FROM Hotels;");
+                sql.Append(@$"SELECT COUNT(Id) FROM Hotels WHERE {baseCondition} ");
+
+                if (!string.IsNullOrEmpty(searchTerm))
+                {
+                    sql.Append(searchCondition);
+                }
 
                 // Using connection pooling implicitly through Dapper
                 using (var multiQuery = await _dataAccess.QueryMultipleAsync(
@@ -181,6 +211,7 @@ namespace Dapper.API.Data.Repositories
                     // Read both result sets
                     var hotels = (await multiQuery.ReadAsync<Hotel>()).ToList();
                     var totalCount = await multiQuery.ReadFirstOrDefaultAsync<int>();
+
                     // Create paginated result with metadata
                     return new PaginatedResult<Hotel>(
                         items: hotels,
