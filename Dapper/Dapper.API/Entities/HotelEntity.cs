@@ -39,7 +39,7 @@ namespace Dapper.API.Entities
         /// <summary>
         /// Gets or sets the phone number of the hotel.
         /// </summary>
-        [StringLength(15)]
+        [StringLength(20)]
         public string PhoneNumber { get; set; } = string.Empty;
 
         /// <summary>

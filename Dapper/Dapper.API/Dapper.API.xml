@@ -71,6 +71,26 @@
             - userId: The user ID extracted from the token if valid
             </returns>
         </member>
+        <member name="M:Dapper.API.Data.Dapper.DapperHandler.QueryMultipleAsync(System.String,Dapper.DynamicParameters,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Executes a SQL query that returns multiple result sets
+            </summary>
+            <param name="sql">The SQL query to execute</param>
+            <param name="parameters">The parameters for the query</param>
+            <param name="connectionName">Optional connection string name</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>A grid reader for accessing multiple result sets</returns>
+        </member>
+        <member name="M:Dapper.API.Data.Dapper.IDapperHandler.QueryMultipleAsync(System.String,Dapper.DynamicParameters,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Executes a SQL query that returns multiple result sets
+            </summary>
+            <param name="sql">The SQL query to execute</param>
+            <param name="param">The parameters for the query</param>
+            <param name="conString">Optional connection string name</param>
+            <param name="cancellationToken">Optional cancellation token</param>
+            <returns>A GridReader for reading multiple result sets</returns>
+        </member>
         <member name="M:Dapper.API.Data.Repositories.HotelRepository.AddHotel(Dapper.API.Entities.HotelEntity)">
             <summary>
             Add a new hotel
@@ -85,11 +105,14 @@
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Dapper.API.Data.Repositories.HotelRepository.GetAll">
+        <member name="M:Dapper.API.Data.Repositories.HotelRepository.GetAll(System.Int32,System.Int32,System.Threading.CancellationToken)">
             <summary>
-            Get all the hotels
+            Gets paginated list of hotels
             </summary>
-            <returns></returns>
+            <param name="page">Current page (1-based indexing)</param>
+            <param name="pageSize">Number of records per page</param>
+            <param name="cancellationToken">Cancellation token for async operations</param>
+            <returns>Paginated result containing hotels and metadata</returns>
         </member>
         <member name="M:Dapper.API.Data.Repositories.HotelRepository.GetHotelById(System.Int32)">
             <summary>
@@ -124,11 +147,14 @@
             <param name="model"></param>
             <returns></returns>
         </member>
-        <member name="M:Dapper.API.Data.Repositories.Interfaces.IHotelRepository.GetAll">
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.IHotelRepository.GetAll(System.Int32,System.Int32,System.Threading.CancellationToken)">
             <summary>
-            Get all the hotels
+            Gets paginated list of hotels
             </summary>
-            <returns></returns>
+            <param name="page">Current page (1-based indexing)</param>
+            <param name="pageSize">Number of records per page</param>
+            <param name="cancellationToken">Cancellation token for async operations</param>
+            <returns>Paginated result containing hotels and metadata</returns>
         </member>
         <member name="M:Dapper.API.Data.Repositories.Interfaces.IHotelRepository.DeleteHotel(System.Int32)">
             <summary>
@@ -325,6 +351,51 @@
             Allows developer to create error codes for system logic in a central place
             </summary>
         </member>
+        <member name="F:Dapper.API.Enums.SystemCodeEnum.HotelCreated">
+            <summary>
+            Hotel created successfully
+            </summary>
+        </member>
+        <member name="F:Dapper.API.Enums.SystemCodeEnum.HotelUpdated">
+            <summary>
+            Hotel updated successfully
+            </summary>
+        </member>
+        <member name="F:Dapper.API.Enums.SystemCodeEnum.HotelDeleted">
+            <summary>
+            Hotel deleted successfully
+            </summary>
+        </member>
+        <member name="F:Dapper.API.Enums.SystemCodeEnum.HotelNotFound">
+            <summary>
+            Hotel not found
+            </summary>
+        </member>
+        <member name="F:Dapper.API.Enums.SystemCodeEnum.HotelAlreadyExists">
+            <summary>
+            Hotel already exists
+            </summary>
+        </member>
+        <member name="F:Dapper.API.Enums.SystemCodeEnum.InvalidHotelData">
+            <summary>
+            Invalid hotel data
+            </summary>
+        </member>
+        <member name="F:Dapper.API.Enums.SystemCodeEnum.HotelHasActiveRooms">
+            <summary>
+            Unable to delete hotel with active rooms
+            </summary>
+        </member>
+        <member name="F:Dapper.API.Enums.SystemCodeEnum.InvalidHotelContactInfo">
+            <summary>
+            Invalid hotel contact information
+            </summary>
+        </member>
+        <member name="F:Dapper.API.Enums.SystemCodeEnum.HotelCapacityExceeded">
+            <summary>
+            Hotel capacity exceeded
+            </summary>
+        </member>
         <member name="T:Dapper.API.Exceptions.BaseException">
             <summary>
             Base exception for all exceptions 
@@ -365,6 +436,57 @@
             <param name="function"></param>
             <param name="innerException"></param>
             <param name="additionalData"></param>
+        </member>
+        <member name="T:Dapper.API.Exceptions.Scheduler.API.Exceptions.DataAccessException">
+            <summary>
+            Exception thrown when data access operations fail at the database level
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Exceptions.Scheduler.API.Exceptions.DataAccessException.Operation">
+            <summary>
+            Gets the database operation that failed
+            </summary>
+        </member>
+        <member name="M:Dapper.API.Exceptions.Scheduler.API.Exceptions.DataAccessException.#ctor">
+            <summary>
+            Initializes a new instance of the DataAccessException class
+            </summary>
+        </member>
+        <member name="M:Dapper.API.Exceptions.Scheduler.API.Exceptions.DataAccessException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the DataAccessException class with a specified error message
+            </summary>
+            <param name="message">The error message that explains the reason for the exception</param>
+        </member>
+        <member name="M:Dapper.API.Exceptions.Scheduler.API.Exceptions.DataAccessException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the DataAccessException class with a specified error message
+            and a reference to the inner exception that is the cause of this exception
+            </summary>
+            <param name="message">The error message that explains the reason for the exception</param>
+            <param name="innerException">The exception that is the cause of the current exception</param>
+        </member>
+        <member name="M:Dapper.API.Exceptions.Scheduler.API.Exceptions.DataAccessException.#ctor(System.String,System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the DataAccessException class with operation information
+            </summary>
+            <param name="message">The error message that explains the reason for the exception</param>
+            <param name="operation">The database operation that failed</param>
+            <param name="innerException">The exception that is the cause of the current exception</param>
+        </member>
+        <member name="M:Dapper.API.Exceptions.Scheduler.API.Exceptions.DataAccessException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Initializes a new instance of the DataAccessException class with serialized data
+            </summary>
+            <param name="info">The SerializationInfo that holds the serialized object data</param>
+            <param name="context">The StreamingContext that contains contextual information</param>
+        </member>
+        <member name="M:Dapper.API.Exceptions.Scheduler.API.Exceptions.DataAccessException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Sets the SerializationInfo with information about the exception
+            </summary>
+            <param name="info">The SerializationInfo that holds the serialized object data</param>
+            <param name="context">The StreamingContext that contains contextual information</param>
         </member>
         <member name="T:Dapper.API.Exceptions.RepositoryException">
             <summary>
@@ -490,6 +612,56 @@
             Error details
             </summary>
         </member>
+        <member name="T:Dapper.API.Models.Pagination.PaginatedResult`1">
+            <summary>
+            Represents a paginated collection of items with metadata
+            </summary>
+            <typeparam name="T">The type of items in the collection</typeparam>
+        </member>
+        <member name="M:Dapper.API.Models.Pagination.PaginatedResult`1.#ctor(System.Collections.Generic.IReadOnlyList{`0},System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Initializes a new instance of the PaginatedResult class
+            </summary>
+            <param name="items">The items on the current page</param>
+            <param name="totalCount">The total number of items across all pages</param>
+            <param name="page">The current page (1-based)</param>
+            <param name="pageSize">The number of items per page</param>
+        </member>
+        <member name="P:Dapper.API.Models.Pagination.PaginatedResult`1.Items">
+            <summary>
+            The items on the current page
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Models.Pagination.PaginatedResult`1.Page">
+            <summary>
+            The current page number (1-based)
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Models.Pagination.PaginatedResult`1.PageSize">
+            <summary>
+            The number of items per page
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Models.Pagination.PaginatedResult`1.TotalCount">
+            <summary>
+            The total number of items across all pages
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Models.Pagination.PaginatedResult`1.TotalPages">
+            <summary>
+            The total number of pages
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Models.Pagination.PaginatedResult`1.HasNextPage">
+            <summary>
+            Whether there is a page after the current page
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Models.Pagination.PaginatedResult`1.HasPreviousPage">
+            <summary>
+            Whether there is a page before the current page
+            </summary>
+        </member>
         <member name="T:Dapper.API.Models.Response">
             <summary>
             Response wrapper for API Endpoints
@@ -566,6 +738,56 @@
             The value that was attempted to be assigned to the property but failed validation.
             This helps in debugging by showing what was actually submitted.
             </summary>
+        </member>
+        <member name="T:Dapper.API.Services.Interfaces.IHotelService">
+            <summary>
+            Hotel Service Interface
+            </summary>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.IHotelService.AddHotel(Dapper.API.Dtos.Hotels.AddEditHotel)">
+            <summary>
+            Add a new hotel
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.IHotelService.GetAll(System.Int32,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Gets paginated list of hotels
+            </summary>
+            <param name="page">Current page (1-based indexing)</param>
+            <param name="pageSize">Number of records per page</param>
+            <param name="cancellationToken">Cancellation token for async operations</param>
+            <returns>Paginated result containing hotels and metadata</returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.IHotelService.DeleteHotel(System.Int32)">
+            <summary>
+            Delete a hotel
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.IHotelService.GetHotelById(System.Int32)">
+            <summary>
+            Get a hotel by it's id
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.IHotelService.GetHotelByName(System.String)">
+            <summary>
+            Get a hotel by it's name
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.IHotelService.UpdateHotel(System.Int32,Dapper.API.Dtos.Hotels.AddEditHotel)">
+            <summary>
+            Update a hotel
+            </summary>
+            <param name="hotelId"></param>
+            <param name="model"></param>
+            <returns></returns>
         </member>
         <member name="M:Dapper.API.Services.Interfaces.IRedisService.AddValueToRedis(System.String,System.String,System.TimeSpan)">
             <summary>

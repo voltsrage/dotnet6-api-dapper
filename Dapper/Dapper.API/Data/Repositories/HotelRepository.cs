@@ -3,7 +3,7 @@ using Dapper.API.Data.Repositories.Interfaces;
 using Dapper.API.Dtos.Hotels;
 using Dapper.API.Entities;
 using Dapper.API.Exceptions;
-using Dapper.API.Models;
+using Dapper.API.Models.Pagination;
 using System.Text;
 
 namespace Dapper.API.Data.Repositories

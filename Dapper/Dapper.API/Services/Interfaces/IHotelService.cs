@@ -1,20 +1,21 @@
 ﻿using Dapper.API.Dtos.Hotels;
 using Dapper.API.Entities;
+using Dapper.API.Models;
 using Dapper.API.Models.Pagination;
 
-namespace Dapper.API.Data.Repositories.Interfaces
+namespace Dapper.API.Services.Interfaces
 {
     /// <summary>
-    /// Repository Interface for the hotels
+    /// Hotel Service Interface
     /// </summary>
-    public interface IHotelRepository
+    public interface IHotelService
     {
         /// <summary>
         /// Add a new hotel
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        Task<int> AddHotel(HotelEntity model);
+        Task<Response<int>> AddHotel(AddEditHotel model);
 
         /// <summary>
         /// Gets paginated list of hotels
@@ -23,34 +24,35 @@ namespace Dapper.API.Data.Repositories.Interfaces
         /// <param name="pageSize">Number of records per page</param>
         /// <param name="cancellationToken">Cancellation token for async operations</param>
         /// <returns>Paginated result containing hotels and metadata</returns>
-        Task<PaginatedResult<Hotel>> GetAll(int page = 1, int pageSize = 10, CancellationToken cancellationToken = default);
+        Task<Response<PaginatedResult<Hotel>>> GetAll(int page = 1, int pageSize = 10, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Delete a hotel
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<bool> DeleteHotel(int id);
+        Task<Response<bool>> DeleteHotel(int id);
 
         /// <summary>
         /// Get a hotel by it's id
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<Hotel> GetHotelById(int id);
+        Task<Response<Hotel>> GetHotelById(int id);
 
         /// <summary>
         /// Get a hotel by it's name
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        Task<Hotel> GetHotelByName(string name);
+        Task<Response<Hotel>> GetHotelByName(string name);
 
         /// <summary>
         /// Update a hotel
         /// </summary>
+        /// <param name="hotelId"></param>
         /// <param name="model"></param>
         /// <returns></returns>
-        Task<bool> UpdateHotel(HotelEntity model);
+        Task<Response<bool>> UpdateHotel(int hotelId, AddEditHotel model);
     }
 }

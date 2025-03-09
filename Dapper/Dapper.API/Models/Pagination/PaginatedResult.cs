@@ -1,4 +1,4 @@
-﻿namespace Dapper.API.Models
+﻿namespace Dapper.API.Models.Pagination
 {
     /// <summary>
     /// Represents a paginated collection of items with metadata
