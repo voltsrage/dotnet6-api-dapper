@@ -26,18 +26,17 @@ namespace Dapper.API.Controllers
         /// <summary>
         /// Get all hotels
         /// </summary>
-        /// <param name="page"></param>
-        /// <param name="pageSize"></param>
+        /// <param name="pagination"></param>       
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(typeof(Response<PaginatedResult<Hotel>>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetHotels(int page = 1, int pageSize = 10, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> GetHotels([FromQuery]PaginationRequest pagination, CancellationToken cancellationToken = default)
         {
             var result = new Response<PaginatedResult<Hotel>>();
             try
             {
-                result = await _hotelService.GetAll(page,pageSize,cancellationToken);
+                result = await _hotelService.GetAll(pagination, cancellationToken);
                 if (result.StatusCode != null)
                 {
                     return StatusCode(result.StatusCode.Value, result);

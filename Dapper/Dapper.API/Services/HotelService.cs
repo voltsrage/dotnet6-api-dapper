@@ -84,9 +84,9 @@ namespace Dapper.API.Services
             return Response<bool>.Success(result);
         }
 
-        public async Task<Response<PaginatedResult<Hotel>>> GetAll(int page = 1, int pageSize = 10, CancellationToken cancellationToken = default)
+        public async Task<Response<PaginatedResult<Hotel>>> GetAll(PaginationRequest pagination, CancellationToken cancellationToken = default)
         {
-            var hotels = await _hotelRepository.GetAll(page, pageSize, cancellationToken);
+            var hotels = await _hotelRepository.GetAll(pagination, cancellationToken);
 
             return Response<PaginatedResult<Hotel>>.Success(hotels);
         }
