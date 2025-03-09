@@ -47,6 +47,14 @@ namespace Dapper.API.Data.Repositories.Interfaces
         Task<Hotel> GetHotelByName(string name);
 
         /// <summary>
+        /// Get a hotel by it's name and address for uniqueness
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="address"></param>
+        /// <returns></returns>
+        Task<Hotel> GetHotelByNameAndAddress(string name, string address);
+
+        /// <summary>
         /// Update a hotel
         /// </summary>
         /// <param name="model"></param>

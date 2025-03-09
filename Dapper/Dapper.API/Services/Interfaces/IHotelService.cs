@@ -15,7 +15,7 @@ namespace Dapper.API.Services.Interfaces
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        Task<Response<int>> AddHotel(AddEditHotel model);
+        Task<Response<Hotel>> AddHotel(AddEditHotel model);
 
         /// <summary>
         /// Gets paginated list of hotels

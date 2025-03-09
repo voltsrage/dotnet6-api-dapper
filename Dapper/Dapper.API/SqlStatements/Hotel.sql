@@ -51,7 +51,7 @@ CREATE TABLE Hotels (
     EntityStatusId INT NOT NULL DEFAULT(1),
     
     -- Timestamp when the hotel record was created
-    CreateAt DATETIME NULL DEFAULT(GETUTCDATE()),
+    CreateAt DATETIME NOT NULL DEFAULT(GETUTCDATE()),
     
     -- User ID of the person who created the hotel record
     CreateBy INT NOT NULL,
@@ -60,7 +60,7 @@ CREATE TABLE Hotels (
     UpdateAt DATETIME NULL,
     
     -- User ID of the person who last updated the hotel record
-    UpdateBy INT NOT NULL
+    UpdateBy INT  NULL
 );
 
 -- Add index for faster searching by name

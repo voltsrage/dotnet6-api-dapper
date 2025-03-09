@@ -109,6 +109,63 @@ namespace Dapper.API.Controllers
         }
 
         /// <summary>
+        /// Create a new hotel
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [ProducesResponseType(typeof(Response<Hotel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> AddHotel([FromBody] AddEditHotel model)
+        {
+            var result = new Response<Hotel>();
+            try
+            {
+                result = await _hotelService.AddHotel(model);
+                if (result.StatusCode != null)
+                {
+                    return StatusCode(result.StatusCode.Value, result);
+                }
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred during hotel creation");
+                result.ErrorMessage = ex.Message;
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Update hotel by id
+        /// </summary>
+        /// <param name="hotelId"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPut("{hotelId}")]
+        [ProducesResponseType(typeof(Response<bool>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> UpdateHotel(int hotelId, [FromBody] AddEditHotel model)
+        {
+            var result = new Response<bool>();
+            try
+            {
+                result = await _hotelService.UpdateHotel(hotelId, model);
+                if (result.StatusCode != null)
+                {
+                    return StatusCode(result.StatusCode.Value, result);
+                }
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred during hotel update");
+                result.ErrorMessage = ex.Message;
+                throw;
+            }
+        }
+
+        /// <summary>
         /// Delete hotel by id
         /// </summary>
         /// <param name="hotelId"></param>

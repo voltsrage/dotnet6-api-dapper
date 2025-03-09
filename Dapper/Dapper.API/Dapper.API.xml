@@ -94,6 +94,21 @@
             <param name="name"></param>
             <returns></returns>
         </member>
+        <member name="M:Dapper.API.Controllers.HotelsController.AddHotel(Dapper.API.Dtos.Hotels.AddEditHotel)">
+            <summary>
+            Create a new hotel
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Controllers.HotelsController.UpdateHotel(System.Int32,Dapper.API.Dtos.Hotels.AddEditHotel)">
+            <summary>
+            Update hotel by id
+            </summary>
+            <param name="hotelId"></param>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
         <member name="M:Dapper.API.Controllers.HotelsController.DeleteHotelById(System.Int32)">
             <summary>
             Delete hotel by id
@@ -205,6 +220,14 @@
             Get a hotel by it's name
             </summary>
             <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.IHotelRepository.GetHotelByNameAndAddress(System.String,System.String)">
+            <summary>
+            Get a hotel by it's name and address for uniqueness
+            </summary>
+            <param name="name"></param>
+            <param name="address"></param>
             <returns></returns>
         </member>
         <member name="M:Dapper.API.Data.Repositories.Interfaces.IHotelRepository.UpdateHotel(Dapper.API.Entities.HotelEntity)">
@@ -394,6 +417,11 @@
         <member name="F:Dapper.API.Enums.SystemCodeEnum.HotelDeleted">
             <summary>
             Hotel deleted successfully
+            </summary>
+        </member>
+        <member name="F:Dapper.API.Enums.SystemCodeEnum.HotelCreationFailed">
+            <summary>
+            Hotel creation failed
             </summary>
         </member>
         <member name="F:Dapper.API.Enums.SystemCodeEnum.HotelNotFound">
@@ -587,6 +615,22 @@
             Formats a DateTime object to a string in the format "yyyy-MM-dd HH:mm:ss"
             </summary>
             <param name="dateTime"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Dapper.API.Helpers.IHelperFunctions">
+            <summary>
+            Represents the helper functions
+            </summary>
+        </member>
+        <member name="M:Dapper.API.Helpers.IHelperFunctions.ProcessValidation``2(FluentValidation.AbstractValidator{``0},``0,Dapper.API.Models.Response{``1})">
+            <summary>
+            Used for model validation
+            </summary>
+            <typeparam name="T"></typeparam>
+            <typeparam name="V"></typeparam>
+            <param name="validator"></param>
+            <param name="obj"></param>
+            <param name="result"></param>
             <returns></returns>
         </member>
         <member name="T:Dapper.API.Models.ErrorDetail">

@@ -280,6 +280,38 @@ namespace Dapper.API.Data.Repositories
             }
         }
 
+        public async Task<Hotel> GetHotelByNameAndAddress(string name, string address)
+        {
+            try
+            {
+                _logger.LogInformation($"Processing HotelBooking.API.Data.HotelRepository {nameof(GetHotelByNameAndAddress)}");
+
+                DynamicParameters param = new DynamicParameters();
+
+                param.Add("Name", name);
+                param.Add("Address", address);
+
+                StringBuilder sql = new StringBuilder();
+
+                sql.Append(@"SELECT Id, Name, Address, City, Country, PhoneNumber, Email, CreatedAt, EntityStatusId FROM Hotels WHERE Name = @Name AND Address = @Address AND EntityStatusId = 1");
+
+                var res = await _dataAccess.ReturnRowSql<Hotel>(sql.ToString(), param);
+
+                return res;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Something went wrong in the HotelBooking.API.Data.HotelRepository {nameof(GetHotelByNameAndAddress)}");
+                throw new RepositoryException(
+                    "Failed to get Hotel by Name and Address",
+                    nameof(HotelRepository),
+                    nameof(GetHotelByNameAndAddress),
+                    "GetByNameAndAddress",
+                    ex,
+                    null);
+            }
+        }
+
         /// <summary>
         /// Update a hotel
         /// </summary>

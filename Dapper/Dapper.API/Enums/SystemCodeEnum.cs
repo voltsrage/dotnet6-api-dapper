@@ -27,6 +27,11 @@ namespace Dapper.API.Enums
         /// </summary>
         public static readonly SystemCodeEnum HotelDeleted = new(3002, "Hotel Deleted Successfully", HttpStatusCode.NoContent);
 
+        /// <summary>
+        /// Hotel creation failed
+        /// </summary>
+        public static readonly SystemCodeEnum HotelCreationFailed = new(3003, "Hotel Creation Failed", HttpStatusCode.BadRequest);
+
         // Error Codes
         /// <summary>
         /// Hotel not found

@@ -29,7 +29,7 @@ namespace Dapper.API.Validators
             RuleFor(x => x.Email)
                 .NotEmpty().Must(x => !x.Equals("string")).WithMessage($"Email is required.")
                 .EmailAddress()
-                .MaximumLength(100);
+                .MaximumLength(100);        
 
 
         }
