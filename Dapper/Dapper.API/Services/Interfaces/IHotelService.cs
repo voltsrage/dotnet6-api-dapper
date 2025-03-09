@@ -20,12 +20,10 @@ namespace Dapper.API.Services.Interfaces
         /// <summary>
         /// Gets paginated list of hotels
         /// </summary>
-        /// <param name="page">Current page (1-based indexing)</param>
-        /// <param name="pageSize">Number of records per page</param>
-        /// <param name="searchTerm"></param>
+        /// <param name="pagination"></param>
         /// <param name="cancellationToken">Cancellation token for async operations</param>
         /// <returns>Paginated result containing hotels and metadata</returns>
-        Task<Response<PaginatedResult<Hotel>>> GetAll(int page = 1, int pageSize = 10, string? searchTerm = null, CancellationToken cancellationToken = default);
+        Task<Response<PaginatedResult<Hotel>>> GetAll(PaginationRequest pagination, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Delete a hotel

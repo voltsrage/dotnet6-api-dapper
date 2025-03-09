@@ -141,38 +141,36 @@ namespace Dapper.API.Data.Repositories
         /// <summary>
         /// Gets paginated list of hotels
         /// </summary>
-        /// <param name="page">Current page (1-based indexing)</param>
-        /// <param name="pageSize">Number of records per page</param>
-        /// <param name="searchTerm"></param>
+        /// <param name="pagination"></param>
         /// <param name="cancellationToken">Cancellation token for async operations</param>
         /// <returns>Paginated result containing hotels and metadata</returns>
-        public async Task<PaginatedResult<Hotel>> GetAll(int page = 1, int pageSize = 10, string? searchTerm = null, CancellationToken cancellationToken = default)
+        public async Task<PaginatedResult<Hotel>> GetAll(PaginationRequest pagination, CancellationToken cancellationToken = default)
         {
             try
             {
                 _logger.LogInformation($"Processing HotelBooking.API.Data.HotelRepository {nameof(GetAll)}");
 
                 // Validate and normalize pagination parameters
-                page = Math.Max(1, page);
-                pageSize = Math.Clamp(pageSize, 1, 100); // Limiting maximum page size
+                pagination.Page = Math.Max(1, pagination.Page);
+                pagination.PageSize = Math.Clamp(pagination.PageSize, 1, 100); // Limiting maximum page size
 
                 // Calculate pagination offset
-                int offset = (page - 1) * pageSize;
+                int offset = (pagination.Page - 1) * pagination.PageSize;
 
                 // Parameters for the query
                 var parameters = new DynamicParameters();
                 parameters.Add("@Offset", offset);
-                parameters.Add("@PageSize", pageSize);
+                parameters.Add("@PageSize", pagination.PageSize);
 
                 StringBuilder sql = new StringBuilder();
 
                 string baseCondition = $" EntityStatusId = {(int)EntityStatusEnum.Active} ";
 
                 string searchCondition = string.Empty;
-                if (!string.IsNullOrEmpty(searchTerm))
+                if (!string.IsNullOrEmpty(pagination.SearchTerm))
                 {
                     // Use consistent parameter name and add parameter only once
-                    parameters.Add("@SearchTerm", $"%{searchTerm.ToLower()}%");
+                    parameters.Add("@SearchTerm", $"%{pagination.SearchTerm.ToLower()}%");
 
                     searchCondition = @" AND (
                         LOWER(Name) LIKE @SearchTerm OR 
@@ -186,7 +184,7 @@ namespace Dapper.API.Data.Repositories
                 sql.Append(@$"SELECT Id, Name, Address, City, Country, PhoneNumber, Email, CreatedAt, EntityStatusId
                                 FROM Hotels WHERE {baseCondition} ");
 
-                if (!string.IsNullOrEmpty(searchTerm))
+                if (!string.IsNullOrEmpty(pagination.SearchTerm))
                 {
                     sql.Append(searchCondition);
                 }        
@@ -197,7 +195,7 @@ namespace Dapper.API.Data.Repositories
 
                 sql.Append(@$"SELECT COUNT(Id) FROM Hotels WHERE {baseCondition} ");
 
-                if (!string.IsNullOrEmpty(searchTerm))
+                if (!string.IsNullOrEmpty(pagination.SearchTerm))
                 {
                     sql.Append(searchCondition);
                 }
@@ -216,14 +214,14 @@ namespace Dapper.API.Data.Repositories
                     return new PaginatedResult<Hotel>(
                         items: hotels,
                         totalCount: totalCount,
-                        page: page,
-                        pageSize: pageSize);
+                        page: pagination.Page,
+                        pageSize: pagination.PageSize);
                 }
 
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error retrieving paginated hotels - Page: {Page}, PageSize: {PageSize}", page, pageSize);
+                _logger.LogError(ex, "Error retrieving paginated hotels - Page: {Page}, PageSize: {PageSize}", pagination.Page, pagination.PageSize);
 
                 // Using a more specific exception type with structured information
                 throw new RepositoryException(
