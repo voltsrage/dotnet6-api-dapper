@@ -168,7 +168,8 @@ namespace Dapper.API.Data.Repositories
                     columns,
                     searchableColumns,
                     baseCondition,
-                    cancellationToken);
+                    sortColumn:"Id",
+                    cancellationToken:cancellationToken);
 
             }
             catch (Exception ex)

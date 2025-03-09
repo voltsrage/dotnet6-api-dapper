@@ -25,6 +25,8 @@ namespace Dapper.API.Helpers
             string columns = "*",
             string[] searchableColumns = null, 
             string baseCondition = null,
+            string sortColumn = null,
+            string sortDirection = "ASC",
             CancellationToken cancellationToken = default)
         {
             // Validate inputs
@@ -54,11 +56,17 @@ namespace Dapper.API.Helpers
                 whereClause += $" AND ({string.Join(" OR ", searchConditions)})";
             }
 
+            // Determine sort column and direction
+            string effectiveSortColumn = request.HasSorting ? request.SortColumn : (sortColumn ?? "1");
+            string effectiveSortDirection = request.HasSorting
+                ? (request.IsAscending ? "ASC" : "DESC")
+                : sortDirection;
+
             // Construct the main query
             sql.AppendLine($"SELECT {columns}");
             sql.AppendLine($"FROM {tableName}");
             sql.AppendLine($"WHERE {whereClause}");
-            sql.AppendLine($"ORDER BY Id ");
+            sql.AppendLine($"ORDER BY {effectiveSortColumn} {effectiveSortDirection} ");
             sql.AppendLine("OFFSET @Offset ROWS");
             sql.AppendLine("FETCH NEXT @PageSize ROWS ONLY;");
 

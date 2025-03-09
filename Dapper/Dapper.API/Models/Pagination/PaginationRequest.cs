@@ -47,5 +47,28 @@ namespace Dapper.API.Models.Pagination
         /// </summary>
         [JsonIgnore]
         public bool HasSearch => !string.IsNullOrWhiteSpace(SearchTerm);
+
+        /// <summary>
+        /// Optional column to sort by
+        /// </summary>
+        public string? SortColumn { get; set; } = "Id";
+
+        /// <summary>
+        /// Sort direction (asc or desc)
+        /// </summary>
+        public string? SortDirection { get; set; } = "asc";
+
+        /// <summary>
+        /// Indicates if sorting is specified
+        /// </summary>
+        [JsonIgnore]
+        public bool HasSorting => !string.IsNullOrWhiteSpace(SortColumn);
+
+        /// <summary>
+        /// Indicates if sort direction is ascending
+        /// </summary>
+        [JsonIgnore]
+        public bool IsAscending => string.IsNullOrEmpty(SortDirection) ||
+                                  SortDirection.Equals("asc", StringComparison.OrdinalIgnoreCase);
     }
 }
