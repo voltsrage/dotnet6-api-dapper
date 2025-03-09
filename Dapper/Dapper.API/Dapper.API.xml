@@ -71,11 +71,15 @@
             - userId: The user ID extracted from the token if valid
             </returns>
         </member>
-        <member name="M:Dapper.API.Controllers.HotelsController.GetHotels(Dapper.API.Models.Pagination.PaginationRequest,System.Threading.CancellationToken)">
+        <member name="M:Dapper.API.Controllers.HotelsController.GetHotels(System.Int32,System.Int32,System.String,System.String,System.String,System.Threading.CancellationToken)">
             <summary>
             Get all hotels
             </summary>
-            <param name="pagination"></param>       
+            <param name="page"></param>
+            <param name="pageSize"></param>
+            <param name="searchTerm"></param>
+            <param name="sortColumn"></param>
+            <param name="sortDirection"></param>    
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>
@@ -630,6 +634,12 @@
             <param name="result"></param>
             <returns></returns>
         </member>
+        <member name="M:Dapper.API.Helpers.PaginationHelper.#ctor(Dapper.API.Data.Dapper.IDapperHandler)">
+            <summary>
+            Creates a new pagination helper
+            </summary>
+            <param name="dapperHandler"></param>
+        </member>
         <member name="T:Dapper.API.Models.ErrorDetail">
             <summary>
             Provides detailed information about an error that occurred in the application.
@@ -736,7 +746,7 @@
         <member name="T:Dapper.API.Models.Pagination.PaginationRequest">
             <summary>
             Represents a request for paginated data
-            </summary>
+            </summary>   
         </member>
         <member name="P:Dapper.API.Models.Pagination.PaginationRequest.Page">
             <summary>
@@ -751,6 +761,36 @@
         <member name="P:Dapper.API.Models.Pagination.PaginationRequest.SearchTerm">
             <summary>
             Optional search term to filter results
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Models.Pagination.PaginationRequest.Skip">
+            <summary>
+            Number of records to skip
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Models.Pagination.PaginationRequest.HasSearch">
+            <summary>
+            Indicates if a search term is provided
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Models.Pagination.PaginationRequest.SortColumn">
+            <summary>
+            Optional column to sort by
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Models.Pagination.PaginationRequest.SortDirection">
+            <summary>
+            Sort direction (asc or desc)
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Models.Pagination.PaginationRequest.HasSorting">
+            <summary>
+            Indicates if sorting is specified
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Models.Pagination.PaginationRequest.IsAscending">
+            <summary>
+            Indicates if sort direction is ascending
             </summary>
         </member>
         <member name="T:Dapper.API.Models.Response">

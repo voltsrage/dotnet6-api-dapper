@@ -4,6 +4,7 @@ using Dapper.API.Dtos.Hotels;
 using Dapper.API.Entities;
 using Dapper.API.Enums.StandardEnums;
 using Dapper.API.Exceptions;
+using Dapper.API.Helpers;
 using Dapper.API.Models.Pagination;
 using System.Text;
 
@@ -13,11 +14,13 @@ namespace Dapper.API.Data.Repositories
     {
         private readonly IDapperHandler _dataAccess;
         private readonly ILogger<HotelRepository> _logger;
+        private readonly PaginationHelper _paginationHelper;
 
-        public HotelRepository(ILogger<HotelRepository> logger, IDapperHandler dataAccess)
+        public HotelRepository(ILogger<HotelRepository> logger, IDapperHandler dataAccess, PaginationHelper paginationHelper)
         {
             _logger = logger;
             _dataAccess = dataAccess;
+            _paginationHelper = paginationHelper;
         }
 
         /// <summary>
@@ -150,73 +153,23 @@ namespace Dapper.API.Data.Repositories
             {
                 _logger.LogInformation($"Processing HotelBooking.API.Data.HotelRepository {nameof(GetAll)}");
 
-                // Validate and normalize pagination parameters
-                pagination.Page = Math.Max(1, pagination.Page);
-                pagination.PageSize = Math.Clamp(pagination.PageSize, 1, 100); // Limiting maximum page size
+                // Define the columns to retrieve
+                string columns = "Id, Name, Address, City, Country, PhoneNumber, Email, EntityStatusId, CreatedAt";
 
-                // Calculate pagination offset
-                int offset = (pagination.Page - 1) * pagination.PageSize;
+                // Define which columns to search
+                string[] searchableColumns = { "Name", "Address", "City", "Country", "Email" };
 
-                // Parameters for the query
-                var parameters = new DynamicParameters();
-                parameters.Add("@Offset", offset);
-                parameters.Add("@PageSize", pagination.PageSize);
+                // Define base condition (only active hotels)
+                string baseCondition = "EntityStatusId = 1";
 
-                StringBuilder sql = new StringBuilder();
-
-                string baseCondition = $" EntityStatusId = {(int)EntityStatusEnum.Active} ";
-
-                string searchCondition = string.Empty;
-                if (!string.IsNullOrEmpty(pagination.SearchTerm))
-                {
-                    // Use consistent parameter name and add parameter only once
-                    parameters.Add("@SearchTerm", $"%{pagination.SearchTerm.ToLower()}%");
-
-                    searchCondition = @" AND (
-                        LOWER(Name) LIKE @SearchTerm OR 
-                        LOWER(Address) LIKE @SearchTerm OR
-                        LOWER(City) LIKE @SearchTerm OR
-                        LOWER(Country) LIKE @SearchTerm OR
-                        LOWER(Email) LIKE @SearchTerm
-                    )";
-                }
-
-                sql.Append(@$"SELECT Id, Name, Address, City, Country, PhoneNumber, Email, CreatedAt, EntityStatusId
-                                FROM Hotels WHERE {baseCondition} ");
-
-                if (!string.IsNullOrEmpty(pagination.SearchTerm))
-                {
-                    sql.Append(searchCondition);
-                }        
-
-                sql.Append(@" ORDER BY Id
-                                OFFSET @Offset ROWS
-                                FETCH NEXT @PageSize ROWS ONLY; ");
-
-                sql.Append(@$"SELECT COUNT(Id) FROM Hotels WHERE {baseCondition} ");
-
-                if (!string.IsNullOrEmpty(pagination.SearchTerm))
-                {
-                    sql.Append(searchCondition);
-                }
-
-                // Using connection pooling implicitly through Dapper
-                using (var multiQuery = await _dataAccess.QueryMultipleAsync(
-                    sql.ToString(),
-                    parameters,
-                    cancellationToken: cancellationToken))
-                {
-                    // Read both result sets
-                    var hotels = (await multiQuery.ReadAsync<Hotel>()).ToList();
-                    var totalCount = await multiQuery.ReadFirstOrDefaultAsync<int>();
-
-                    // Create paginated result with metadata
-                    return new PaginatedResult<Hotel>(
-                        items: hotels,
-                        totalCount: totalCount,
-                        page: pagination.Page,
-                        pageSize: pagination.PageSize);
-                }
+                return await _paginationHelper.GetPaginatedResultAsync<Hotel>(
+                    pagination,
+                    "Hotels",
+                    columns,
+                    searchableColumns,
+                    baseCondition,
+                    sortColumn:"Id",
+                    cancellationToken:cancellationToken);
 
             }
             catch (Exception ex)

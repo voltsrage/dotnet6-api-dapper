@@ -114,7 +114,9 @@ try
 
     builder.Services.AddSingleton<ICreateToken,CreateToken>();
 
-    builder.Services.AddScoped<IHelperFunctions, HelperFunctions>();
+    builder.Services.AddSingleton<IHelperFunctions, HelperFunctions>();
+
+    builder.Services.AddScoped<PaginationHelper>();
     #endregion
 
     #region AutoFac
