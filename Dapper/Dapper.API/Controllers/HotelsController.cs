@@ -39,7 +39,7 @@ namespace Dapper.API.Controllers
             int page = 1,
             int pageSize = 10, 
             string? searchTerm = null,
-            string? sortColumn = null,
+            string? sortColumn = "Id",
             string? sortDirection = "asc",
             CancellationToken cancellationToken = default)
         {

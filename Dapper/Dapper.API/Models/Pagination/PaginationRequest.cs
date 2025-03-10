@@ -70,5 +70,17 @@ namespace Dapper.API.Models.Pagination
         [JsonIgnore]
         public bool IsAscending => string.IsNullOrEmpty(SortDirection) ||
                                   SortDirection.Equals("asc", StringComparison.OrdinalIgnoreCase);
+
+        /// <summary>
+        /// Dictionary of field-specific filters
+        /// </summary>
+        public Dictionary<string, string> Filters { get; set; } = new Dictionary<string, string>();
+
+        /// <summary>
+        /// Indicates whether there are filters specified
+        /// </summary>
+        [JsonIgnore]
+        public bool HasFilters => Filters?.Count > 0;
+
     }
 }

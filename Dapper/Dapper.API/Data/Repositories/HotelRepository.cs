@@ -149,41 +149,26 @@ namespace Dapper.API.Data.Repositories
         /// <returns>Paginated result containing hotels and metadata</returns>
         public async Task<PaginatedResult<Hotel>> GetAll(PaginationRequest pagination, CancellationToken cancellationToken = default)
         {
-            try
-            {
-                _logger.LogInformation($"Processing HotelBooking.API.Data.HotelRepository {nameof(GetAll)}");
+          
+            _logger.LogInformation($"Processing HotelBooking.API.Data.HotelRepository {nameof(GetAll)}");
 
-                // Define the columns to retrieve
-                string columns = "Id, Name, Address, City, Country, PhoneNumber, Email, EntityStatusId, CreatedAt";
+            // Define the columns to retrieve
+            string columns = "Id, Name, Address, City, Country, PhoneNumber, Email, EntityStatusId, CreatedAt";
 
-                // Define which columns to search
-                string[] searchableColumns = { "Name", "Address", "City", "Country", "Email" };
+            // Define which columns to search
+            string[] searchableColumns = { "Name", "Address", "City", "Country", "Email" };
 
-                // Define base condition (only active hotels)
-                string baseCondition = "EntityStatusId = 1";
+            // Define base condition (only active hotels)
+            string baseCondition = "EntityStatusId = 1";
 
-                return await _paginationHelper.GetPaginatedResultAsync<Hotel>(
-                    pagination,
-                    "Hotels",
-                    columns,
-                    searchableColumns,
-                    baseCondition,
-                    sortColumn:"Id",
-                    cancellationToken:cancellationToken);
-
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error retrieving paginated hotels - Page: {Page}, PageSize: {PageSize}", pagination.Page, pagination.PageSize);
-
-                // Using a more specific exception type with structured information
-                throw new RepositoryException(
-                    message: "Failed to retrieve paginated hotels",
-                    nameof(HotelRepository),
-                   nameof(GetAll),
-                    operation: "GetAllHotels",
-                    innerException: ex);
-            }
+            return await _paginationHelper.GetPaginatedResultAsync<Hotel>(
+                pagination,
+                tableName: "Hotels",
+                columns: columns,
+                searchableColumns: searchableColumns,
+                baseCondition: baseCondition,
+                sortColumn: "Id",
+                cancellationToken: cancellationToken);         
         }
 
         /// <summary>
