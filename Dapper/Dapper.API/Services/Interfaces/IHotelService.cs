@@ -43,6 +43,16 @@ namespace Dapper.API.Services.Interfaces
         Task<Response<bool>> DeleteHotel(int id);
 
         /// <summary>
+        /// Deletes multiple hotels in a single transaction
+        /// </summary>
+        /// <param name="ids">Collection of hotel IDs to delete</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>Result of the bulk delete operation</returns>
+        Task<Response<BulkDeleteResult>> DeleteManyAsync(
+            IEnumerable<int> ids,
+            CancellationToken cancellationToken);
+
+        /// <summary>
         /// Get a hotel by it's id
         /// </summary>
         /// <param name="id"></param>

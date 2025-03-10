@@ -5,6 +5,7 @@ using Dapper.API.Entities;
 using Dapper.API.Enums.StandardEnums;
 using Dapper.API.Exceptions;
 using Dapper.API.Helpers;
+using Dapper.API.Models;
 using Dapper.API.Models.Pagination;
 using Newtonsoft.Json.Linq;
 using System.Text;
@@ -179,11 +180,7 @@ namespace Dapper.API.Data.Repositories
             }
         }
 
-        /// <summary>
-        /// Delete a hotel
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <inheritdoc/>
         public async Task<bool> DeleteHotel(int id)
         {
             try
@@ -221,12 +218,7 @@ namespace Dapper.API.Data.Repositories
             }
         }
 
-        /// <summary>
-        /// Gets paginated list of hotels
-        /// </summary>
-        /// <param name="pagination"></param>
-        /// <param name="cancellationToken">Cancellation token for async operations</param>
-        /// <returns>Paginated result containing hotels and metadata</returns>
+        /// <inheritdoc/>
         public async Task<PaginatedResult<Hotel>> GetAll(PaginationRequest pagination, CancellationToken cancellationToken = default)
         {
           
@@ -270,7 +262,7 @@ namespace Dapper.API.Data.Repositories
                 var sql = new StringBuilder();
                 sql.Append("SELECT Id, Name, Address, City, Country, PhoneNumber, Email, EntityStatusId, CreatedAt ");
                 sql.Append("FROM Hotels ");
-                sql.Append("WHERE Id IN @Ids");
+                sql.Append($"WHERE Id IN @Ids");
 
                 // Execute the query
                 var hotels = await _dataAccess.ReturnListSql<Hotel>(
@@ -292,11 +284,7 @@ namespace Dapper.API.Data.Repositories
             }
         }
 
-        /// <summary>
-        /// Get a hotel by it's id
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <inheritdoc/>
         public async Task<Hotel> GetHotelById(int id)
         {
             try
@@ -330,11 +318,7 @@ namespace Dapper.API.Data.Repositories
             }
         }
 
-        /// <summary>
-        /// Get a hotel by it's name
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
+        /// <inheritdoc/>
         public async Task<Hotel> GetHotelByName(string name)
         {
             try
@@ -368,6 +352,7 @@ namespace Dapper.API.Data.Repositories
             }
         }
 
+        /// <inheritdoc/>
         public async Task<Hotel> GetHotelByNameAndAddress(string name, string address)
         {
             try
@@ -400,11 +385,7 @@ namespace Dapper.API.Data.Repositories
             }
         }
 
-        /// <summary>
-        /// Update a hotel
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
+        /// <inheritdoc/>
         public async Task<bool> UpdateHotel(HotelEntity model)
         {
             try
@@ -457,6 +438,105 @@ namespace Dapper.API.Data.Repositories
                     "Update",
                     ex,
                     null);
+            }
+        }
+
+        /// <inheritdoc/>
+        public async Task<BulkDeleteResult> DeleteManyAsync(IEnumerable<int> ids, int userId, CancellationToken cancellationToken)
+        {
+            try
+            {
+                _logger.LogInformation("Deleting {Count} hotels in repository", ids.Count());
+
+                var result = new BulkDeleteResult
+                {
+                    SuccessfullyDeletedIds = new List<int>(),
+                    NotFoundIds = new List<int>(),
+                    FailedIds = new Dictionary<int, string>()
+                };
+
+                // First verify which hotels exist
+                var existingHotels = await GetByIdsAsync(ids.ToArray(), cancellationToken);
+                var existingIds = existingHotels.Select(h => h.Id).ToHashSet();
+
+                // Identify not found IDs
+                foreach (var id in ids)
+                {
+                    if (!existingIds.Contains(id))
+                    {
+                        result.NotFoundIds.Add(id);
+                    }
+                }
+
+                // Process deletions for existing hotels
+                var idsToDelete = ids.Where(id => existingIds.Contains(id)).ToList();
+
+                if (idsToDelete.Any())
+                {
+                    // Execute all deletions in a single transaction
+                    await _dataAccess.ExecuteInTransaction(async (connection, transaction, token) =>
+                    {
+                        foreach (var id in idsToDelete)
+                        {
+                            try
+                            {
+                                // Instead of hard-deleting, we'll set the status to 'Deleted'
+                                // This is a common pattern for maintaining audit history
+                                var parameters = new DynamicParameters();
+                                parameters.Add("@Id", id);
+                                parameters.Add("@UpdatedBy", userId);
+                                parameters.Add("@UpdatedAt", DateTime.UtcNow);
+                                parameters.Add("@EntityStatusId", 3); // 3 = DeletedForEveryone
+
+                                const string updateSql = @"
+                            UPDATE Hotels 
+                            SET EntityStatusId = @EntityStatusId,
+                                UpdatedBy = @UpdatedBy,
+                                UpdatedAt = @UpdatedAt
+                            WHERE Id = @Id";
+
+                                int rowsAffected = await _dataAccess.ExecuteWithoutReturnSqlInTransaction(
+                                    updateSql,
+                                    transaction,
+                                    parameters,
+                                    token);
+
+                                if (rowsAffected > 0)
+                                {
+                                    result.SuccessfullyDeletedIds.Add(id);
+                                    _logger.LogDebug("Marked hotel with ID {Id} as deleted", id);
+                                }
+                                else
+                                {
+                                    // This shouldn't happen since we verified existence, but handle it just in case
+                                    result.FailedIds.Add(id, "Failed to delete. Hotel not found or already deleted.");
+                                    _logger.LogWarning("Failed to delete hotel with ID {Id} - not found or already deleted", id);
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                result.FailedIds.Add(id, "Error deleting hotel: " + ex.Message);
+                                _logger.LogError(ex, "Error deleting hotel with ID {Id}", id);
+                                throw; // This will trigger a transaction rollback
+                            }
+                        }
+                    }, cancellationToken: cancellationToken);
+                }
+
+                _logger.LogInformation("Bulk delete complete. Deleted: {SuccessCount}, Not found: {NotFoundCount}, Failed: {FailedCount}",
+                    result.SuccessfullyDeletedIds.Count, result.NotFoundIds.Count, result.FailedIds.Count);
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error deleting hotels batch");
+                throw new RepositoryException(
+                    "Failed to delete hotels batch",
+                    REPOSITORY_NAME,
+                    nameof(DeleteManyAsync),
+                    "DeleteMany",
+                    ex);
             }
         }
     }

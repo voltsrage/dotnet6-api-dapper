@@ -120,6 +120,22 @@ namespace Dapper.API.Services
         }
 
         ///<inheritdoc/>
+        public async Task<Response<BulkDeleteResult>> DeleteManyAsync(IEnumerable<int> ids, CancellationToken cancellationToken)
+        {
+            _logger.LogInformation("Deleting {Count} hotels", ids.Count());
+
+            var currentUserId = 0;
+
+            // Delete all hotels in a transaction
+            var result = await _hotelRepository.DeleteManyAsync(ids, currentUserId, cancellationToken);
+
+            _logger.LogInformation("Successfully processed bulk delete: {SuccessCount} deleted, {NotFoundCount} not found",
+           result.SuccessfullyDeletedIds.Count(), result.NotFoundIds.Count());
+
+            return Response<BulkDeleteResult>.Success(result);
+        }
+
+        ///<inheritdoc/>
         public async Task<Response<PaginatedResult<Hotel>>> GetAll(PaginationRequest pagination, CancellationToken cancellationToken = default)
         {
             var hotels = await _hotelRepository.GetAll(pagination, cancellationToken);

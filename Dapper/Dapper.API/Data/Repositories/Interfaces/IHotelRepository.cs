@@ -1,5 +1,6 @@
 ﻿using Dapper.API.Dtos.Hotels;
 using Dapper.API.Entities;
+using Dapper.API.Models;
 using Dapper.API.Models.Pagination;
 
 namespace Dapper.API.Data.Repositories.Interfaces
@@ -40,6 +41,18 @@ namespace Dapper.API.Data.Repositories.Interfaces
         /// <param name="id"></param>
         /// <returns></returns>
         Task<bool> DeleteHotel(int id);
+
+        /// <summary>
+        /// Deletes multiple hotels in a single transaction
+        /// </summary>
+        /// <param name="ids">Collection of hotel IDs to delete</param>
+        /// <param name="userId">ID of the user performing the delete operation</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>Result of the bulk delete operation</returns>
+        Task<BulkDeleteResult> DeleteManyAsync(
+            IEnumerable<int> ids,
+            int userId,
+            CancellationToken cancellationToken);
 
         /// <summary>
         /// Get a hotel by it's id

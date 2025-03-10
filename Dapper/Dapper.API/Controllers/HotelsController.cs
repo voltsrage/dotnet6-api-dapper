@@ -98,6 +98,11 @@ namespace Dapper.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Get hotels by ids
+        /// </summary>
+        /// <param name="hotelIds"></param>
+        /// <returns></returns>
         [HttpGet("byIds/{hotelIds}")]
         [ProducesResponseType(typeof(Response<IEnumerable<Hotel>>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -186,6 +191,12 @@ namespace Dapper.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Creates multiple hotels in a single transaction
+        /// </summary>
+        /// <param name="hotels">Collection of hotels to create</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>Collection of created hotels with IDs assigned</returns>
         [HttpPost("batch")]
         [ProducesResponseType(typeof(Response<IEnumerable<Hotel>>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -252,6 +263,35 @@ namespace Dapper.API.Controllers
             try
             {
                 result = await _hotelService.DeleteHotel(hotelId);
+                if (result.StatusCode != null)
+                {
+                    return StatusCode(result.StatusCode.Value, result);
+                }
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred during hotel deletion");
+                result.ErrorMessage = ex.Message;
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Deletes multiple hotels in a single transaction
+        /// </summary>
+        /// <param name="ids">Collection of hotel IDs to delete</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>Result of the bulk delete operation</returns>
+        [HttpDelete("batch")]
+        [ProducesResponseType(typeof(Response<BulkDeleteResult>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> DeleteManyAsync([FromBody] IEnumerable<int> ids)
+        {
+            var result = new Response<BulkDeleteResult>();
+            try
+            {
+                result = await _hotelService.DeleteManyAsync(ids, CancellationToken.None);
                 if (result.StatusCode != null)
                 {
                     return StatusCode(result.StatusCode.Value, result);
