@@ -56,5 +56,14 @@
         /// Whether there is a page before the current page
         /// </summary>
         public bool HasPreviousPage => Page > 1;
+
+        /// <summary>
+        /// Creates an empty paged result
+        /// </summary>
+        /// <param name="page">Current page number</param>
+        /// <param name="pageSize">Number of items per page</param>
+        /// <returns>Empty paged result</returns>
+        public static PaginatedResult<T> Empty(int page, int pageSize) =>
+            new PaginatedResult<T>(Array.Empty<T>(), 0, page, pageSize);
     }
 }

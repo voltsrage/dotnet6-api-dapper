@@ -400,6 +400,26 @@
             Gets or sets the email address of the hotel.
             </summary>
         </member>
+        <member name="T:Dapper.API.Enums.StandardEnums.JoinType">
+            <summary>
+            Types of SQL joins
+            </summary>
+        </member>
+        <member name="F:Dapper.API.Enums.StandardEnums.JoinType.Inner">
+            <summary>
+            INNER JOIN
+            </summary>
+        </member>
+        <member name="F:Dapper.API.Enums.StandardEnums.JoinType.Left">
+            <summary>
+            LEFT JOIN
+            </summary>
+        </member>
+        <member name="F:Dapper.API.Enums.StandardEnums.JoinType.Right">
+            <summary>
+            RIGHT JOIN
+            </summary>
+        </member>
         <member name="T:Dapper.API.Enums.SystemCodeEnum">
             <summary>
             Allows developer to create error codes for system logic in a central place
@@ -547,6 +567,105 @@
             <param name="info">The SerializationInfo that holds the serialized object data</param>
             <param name="context">The StreamingContext that contains contextual information</param>
         </member>
+        <member name="T:Dapper.API.Exceptions.FilterException">
+            <summary>
+            Exception thrown when filtering operations fail
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Exceptions.FilterException.FilterKey">
+            <summary>
+            The filter key that caused the exception
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Exceptions.FilterException.FilterValue">
+            <summary>
+            The filter value that caused the exception
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Exceptions.FilterException.FilterOperation">
+            <summary>
+            The operation being attempted (e.g., 'eq', 'contains', 'in')
+            </summary>
+        </member>
+        <member name="M:Dapper.API.Exceptions.FilterException.#ctor(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.Exception,System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            Creates a new filter exception
+            </summary>
+            <param name="message">Exception message</param>
+            <param name="component">Component where exception occurred</param>
+            <param name="function">Function where exception occurred</param>
+            <param name="table">Table being queried</param>
+            <param name="filterKey">Filter key that caused the exception</param>
+            <param name="filterValue">Filter value that caused the exception</param>
+            <param name="filterOperation">Filter operation that failed</param>
+            <param name="innerException">Inner exception if available</param>
+            <param name="additionalData">Additional contextual data</param>
+        </member>
+        <member name="T:Dapper.API.Exceptions.InvalidPaginationParametersException">
+            <summary>
+            Exception thrown when pagination input parameters are invalid
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Exceptions.InvalidPaginationParametersException.ParameterName">
+            <summary>
+            The invalid parameter that caused the exception
+            </summary>
+        </member>
+        <member name="M:Dapper.API.Exceptions.InvalidPaginationParametersException.#ctor(System.String,System.String,System.String,System.String,System.String,System.Exception,System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            Creates a new invalid pagination parameters exception
+            </summary>
+            <param name="message">Exception message</param>
+            <param name="component">Component where exception occurred</param>
+            <param name="function">Function where exception occurred</param>
+            <param name="table">Table being queried</param>
+            <param name="parameterName">Name of the invalid parameter</param>
+            <param name="innerException">Inner exception if available</param>
+            <param name="additionalData">Additional contextual data</param>
+        </member>
+        <member name="T:Dapper.API.Exceptions.PaginationDatabaseException">
+            <summary>
+            Exception thrown when database operations related to pagination fail
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Exceptions.PaginationDatabaseException.SqlStatement">
+            <summary>
+            SQL statement that caused the exception (only populated in development)
+            </summary>
+        </member>
+        <member name="M:Dapper.API.Exceptions.PaginationDatabaseException.#ctor(System.String,System.String,System.String,System.String,System.String,System.Exception,System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            Creates a new pagination database exception
+            </summary>
+            <param name="message">Exception message</param>
+            <param name="component">Component where exception occurred</param>
+            <param name="function">Function where exception occurred</param>
+            <param name="table">Table being queried</param>
+            <param name="sqlStatement">SQL statement that caused the exception</param>
+            <param name="innerException">Inner exception if available</param>
+            <param name="additionalData">Additional contextual data</param>
+        </member>
+        <member name="T:Dapper.API.Exceptions.PaginationException">
+            <summary>
+            Base exception for pagination-related errors
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Exceptions.PaginationException.Table">
+            <summary>
+            The table or entity being queried when the exception occurred
+            </summary>
+        </member>
+        <member name="M:Dapper.API.Exceptions.PaginationException.#ctor(System.String,System.String,System.String,System.String,System.Exception,System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            Creates a new pagination exception
+            </summary>
+            <param name="message">Exception message</param>
+            <param name="component">Component where exception occurred</param>
+            <param name="function">Function where exception occurred</param>
+            <param name="table">Table being queried</param>
+            <param name="innerException">Inner exception if available</param>
+            <param name="additionalData">Additional contextual data</param>
+        </member>
         <member name="T:Dapper.API.Exceptions.RepositoryException">
             <summary>
             Repository Layer Exceptions
@@ -572,6 +691,62 @@
             <param name="operation"></param>
             <param name="innerException"></param>
             <param name="additionalData"></param>
+        </member>
+        <member name="T:Dapper.API.Exceptions.SearchException">
+            <summary>
+            Exception thrown when search operations fail
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Exceptions.SearchException.SearchTerm">
+            <summary>
+            The search term that caused the exception
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Exceptions.SearchException.SearchColumns">
+            <summary>
+            The columns being searched
+            </summary>
+        </member>
+        <member name="M:Dapper.API.Exceptions.SearchException.#ctor(System.String,System.String,System.String,System.String,System.String,System.String[],System.Exception,System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            Creates a new search exception
+            </summary>
+            <param name="message">Exception message</param>
+            <param name="component">Component where exception occurred</param>
+            <param name="function">Function where exception occurred</param>
+            <param name="table">Table being queried</param>
+            <param name="searchTerm">Search term that caused the exception</param>
+            <param name="searchColumns">Columns being searched</param>
+            <param name="innerException">Inner exception if available</param>
+            <param name="additionalData">Additional contextual data</param>
+        </member>
+        <member name="T:Dapper.API.Exceptions.SortException">
+            <summary>
+            Exception thrown when sorting operations fail
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Exceptions.SortException.SortColumn">
+            <summary>
+            The sort column that caused the exception
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Exceptions.SortException.SortDirection">
+            <summary>
+            The sort direction
+            </summary>
+        </member>
+        <member name="M:Dapper.API.Exceptions.SortException.#ctor(System.String,System.String,System.String,System.String,System.String,System.String,System.Exception,System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            Creates a new sort exception
+            </summary>
+            <param name="message">Exception message</param>
+            <param name="component">Component where exception occurred</param>
+            <param name="function">Function where exception occurred</param>
+            <param name="table">Table being queried</param>
+            <param name="sortColumn">Sort column that caused the exception</param>
+            <param name="sortDirection">Sort direction</param>
+            <param name="innerException">Inner exception if available</param>
+            <param name="additionalData">Additional contextual data</param>
         </member>
         <member name="T:Dapper.API.Exceptions.ValidationException">
             <summary>
@@ -634,11 +809,161 @@
             <param name="result"></param>
             <returns></returns>
         </member>
-        <member name="M:Dapper.API.Helpers.PaginationHelper.#ctor(Dapper.API.Data.Dapper.IDapperHandler)">
+        <member name="M:Dapper.API.Helpers.PaginationHelper.#ctor(Dapper.API.Data.Dapper.IDapperHandler,Microsoft.Extensions.Logging.ILogger{Dapper.API.Helpers.PaginationHelper})">
             <summary>
             Creates a new pagination helper
             </summary>
             <param name="dapperHandler"></param>
+        </member>
+        <member name="M:Dapper.API.Helpers.PaginationHelper.GetPaginatedResultAsync``1(Dapper.API.Models.Pagination.PaginationRequest,System.String,System.String,System.String[],System.Collections.Generic.Dictionary{System.String,System.String},System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Gets paginated data using a base query with optional search and filters
+            </summary>
+            <typeparam name="T">Type of entity to retrieve</typeparam>
+            <param name="request">Pagination request</param>
+            <param name="tableName">Name of the database table</param>
+            <param name="columns">Columns to select</param>
+            <param name="searchableColumns">Columns to include in search</param>
+            <param name="filterableColumns">Dictionary mapping filter keys to column names</param>
+            <param name="baseCondition">Base WHERE condition</param>
+            <param name="sortColumn">Default sort column</param>
+            <param name="sortDirection">Default sort direction</param>
+            <returns>Paginated result</returns>
+        </member>
+        <member name="M:Dapper.API.Helpers.PaginationHelper.GetPaginatedDataWithJoinsAsync``1(Dapper.API.Models.Pagination.PaginationRequest,Dapper.API.Helpers.QueryBuilder,System.String,System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Gets paginated data with custom joins
+            </summary>
+            <typeparam name="T">Type of entity to retrieve</typeparam>
+            <param name="request">Pagination request</param>
+            <param name="queryBuilder">Pre-configured query builder with custom joins</param>
+            <returns>Paginated result</returns>
+        </member>
+        <member name="M:Dapper.API.Helpers.PaginationHelper.ApplyFilters(Dapper.API.Helpers.QueryBuilder,System.Collections.Generic.Dictionary{System.String,System.String},System.Collections.Generic.Dictionary{System.String,System.String},System.String)">
+            <summary>
+            Applies filters to the query builder
+            </summary>
+        </member>
+        <member name="M:Dapper.API.Helpers.PaginationHelper.ApplyFilterWithOperator(Dapper.API.Helpers.QueryBuilder,System.String,System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            Applies a filter with the specified operator
+            </summary>
+        </member>
+        <member name="M:Dapper.API.Helpers.PaginationHelper.ExecutePaginatedQueryAsync``1(Dapper.API.Helpers.QueryBuilder,System.Int32,System.Int32,System.Int32,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Executes a paginated query using the provided query builder
+            </summary>
+        </member>
+        <member name="T:Dapper.API.Helpers.QueryBuilder">
+            <summary>
+            Builder for constructing SQL queries
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "P:Dapper.API.Helpers.QueryBuilder.Parameters" -->
+        <member name="P:Dapper.API.Helpers.QueryBuilder.HasOrdering">
+            <summary>
+            Indicates if ordering has been specified
+            </summary>
+        </member>
+        <member name="M:Dapper.API.Helpers.QueryBuilder.#ctor(System.String,System.String)">
+            <summary>
+            Creates a new query builder
+            </summary>
+            <param name="baseTable">Base table name</param>
+            <param name="baseAlias">Optional alias for base table</param>
+        </member>
+        <member name="M:Dapper.API.Helpers.QueryBuilder.Select(System.String)">
+            <summary>
+            Specifies columns to select
+            </summary>
+            <param name="columns">Columns or expressions to select</param>
+            <returns>The builder for chaining</returns>
+        </member>
+        <member name="M:Dapper.API.Helpers.QueryBuilder.Join(Dapper.API.Enums.StandardEnums.JoinType,System.String,System.String,System.String)">
+            <summary>
+            Adds a JOIN clause to the query
+            </summary>
+            <param name="joinType">Type of join</param>
+            <param name="table">Table to join</param>
+            <param name="alias">Alias for the joined table</param>
+            <param name="on">Join condition</param>
+            <returns>The builder for method chaining</returns>
+        </member>
+        <member name="M:Dapper.API.Helpers.QueryBuilder.InnerJoin(System.String,System.String,System.String)">
+            <summary>
+            Adds an INNER JOIN to the query
+            </summary>
+            <param name="table">Table to join</param>
+            <param name="alias">Alias for the joined table</param>
+            <param name="on">Join condition</param>
+            <returns>The builder for chaining</returns>
+        </member>
+        <member name="M:Dapper.API.Helpers.QueryBuilder.LeftJoin(System.String,System.String,System.String)">
+            <summary>
+            Adds a LEFT JOIN to the query
+            </summary>
+            <param name="table">Table to join</param>
+            <param name="alias">Alias for the joined table</param>
+            <param name="on">Join condition</param>
+            <returns>The builder for chaining</returns>
+        </member>
+        <member name="M:Dapper.API.Helpers.QueryBuilder.RightJoin(System.String,System.String,System.String)">
+            <summary>
+            Adds a RIGHT JOIN to the query
+            </summary>
+            <param name="table">Table to join</param>
+            <param name="alias">Alias for the joined table</param>
+            <param name="on">Join condition</param>
+            <returns>The builder for chaining</returns>
+        </member>
+        <member name="M:Dapper.API.Helpers.QueryBuilder.Where(System.String)">
+            <summary>
+            Adds a WHERE condition to the query
+            </summary>
+            <param name="condition">WHERE condition</param>
+            <returns>The builder for chaining</returns>
+        </member>
+        <member name="M:Dapper.API.Helpers.QueryBuilder.WithSearch(System.String,System.String[])">
+            <summary>
+            Adds a search condition across specified columns
+            </summary>
+            <param name="searchTerm">Search term</param>
+            <param name="columns">Columns to search</param>
+            <returns>The builder for chaining</returns>
+        </member>
+        <member name="M:Dapper.API.Helpers.QueryBuilder.OrderBy(System.String[])">
+            <summary>
+            Sets the ORDER BY clause
+            </summary>
+            <param name="columns">Columns to order by</param>
+            <returns>The builder for method chaining</returns>
+        </member>
+        <member name="M:Dapper.API.Helpers.QueryBuilder.OrderByDescending(System.String[])">
+            <summary>
+            Sets the ORDER BY clause with descending direction
+            </summary>
+            <param name="columns">Columns to order by</param>
+            <returns>The builder for method chaining</returns>
+        </member>
+        <member name="M:Dapper.API.Helpers.QueryBuilder.AddParameter(System.String,System.Object)">
+            <summary>
+            Adds a parameter to the query
+            </summary>
+            <param name="name">Parameter name</param>
+            <param name="value">Parameter value</param>
+            <returns>The builder for chaining</returns>
+        </member>
+        <member name="M:Dapper.API.Helpers.QueryBuilder.BuildSelectQuery">
+            <summary>
+            Builds the SELECT query without pagination
+            </summary>
+            <returns>SQL SELECT query</returns>
+        </member>
+        <member name="M:Dapper.API.Helpers.QueryBuilder.BuildCountQuery">
+            <summary>
+            Builds the COUNT query
+            </summary>
+            <returns>SQL COUNT query</returns>
         </member>
         <member name="T:Dapper.API.Models.ErrorDetail">
             <summary>
@@ -693,6 +1018,41 @@
             Error details
             </summary>
         </member>
+        <member name="T:Dapper.API.Models.Pagination.JoinClause">
+            <summary>
+            Represents a JOIN clause in a SQL query
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Models.Pagination.JoinClause.Type">
+            <summary>
+            JOIN type (INNER JOIN, LEFT JOIN, etc.)
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Models.Pagination.JoinClause.Table">
+            <summary>
+            Table being joined
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Models.Pagination.JoinClause.Alias">
+            <summary>
+            Alias for the joined table
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Models.Pagination.JoinClause.Condition">
+            <summary>
+            JOIN condition
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Models.Pagination.JoinClause.JoinTypeString">
+            <summary>
+            String representation of the join type
+            </summary>
+        </member>
+        <member name="M:Dapper.API.Models.Pagination.JoinClause.#ctor(Dapper.API.Enums.StandardEnums.JoinType,System.String,System.String,System.String)">
+            <summary>
+            Creates a new JOIN clause
+            </summary>
+        </member>
         <member name="T:Dapper.API.Models.Pagination.PaginatedResult`1">
             <summary>
             Represents a paginated collection of items with metadata
@@ -743,6 +1103,14 @@
             Whether there is a page before the current page
             </summary>
         </member>
+        <member name="M:Dapper.API.Models.Pagination.PaginatedResult`1.Empty(System.Int32,System.Int32)">
+            <summary>
+            Creates an empty paged result
+            </summary>
+            <param name="page">Current page number</param>
+            <param name="pageSize">Number of items per page</param>
+            <returns>Empty paged result</returns>
+        </member>
         <member name="T:Dapper.API.Models.Pagination.PaginationRequest">
             <summary>
             Represents a request for paginated data
@@ -791,6 +1159,16 @@
         <member name="P:Dapper.API.Models.Pagination.PaginationRequest.IsAscending">
             <summary>
             Indicates if sort direction is ascending
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Models.Pagination.PaginationRequest.Filters">
+            <summary>
+            Dictionary of field-specific filters
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Models.Pagination.PaginationRequest.HasFilters">
+            <summary>
+            Indicates whether there are filters specified
             </summary>
         </member>
         <member name="T:Dapper.API.Models.Response">

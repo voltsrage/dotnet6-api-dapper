@@ -1,6 +1,7 @@
 ﻿using Dapper.API.Exceptions;
 using Dapper.API.Helpers;
 using Dapper.API.Models;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Net;
 using System.Text.Json;
@@ -95,6 +96,8 @@ namespace Dapper.API.Middlewares
         private int DetermineStatusCode(Exception exception) => exception switch
         {
             ValidationException => StatusCodes.Status400BadRequest,
+            PaginationDatabaseException => StatusCodes.Status500InternalServerError,
+            PaginationException => StatusCodes.Status400BadRequest,
             AuthenticationException authException => (int)authException.ErrorType.StatusCode,
             RepositoryException => StatusCodes.Status500InternalServerError,   
             _ => StatusCodes.Status500InternalServerError
@@ -131,6 +134,7 @@ namespace Dapper.API.Middlewares
                         AdditionalData = authException.AdditionalData
                     };
                     break;
+
 
                 default:
                     response.Error = new ErrorDetail
