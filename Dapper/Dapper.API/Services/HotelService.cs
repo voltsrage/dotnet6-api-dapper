@@ -30,6 +30,7 @@ namespace Dapper.API.Services
             _helperFunctions = helperFunctions;
         }
 
+        ///<inheritdoc/>
         public async Task<Response<Hotel>> AddHotel(AddEditHotel model)
         {
             var result = new Response<Hotel>();
@@ -70,6 +71,40 @@ namespace Dapper.API.Services
             return Response<Hotel>.Success(hotel);
         }
 
+        ///<inheritdoc/>
+        public async Task<Response<IEnumerable<Hotel>>> CreateManyAsync(IEnumerable<AddEditHotel> hotels, CancellationToken cancellationToken)
+        {
+            if(hotels is null || !hotels.Any())
+            {
+                return Response<IEnumerable<Hotel>>.Failure(SystemCodeEnum.NoHotelsToCreate);
+            }
+
+            var validationErrors = new List<Response<Hotel>>();
+
+
+            foreach(var hotel in hotels)
+            {
+                HotelValidator validator = new HotelValidator();
+
+                var result = await _helperFunctions.ProcessValidation<AddEditHotel, Hotel>(validator, hotel, new Response<Hotel>());
+
+                if (!result.IsSuccess)
+                {
+                    validationErrors.Add(result);
+                }
+            }
+
+            if (validationErrors.Any())
+            {
+                return Response<IEnumerable<Hotel>>.Failure(SystemCodeEnum.HotelCreationFailed);
+            }
+
+            var createdHotels = await _hotelRepository.CreateManyAsync(hotels.Select(h => _mapper.Map<HotelEntity>(h)), cancellationToken);
+
+            return Response<IEnumerable<Hotel>>.Success(createdHotels.Select(h => _mapper.Map<Hotel>(h)));
+        }
+
+        ///<inheritdoc/>
         public async Task<Response<bool>> DeleteHotel(int id)
         {
             var hotel = await _hotelRepository.GetHotelById(id);
@@ -84,6 +119,7 @@ namespace Dapper.API.Services
             return Response<bool>.Success(result);
         }
 
+        ///<inheritdoc/>
         public async Task<Response<PaginatedResult<Hotel>>> GetAll(PaginationRequest pagination, CancellationToken cancellationToken = default)
         {
             var hotels = await _hotelRepository.GetAll(pagination, cancellationToken);
@@ -91,6 +127,15 @@ namespace Dapper.API.Services
             return Response<PaginatedResult<Hotel>>.Success(hotels);
         }
 
+        ///<inheritdoc/>
+        public async Task<Response<IEnumerable<Hotel>>> GetByIdsAsync(IEnumerable<int> ids, CancellationToken cancellationToken)
+        {
+            var hotels = await _hotelRepository.GetByIdsAsync(ids.ToArray(),cancellationToken);
+
+            return Response<IEnumerable<Hotel>>.Success(hotels);
+        }
+
+        ///<inheritdoc/>
         public async Task<Response<Hotel>> GetHotelById(int id)
         {
             var hotel = await _hotelRepository.GetHotelById(id);
@@ -103,6 +148,8 @@ namespace Dapper.API.Services
             return Response<Hotel>.Success(hotel);
         }
 
+
+        ///<inheritdoc/>
         public async Task<Response<Hotel>> GetHotelByName(string name)
         {
             var hotel = await _hotelRepository.GetHotelByName(name);
@@ -115,6 +162,7 @@ namespace Dapper.API.Services
             return Response<Hotel>.Success(hotel);
         }
 
+        ///<inheritdoc/>
         public async Task<Response<bool>> UpdateHotel(int hotelId, AddEditHotel model)
         {
             var result = new Response<bool>();

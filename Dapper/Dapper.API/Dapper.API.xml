@@ -146,6 +146,9 @@
             <param name="model"></param>
             <returns></returns>
         </member>
+        <member name="M:Dapper.API.Data.Repositories.HotelRepository.CreateManyAsync(System.Collections.Generic.IEnumerable{Dapper.API.Entities.HotelEntity},System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
         <member name="M:Dapper.API.Data.Repositories.HotelRepository.DeleteHotel(System.Int32)">
             <summary>
             Delete a hotel
@@ -160,6 +163,9 @@
             <param name="pagination"></param>
             <param name="cancellationToken">Cancellation token for async operations</param>
             <returns>Paginated result containing hotels and metadata</returns>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.HotelRepository.GetByIdsAsync(System.Int32[],System.Threading.CancellationToken)">
+            <inheritdoc/>
         </member>
         <member name="M:Dapper.API.Data.Repositories.HotelRepository.GetHotelById(System.Int32)">
             <summary>
@@ -194,6 +200,14 @@
             <param name="model"></param>
             <returns></returns>
         </member>
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.IHotelRepository.CreateManyAsync(System.Collections.Generic.IEnumerable{Dapper.API.Entities.HotelEntity},System.Threading.CancellationToken)">
+            <summary>
+            Creates multiple hotels in a single transaction
+            </summary>
+            <param name="hotels">Collection of hotels to create</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>Created hotels with IDs assigned</returns>
+        </member>
         <member name="M:Dapper.API.Data.Repositories.Interfaces.IHotelRepository.GetAll(Dapper.API.Models.Pagination.PaginationRequest,System.Threading.CancellationToken)">
             <summary>
             Gets paginated list of hotels
@@ -215,6 +229,14 @@
             </summary>
             <param name="id"></param>
             <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.IHotelRepository.GetByIdsAsync(System.Int32[],System.Threading.CancellationToken)">
+            <summary>
+            Gets hotels by their IDs
+            </summary>
+            <param name="ids">Collection of hotel IDs</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>Found hotels</returns>
         </member>
         <member name="M:Dapper.API.Data.Repositories.Interfaces.IHotelRepository.GetHotelByName(System.String)">
             <summary>
@@ -440,11 +462,6 @@
             Hotel deleted successfully
             </summary>
         </member>
-        <member name="F:Dapper.API.Enums.SystemCodeEnum.HotelCreationFailed">
-            <summary>
-            Hotel creation failed
-            </summary>
-        </member>
         <member name="F:Dapper.API.Enums.SystemCodeEnum.HotelNotFound">
             <summary>
             Hotel not found
@@ -473,6 +490,21 @@
         <member name="F:Dapper.API.Enums.SystemCodeEnum.HotelCapacityExceeded">
             <summary>
             Hotel capacity exceeded
+            </summary>
+        </member>
+        <member name="F:Dapper.API.Enums.SystemCodeEnum.HotelCreationFailed">
+            <summary>
+            Hotel creation failed
+            </summary>
+        </member>
+        <member name="F:Dapper.API.Enums.SystemCodeEnum.NoHotelsToCreate">
+            <summary>
+            No hotels to create in bulk
+            </summary>
+        </member>
+        <member name="F:Dapper.API.Enums.SystemCodeEnum.HotelBulkCreateValidationError">
+            <summary>
+            Validation failed for one or more hotels
             </summary>
         </member>
         <member name="T:Dapper.API.Exceptions.BaseException">
@@ -1248,6 +1280,30 @@
             This helps in debugging by showing what was actually submitted.
             </summary>
         </member>
+        <member name="M:Dapper.API.Services.HotelService.AddHotel(Dapper.API.Dtos.Hotels.AddEditHotel)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Dapper.API.Services.HotelService.CreateManyAsync(System.Collections.Generic.IEnumerable{Dapper.API.Dtos.Hotels.AddEditHotel},System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Dapper.API.Services.HotelService.DeleteHotel(System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Dapper.API.Services.HotelService.GetAll(Dapper.API.Models.Pagination.PaginationRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Dapper.API.Services.HotelService.GetByIdsAsync(System.Collections.Generic.IEnumerable{System.Int32},System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Dapper.API.Services.HotelService.GetHotelById(System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Dapper.API.Services.HotelService.GetHotelByName(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Dapper.API.Services.HotelService.UpdateHotel(System.Int32,Dapper.API.Dtos.Hotels.AddEditHotel)">
+            <inheritdoc/>
+        </member>
         <member name="T:Dapper.API.Services.Interfaces.IHotelService">
             <summary>
             Hotel Service Interface
@@ -1259,6 +1315,14 @@
             </summary>
             <param name="model"></param>
             <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.IHotelService.CreateManyAsync(System.Collections.Generic.IEnumerable{Dapper.API.Dtos.Hotels.AddEditHotel},System.Threading.CancellationToken)">
+            <summary>
+            Creates multiple hotels in a single transaction
+            </summary>
+            <param name="hotels">Collection of hotels to create</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>Created hotels with IDs assigned</returns>
         </member>
         <member name="M:Dapper.API.Services.Interfaces.IHotelService.GetAll(Dapper.API.Models.Pagination.PaginationRequest,System.Threading.CancellationToken)">
             <summary>
@@ -1281,6 +1345,14 @@
             </summary>
             <param name="id"></param>
             <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.IHotelService.GetByIdsAsync(System.Collections.Generic.IEnumerable{System.Int32},System.Threading.CancellationToken)">
+            <summary>
+            Gets hotels by their IDs
+            </summary>
+            <param name="ids">Collection of hotel IDs</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>Found hotels</returns>
         </member>
         <member name="M:Dapper.API.Services.Interfaces.IHotelService.GetHotelByName(System.String)">
             <summary>

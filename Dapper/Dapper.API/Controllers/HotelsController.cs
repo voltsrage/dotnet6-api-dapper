@@ -98,6 +98,38 @@ namespace Dapper.API.Controllers
             }
         }
 
+        [HttpGet("byIds/{hotelIds}")]
+        [ProducesResponseType(typeof(Response<IEnumerable<Hotel>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetHotelsByIds(string hotelIds)
+        {
+            var result = new Response<IEnumerable<Hotel>>();
+            try
+            {
+                if (string.IsNullOrEmpty(hotelIds))
+                {
+                    result.IsSuccess = false;
+                    result.ErrorMessage = "No IDs provided";
+                    return StatusCode((int)HttpStatusCode.BadRequest, result);
+                }
+
+                var idList = hotelIds.Split(',').Select(int.Parse).ToList();
+
+                result = await _hotelService.GetByIdsAsync(idList, CancellationToken.None);
+                if (result.StatusCode != null)
+                {
+                    return StatusCode(result.StatusCode.Value, result);
+                }
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred during hotel retrieval");
+                result.ErrorMessage = ex.Message;
+                throw;
+            }
+        }
+
         /// <summary>
         /// Get hotel by name
         /// </summary>
@@ -140,6 +172,29 @@ namespace Dapper.API.Controllers
             try
             {
                 result = await _hotelService.AddHotel(model);
+                if (result.StatusCode != null)
+                {
+                    return StatusCode(result.StatusCode.Value, result);
+                }
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred during hotel creation");
+                result.ErrorMessage = ex.Message;
+                throw;
+            }
+        }
+
+        [HttpPost("batch")]
+        [ProducesResponseType(typeof(Response<IEnumerable<Hotel>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> CreateManyAsync([FromBody] IEnumerable<AddEditHotel> hotels)
+        {
+            var result = new Response<IEnumerable<Hotel>>();
+            try
+            {
+                result = await _hotelService.CreateManyAsync(hotels, CancellationToken.None);
                 if (result.StatusCode != null)
                 {
                     return StatusCode(result.StatusCode.Value, result);

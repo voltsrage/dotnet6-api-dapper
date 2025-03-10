@@ -17,6 +17,16 @@ namespace Dapper.API.Data.Repositories.Interfaces
         Task<int> AddHotel(HotelEntity model);
 
         /// <summary>
+        /// Creates multiple hotels in a single transaction
+        /// </summary>
+        /// <param name="hotels">Collection of hotels to create</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>Created hotels with IDs assigned</returns>
+        Task<IEnumerable<HotelEntity>> CreateManyAsync(
+            IEnumerable<HotelEntity> hotels,
+            CancellationToken cancellationToken);
+
+        /// <summary>
         /// Gets paginated list of hotels
         /// </summary>
         /// <param name="pagination"></param>
@@ -37,6 +47,16 @@ namespace Dapper.API.Data.Repositories.Interfaces
         /// <param name="id"></param>
         /// <returns></returns>
         Task<Hotel> GetHotelById(int id);
+
+        /// <summary>
+        /// Gets hotels by their IDs
+        /// </summary>
+        /// <param name="ids">Collection of hotel IDs</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>Found hotels</returns>
+        Task<IEnumerable<Hotel>> GetByIdsAsync(
+            int[] ids,
+            CancellationToken cancellationToken);
 
         /// <summary>
         /// Get a hotel by it's name

@@ -27,10 +27,6 @@ namespace Dapper.API.Enums
         /// </summary>
         public static readonly SystemCodeEnum HotelDeleted = new(3002, "Hotel Deleted Successfully", HttpStatusCode.NoContent);
 
-        /// <summary>
-        /// Hotel creation failed
-        /// </summary>
-        public static readonly SystemCodeEnum HotelCreationFailed = new(3003, "Hotel Creation Failed", HttpStatusCode.BadRequest);
 
         // Error Codes
         /// <summary>
@@ -62,6 +58,22 @@ namespace Dapper.API.Enums
         /// Hotel capacity exceeded
         /// </summary>
         public static readonly SystemCodeEnum HotelCapacityExceeded = new(3055, "Hotel Capacity Exceeded", HttpStatusCode.BadRequest);
+
+        /// <summary>
+        /// Hotel creation failed
+        /// </summary>
+        public static readonly SystemCodeEnum HotelCreationFailed = new(3056, "Hotel Creation Failed", HttpStatusCode.BadRequest);
+
+        /// <summary>
+        /// No hotels to create in bulk
+        /// </summary>
+        public static readonly SystemCodeEnum NoHotelsToCreate = new(3057, "No Hotels To Create", HttpStatusCode.BadRequest);
+
+        /// <summary>
+        /// Validation failed for one or more hotels
+        /// </summary>
+        public static readonly SystemCodeEnum HotelBulkCreateValidationError = new(3058, "Validation failed for one or more hotels", HttpStatusCode.BadRequest);
+
 
         #endregion
 
