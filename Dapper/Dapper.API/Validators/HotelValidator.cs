@@ -24,7 +24,7 @@ namespace Dapper.API.Validators
                 .MaximumLength(100);
 
             RuleFor(x => x.PhoneNumber)
-                .MaximumLength(15);
+                .MaximumLength(20);
 
             RuleFor(x => x.Email)
                 .NotEmpty().Must(x => !x.Equals("string")).WithMessage($"Email is required.")

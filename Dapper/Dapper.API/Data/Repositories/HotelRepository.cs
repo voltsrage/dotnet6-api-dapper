@@ -5,8 +5,11 @@ using Dapper.API.Entities;
 using Dapper.API.Enums.StandardEnums;
 using Dapper.API.Exceptions;
 using Dapper.API.Helpers;
+using Dapper.API.Models;
 using Dapper.API.Models.Pagination;
+using Newtonsoft.Json.Linq;
 using System.Text;
+using System.Transactions;
 
 namespace Dapper.API.Data.Repositories
 {
@@ -15,6 +18,7 @@ namespace Dapper.API.Data.Repositories
         private readonly IDapperHandler _dataAccess;
         private readonly ILogger<HotelRepository> _logger;
         private readonly PaginationHelper _paginationHelper;
+        private const string REPOSITORY_NAME = nameof(HotelRepository);
 
         public HotelRepository(ILogger<HotelRepository> logger, IDapperHandler dataAccess, PaginationHelper paginationHelper)
         {
@@ -90,7 +94,7 @@ namespace Dapper.API.Data.Repositories
                 // rethrow the error up the chain
                 throw new RepositoryException(
                   "Failed to create Hotel",
-                  nameof(HotelRepository),
+                  REPOSITORY_NAME,
                   nameof(AddHotel),
                   "Create",
                   ex,
@@ -99,11 +103,84 @@ namespace Dapper.API.Data.Repositories
             }
         }
 
-        /// <summary>
-        /// Delete a hotel
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <inheritdoc/>
+        public async Task<IEnumerable<HotelEntity>> CreateManyAsync(IEnumerable<HotelEntity> hotels, CancellationToken cancellationToken)
+        {
+            try
+            {
+                _logger.LogInformation("Creating {Count} hotels in repository", hotels.Count());
+                var createdHotels = new List<HotelEntity>();
+
+                await _dataAccess.ExecuteInTransaction(async (connection, transaction, token) =>
+                {
+                    foreach(var hotel in hotels)
+                    {
+                        // Set Id parameter for output
+                        var parameters = new DynamicParameters();
+                        parameters.Add("@Name", hotel.Name);
+                        parameters.Add("@Address", hotel.Address);
+                        parameters.Add("@City", hotel.City);
+                        parameters.Add("@Country", hotel.Country);
+                        parameters.Add("@PhoneNumber", hotel.PhoneNumber);
+                        parameters.Add("@Email", hotel.Email);
+                        parameters.Add("@CreatedAt", DateTime.UtcNow);
+                        parameters.Add("@CreatedBy",0);
+
+                        StringBuilder sql = new StringBuilder();
+
+                        // Create the insert query using a parametized query
+                        sql.Append(@"INSERT INTO Hotels
+                            (
+                            Name,
+                            Address, 
+                            City, 
+                            Country, 
+                            PhoneNumber, 
+                            Email, 
+                            CreatedAt, 
+                            CreatedBy
+                        ) 
+                        Values 
+                        (
+                            @Name,
+                            @Address, 
+                            @City, 
+                            @Country, 
+                            @PhoneNumber, 
+                            @Email, 
+                            @CreatedAt, 
+                            @CreatedBy
+                        );  
+                        SELECT CAST(SCOPE_IDENTITY() as int)");
+                        // The last query tells SQL Server to return id of the recently created Hotel
+
+                        var hotel_id = await _dataAccess.ReturnRowSqlInTransaction<int>(sql.ToString(),transaction, parameters, token);
+
+                        hotel.Id = hotel_id;
+
+                        createdHotels.Add(hotel);
+
+                        _logger.LogDebug("Created hotel with ID: {Id}", hotel.Id);
+                    }
+                });
+
+                _logger.LogInformation("Successfully created {Count} hotels", createdHotels.Count);
+
+                return createdHotels;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error creating hotels batch");
+                throw new RepositoryException(
+                    "Failed to create hotels batch",
+                    REPOSITORY_NAME,
+                    nameof(CreateManyAsync),
+                    "CreateMany",
+                    ex);
+            }
+        }
+
+        /// <inheritdoc/>
         public async Task<bool> DeleteHotel(int id)
         {
             try
@@ -133,7 +210,7 @@ namespace Dapper.API.Data.Repositories
 
                 throw new RepositoryException(
                     "Failed to delete Hotel",
-                    nameof(HotelRepository),
+                    REPOSITORY_NAME,
                     nameof(DeleteHotel),
                     "Delete",
                     ex,
@@ -141,12 +218,7 @@ namespace Dapper.API.Data.Repositories
             }
         }
 
-        /// <summary>
-        /// Gets paginated list of hotels
-        /// </summary>
-        /// <param name="pagination"></param>
-        /// <param name="cancellationToken">Cancellation token for async operations</param>
-        /// <returns>Paginated result containing hotels and metadata</returns>
+        /// <inheritdoc/>
         public async Task<PaginatedResult<Hotel>> GetAll(PaginationRequest pagination, CancellationToken cancellationToken = default)
         {
           
@@ -171,11 +243,48 @@ namespace Dapper.API.Data.Repositories
                 cancellationToken: cancellationToken);         
         }
 
-        /// <summary>
-        /// Get a hotel by it's id
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <inheritdoc/>
+        public async Task<IEnumerable<Hotel>> GetByIdsAsync(int[] ids, CancellationToken cancellationToken)
+        {
+            try
+            {
+                _logger.LogInformation($"Processing {nameof(GetByIdsAsync)} in {REPOSITORY_NAME}");
+
+                if (ids == null || !ids.Any())
+                    return Enumerable.Empty<Hotel>();
+
+                // Create the parameters for the IN clause
+                var parameters = new DynamicParameters();
+
+                parameters.Add("@Ids", ids);
+
+                // Build a SQL query with an IN clause for the IDs
+                var sql = new StringBuilder();
+                sql.Append("SELECT Id, Name, Address, City, Country, PhoneNumber, Email, EntityStatusId, CreatedAt ");
+                sql.Append("FROM Hotels ");
+                sql.Append($"WHERE Id IN @Ids");
+
+                // Execute the query
+                var hotels = await _dataAccess.ReturnListSql<Hotel>(
+                    sql.ToString(),
+                    parameters,
+                    cancellationToken: cancellationToken);
+
+                return hotels;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting hotels by IDs");
+                throw new RepositoryException(
+                    "Failed to retrieve hotels by IDs",
+                    REPOSITORY_NAME,
+                    nameof(GetByIdsAsync),
+                    "GetByIds",
+                    ex);
+            }
+        }
+
+        /// <inheritdoc/>
         public async Task<Hotel> GetHotelById(int id)
         {
             try
@@ -201,7 +310,7 @@ namespace Dapper.API.Data.Repositories
 
                 throw new RepositoryException(
                     "Failed to get Hotel by Id",
-                    nameof(HotelRepository),
+                    REPOSITORY_NAME,
                     nameof(GetHotelById),
                     "GetById",
                     ex,
@@ -209,11 +318,7 @@ namespace Dapper.API.Data.Repositories
             }
         }
 
-        /// <summary>
-        /// Get a hotel by it's name
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
+        /// <inheritdoc/>
         public async Task<Hotel> GetHotelByName(string name)
         {
             try
@@ -239,7 +344,7 @@ namespace Dapper.API.Data.Repositories
 
                 throw new RepositoryException(
                     "Failed to get Hotel by Name",
-                    nameof(HotelRepository),
+                    REPOSITORY_NAME,
                     nameof(GetHotelByName),
                     "GetByName",
                     ex,
@@ -247,6 +352,7 @@ namespace Dapper.API.Data.Repositories
             }
         }
 
+        /// <inheritdoc/>
         public async Task<Hotel> GetHotelByNameAndAddress(string name, string address)
         {
             try
@@ -271,7 +377,7 @@ namespace Dapper.API.Data.Repositories
                 _logger.LogError(ex, $"Something went wrong in the HotelBooking.API.Data.HotelRepository {nameof(GetHotelByNameAndAddress)}");
                 throw new RepositoryException(
                     "Failed to get Hotel by Name and Address",
-                    nameof(HotelRepository),
+                    REPOSITORY_NAME,
                     nameof(GetHotelByNameAndAddress),
                     "GetByNameAndAddress",
                     ex,
@@ -279,11 +385,7 @@ namespace Dapper.API.Data.Repositories
             }
         }
 
-        /// <summary>
-        /// Update a hotel
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
+        /// <inheritdoc/>
         public async Task<bool> UpdateHotel(HotelEntity model)
         {
             try
@@ -331,11 +433,110 @@ namespace Dapper.API.Data.Repositories
 
                 throw new RepositoryException(
                     "Failed to update Hotel",
-                    nameof(HotelRepository),
+                    REPOSITORY_NAME,
                     nameof(UpdateHotel),
                     "Update",
                     ex,
                     null);
+            }
+        }
+
+        /// <inheritdoc/>
+        public async Task<BulkDeleteResult> DeleteManyAsync(IEnumerable<int> ids, int userId, CancellationToken cancellationToken)
+        {
+            try
+            {
+                _logger.LogInformation("Deleting {Count} hotels in repository", ids.Count());
+
+                var result = new BulkDeleteResult
+                {
+                    SuccessfullyDeletedIds = new List<int>(),
+                    NotFoundIds = new List<int>(),
+                    FailedIds = new Dictionary<int, string>()
+                };
+
+                // First verify which hotels exist
+                var existingHotels = await GetByIdsAsync(ids.ToArray(), cancellationToken);
+                var existingIds = existingHotels.Select(h => h.Id).ToHashSet();
+
+                // Identify not found IDs
+                foreach (var id in ids)
+                {
+                    if (!existingIds.Contains(id))
+                    {
+                        result.NotFoundIds.Add(id);
+                    }
+                }
+
+                // Process deletions for existing hotels
+                var idsToDelete = ids.Where(id => existingIds.Contains(id)).ToList();
+
+                if (idsToDelete.Any())
+                {
+                    // Execute all deletions in a single transaction
+                    await _dataAccess.ExecuteInTransaction(async (connection, transaction, token) =>
+                    {
+                        foreach (var id in idsToDelete)
+                        {
+                            try
+                            {
+                                // Instead of hard-deleting, we'll set the status to 'Deleted'
+                                // This is a common pattern for maintaining audit history
+                                var parameters = new DynamicParameters();
+                                parameters.Add("@Id", id);
+                                parameters.Add("@UpdatedBy", userId);
+                                parameters.Add("@UpdatedAt", DateTime.UtcNow);
+                                parameters.Add("@EntityStatusId", 3); // 3 = DeletedForEveryone
+
+                                const string updateSql = @"
+                            UPDATE Hotels 
+                            SET EntityStatusId = @EntityStatusId,
+                                UpdatedBy = @UpdatedBy,
+                                UpdatedAt = @UpdatedAt
+                            WHERE Id = @Id";
+
+                                int rowsAffected = await _dataAccess.ExecuteWithoutReturnSqlInTransaction(
+                                    updateSql,
+                                    transaction,
+                                    parameters,
+                                    token);
+
+                                if (rowsAffected > 0)
+                                {
+                                    result.SuccessfullyDeletedIds.Add(id);
+                                    _logger.LogDebug("Marked hotel with ID {Id} as deleted", id);
+                                }
+                                else
+                                {
+                                    // This shouldn't happen since we verified existence, but handle it just in case
+                                    result.FailedIds.Add(id, "Failed to delete. Hotel not found or already deleted.");
+                                    _logger.LogWarning("Failed to delete hotel with ID {Id} - not found or already deleted", id);
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                result.FailedIds.Add(id, "Error deleting hotel: " + ex.Message);
+                                _logger.LogError(ex, "Error deleting hotel with ID {Id}", id);
+                                throw; // This will trigger a transaction rollback
+                            }
+                        }
+                    }, cancellationToken: cancellationToken);
+                }
+
+                _logger.LogInformation("Bulk delete complete. Deleted: {SuccessCount}, Not found: {NotFoundCount}, Failed: {FailedCount}",
+                    result.SuccessfullyDeletedIds.Count, result.NotFoundIds.Count, result.FailedIds.Count);
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error deleting hotels batch");
+                throw new RepositoryException(
+                    "Failed to delete hotels batch",
+                    REPOSITORY_NAME,
+                    nameof(DeleteManyAsync),
+                    "DeleteMany",
+                    ex);
             }
         }
     }
