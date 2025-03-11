@@ -77,6 +77,83 @@ namespace Dapper.API.Enums
 
         #endregion
 
+        #region Room Related Codes (3100-3199)
+
+        // Success Codes
+        /// <summary>
+        /// Room created successfully
+        /// </summary>
+        public static readonly SystemCodeEnum RoomCreated = new(3100, "Room Created Successfully", HttpStatusCode.Created);
+
+        /// <summary>
+        /// Room updated successfully
+        /// </summary>
+        public static readonly SystemCodeEnum RoomUpdated = new(3101, "Room Updated Successfully", HttpStatusCode.OK);
+
+        /// <summary>
+        /// Room deleted successfully
+        /// </summary>
+        public static readonly SystemCodeEnum RoomDeleted = new(3102, "Room Deleted Successfully", HttpStatusCode.NoContent);
+
+        /// <summary>
+        /// Room status changed successfully
+        /// </summary>
+        public static readonly SystemCodeEnum RoomStatusChanged = new(3103, "Room Status Changed Successfully", HttpStatusCode.OK);
+
+        // Error Codes
+        /// <summary>
+        /// Room not found
+        /// </summary>
+        public static readonly SystemCodeEnum RoomNotFound = new(3150, "Room Not Found", HttpStatusCode.NotFound);
+
+        /// <summary>
+        /// Room already exists
+        /// </summary>
+        public static readonly SystemCodeEnum RoomAlreadyExists = new(3151, "Room Already Exists", HttpStatusCode.Conflict);
+
+        /// <summary>
+        /// Invalid room data
+        /// </summary>
+        public static readonly SystemCodeEnum InvalidRoomData = new(3152, "Invalid Room Data", HttpStatusCode.BadRequest);
+
+        /// <summary>
+        /// Room is currently occupied
+        /// </summary>
+        public static readonly SystemCodeEnum RoomOccupied = new(3153, "Room Is Currently Occupied", HttpStatusCode.Conflict);
+
+        /// <summary>
+        /// Room is under maintenance
+        /// </summary>
+        public static readonly SystemCodeEnum RoomUnderMaintenance = new(3154, "Room Is Under Maintenance", HttpStatusCode.Conflict);
+
+        /// <summary>
+        /// Room capacity exceeded
+        /// </summary>
+        public static readonly SystemCodeEnum RoomCapacityExceeded = new(3155, "Room Capacity Exceeded", HttpStatusCode.BadRequest);
+
+        /// <summary>
+        /// Room is not available for booking
+        /// </summary>
+        public static readonly SystemCodeEnum RoomNotAvailable = new(3156, "Room Not Available For Booking", HttpStatusCode.Conflict);
+
+        /// <summary>
+        /// Invalid room price
+        /// </summary>
+        public static readonly SystemCodeEnum InvalidRoomPrice = new(3157, "Invalid Room Price", HttpStatusCode.BadRequest);
+
+        /// <summary>
+        /// Room belongs to a different hotel
+        /// </summary>
+        public static readonly SystemCodeEnum RoomBelongsToDifferentHotel = new(3158, "Room Belongs To A Different Hotel", HttpStatusCode.Conflict);
+
+
+        /// <summary>
+        /// Room creation failed
+        /// </summary>
+        public static readonly SystemCodeEnum RoomCreationFailed = new(3159, "Room Creation Failed", HttpStatusCode.BadRequest);
+
+        #endregion
+
         private SystemCodeEnum(int value, string name) : base(value, name) { }
 
         public HttpStatusCode StatusCode { get; private set; }

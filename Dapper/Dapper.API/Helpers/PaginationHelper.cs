@@ -206,7 +206,8 @@ namespace Dapper.API.Helpers
             PaginationRequest request,
             QueryBuilder queryBuilder,
             string mainTableName,
-            Dictionary<string, string> filterableColumns = null
+            Dictionary<string, string> filterableColumns = null,
+            string[] searchableColumns = null
             )
         {
             try
@@ -217,6 +218,26 @@ namespace Dapper.API.Helpers
 
                 if (queryBuilder == null)
                     throw new ArgumentNullException(nameof(queryBuilder));
+
+                // Apply search if needed
+                if (request.HasSearch && searchableColumns != null && searchableColumns.Length > 0)
+                {
+                    try
+                    {
+                        queryBuilder.WithSearch(request.SearchTerm, searchableColumns);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new SearchException(
+                            "Error applying search criteria",
+                            COMPONENT_NAME,
+                            nameof(GetPaginatedResultAsync),
+                            mainTableName,
+                            request.SearchTerm,
+                            searchableColumns,
+                            ex);
+                    }
+                }
 
                 // Apply filters if provided
                 if (request.HasFilters && filterableColumns != null)
@@ -551,7 +572,7 @@ namespace Dapper.API.Helpers
             try
             {
                 using (var multiQuery = await _dataAccess.QueryMultipleAsync(
-                 sql.ToString(),
+                 sqlQuery,
                  queryBuilder.Parameters,
                  cancellationToken: cancellationToken))
                 {
