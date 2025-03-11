@@ -1,4 +1,4 @@
-﻿using Dapper.API.Enums.StandardEnums;
+using Dapper.API.Enums.StandardEnums;
 using Dapper.API.Models.Pagination;
 using System.Text;
 
@@ -220,7 +220,7 @@ namespace Dapper.API.Helpers
             // JOIN clauses
             foreach (var join in _joins)
             {
-                sql.AppendLine($"{join.Type} {join.Table} AS {join.Alias} ON {join.Condition} ");
+                sql.AppendLine($"{join.Type} JOIN {join.Table} AS {join.Alias} ON {join.Condition} ");
             }
 
             // WHERE clause
@@ -267,7 +267,7 @@ namespace Dapper.API.Helpers
             // JOIN clauses
             foreach (var join in _joins)
             {
-                sql.AppendLine($"{join.Type} {join.Table} AS {join.Alias} ON {join.Condition} ");
+                sql.AppendLine($"{join.Type} JOIN {join.Table} AS {join.Alias} ON {join.Condition} ");
             }
 
             // WHERE clause
