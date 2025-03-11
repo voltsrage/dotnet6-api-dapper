@@ -30,6 +30,7 @@ namespace Dapper.API.Controllers
         /// <param name="pageSize">Number of items per page</param>
         /// <param name="searchTerm">Optional search term</param>
         /// <param name="country">Optional country filter</param>
+        /// <param name="isAvailable">Optional country filter</param>
         /// <param name="city">Optional city filter</param>
         /// <param name="sortColumn">Column to sort by</param>
         /// <param name="sortDirection">Sort direction (asc/desc)</param>   
@@ -46,6 +47,7 @@ namespace Dapper.API.Controllers
             int page = 1,
             int pageSize = 10,
             int guests = 1,
+            bool? isAvailable = true,
             int? hotelId = null,
             int? roomTypeId = null,
             decimal? minPrice = null,
@@ -70,7 +72,7 @@ namespace Dapper.API.Controllers
                     Filters = new Dictionary<string, string>
                     {
                         // Always filter for available rooms with sufficient capacity
-                        { "isAvailable", "true" },
+                        { "isAvailable", !isAvailable.HasValue ? true.ToString() : isAvailable.ToString() },
                         { "maxOccupancy__gte"
                         , guests.ToString() }
                     }
@@ -142,7 +144,8 @@ namespace Dapper.API.Controllers
         /// <summary>
         /// Get rooms by hotel id
         /// </summary>
-        /// <param name="hotelId">The hotel ID</param>
+        /// <param name="hotelId">The hotel ID</param> 
+        /// <param name="isAvailable">Room availability</param>
         /// <param name="roomTypeId">Optional room type ID filter</param> 
         /// <param name="minPrice">Minimum price per night</param>
         /// <param name="maxPrice">Maximum price per night</param>
@@ -159,6 +162,7 @@ namespace Dapper.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetRoomsByHotelId(
             int hotelId,
+            bool? isAvailable = true,
             int page = 1,
             int pageSize = 10,
             int guests = 1,
@@ -183,7 +187,7 @@ namespace Dapper.API.Controllers
                     Filters = new Dictionary<string, string>
                     {
                         // Always filter for available rooms with sufficient capacity
-                        { "isAvailable", "true" },
+                        { "isAvailable", !isAvailable.HasValue ? true.ToString() : isAvailable.ToString()},
                         { "maxOccupancy__gte"
                         , guests.ToString() }
                     }

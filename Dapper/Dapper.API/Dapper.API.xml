@@ -142,7 +142,7 @@
             <param name="cancellationToken">Cancellation token</param>
             <returns>Result of the bulk delete operation</returns>
         </member>
-        <member name="M:Dapper.API.Controllers.RoomsController.GetRooms(System.Int32,System.Int32,System.Int32,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.String,System.String,System.String,System.String,System.String,System.Threading.CancellationToken)">
+        <member name="M:Dapper.API.Controllers.RoomsController.GetRooms(System.Int32,System.Int32,System.Int32,System.Nullable{System.Boolean},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.String,System.String,System.String,System.String,System.String,System.Threading.CancellationToken)">
             <summary>
             Get all rooms
             </summary>
@@ -150,6 +150,7 @@
             <param name="pageSize">Number of items per page</param>
             <param name="searchTerm">Optional search term</param>
             <param name="country">Optional country filter</param>
+            <param name="isAvailable">Optional country filter</param>
             <param name="city">Optional city filter</param>
             <param name="sortColumn">Column to sort by</param>
             <param name="sortDirection">Sort direction (asc/desc)</param>   
@@ -169,11 +170,12 @@
             <param name="cancellationToken">Cancellation token</param>
             <returns>Room if found</returns>
         </member>
-        <member name="M:Dapper.API.Controllers.RoomsController.GetRoomsByHotelId(System.Int32,System.Int32,System.Int32,System.Int32,System.Nullable{System.Int32},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.String,System.String,System.String,System.Threading.CancellationToken)">
+        <member name="M:Dapper.API.Controllers.RoomsController.GetRoomsByHotelId(System.Int32,System.Nullable{System.Boolean},System.Int32,System.Int32,System.Int32,System.Nullable{System.Int32},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.String,System.String,System.String,System.Threading.CancellationToken)">
             <summary>
             Get rooms by hotel id
             </summary>
-            <param name="hotelId">The hotel ID</param>
+            <param name="hotelId">The hotel ID</param> 
+            <param name="isAvailable">Room availability</param>
             <param name="roomTypeId">Optional room type ID filter</param> 
             <param name="minPrice">Minimum price per night</param>
             <param name="maxPrice">Maximum price per night</param>
