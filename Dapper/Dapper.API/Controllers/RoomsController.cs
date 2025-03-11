@@ -29,8 +29,15 @@ namespace Dapper.API.Controllers
         /// <param name="page">Page number</param>
         /// <param name="pageSize">Number of items per page</param>
         /// <param name="searchTerm">Optional search term</param>
+        /// <param name="country">Optional country filter</param>
+        /// <param name="city">Optional city filter</param>
         /// <param name="sortColumn">Column to sort by</param>
-        /// <param name="sortDirection">Sort direction (asc/desc)</param>    
+        /// <param name="sortDirection">Sort direction (asc/desc)</param>   
+        /// <param name="guests">Number of guests</param>
+        /// <param name="hotelId">Optional hotel ID filter</param>
+        /// <param name="roomTypeId">Optional room type ID filter</param> 
+        /// <param name="minPrice">Minimum price per night</param>
+        /// <param name="maxPrice">Maximum price per night</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Paginated list of rooms</returns>
         [HttpGet]
@@ -38,7 +45,14 @@ namespace Dapper.API.Controllers
         public async Task<IActionResult> GetRooms(
             int page = 1,
             int pageSize = 10,
+            int guests = 1,
+            int? hotelId = null,
+            int? roomTypeId = null,
+            decimal? minPrice = null,
+            decimal? maxPrice = null,
             string? searchTerm = null,
+            string? country = null,
+            string? city = null,
             string? sortColumn = "Id",
             string? sortDirection = "asc",
             CancellationToken cancellationToken = default)
@@ -52,8 +66,34 @@ namespace Dapper.API.Controllers
                     PageSize = pageSize,
                     SearchTerm = searchTerm,
                     SortColumn = sortColumn,
-                    SortDirection = sortDirection
+                    SortDirection = sortDirection,
+                    Filters = new Dictionary<string, string>
+                    {
+                        // Always filter for available rooms with sufficient capacity
+                        { "isAvailable", "true" },
+                        { "maxOccupancy__gte"
+                        , guests.ToString() }
+                    }
                 };
+
+                // Add optional filters
+                if (hotelId.HasValue)
+                    pagination.Filters.Add("hotelId", hotelId.Value.ToString());
+
+                if (roomTypeId.HasValue)
+                    pagination.Filters.Add("roomTypeId", roomTypeId.Value.ToString());
+
+                if (minPrice.HasValue)
+                    pagination.Filters.Add("priceMin__gte", minPrice.Value.ToString());
+
+                if (maxPrice.HasValue)
+                    pagination.Filters.Add("priceMax__lte", maxPrice.Value.ToString());
+
+                if (!string.IsNullOrEmpty(country))
+                    pagination.Filters.Add("country", country);
+
+                if (!string.IsNullOrEmpty(city))
+                    pagination.Filters.Add("city", city);
 
                 result = await _roomService.GetAllAsync(pagination, cancellationToken);
                 if (result.StatusCode != null)
@@ -103,7 +143,11 @@ namespace Dapper.API.Controllers
         /// Get rooms by hotel id
         /// </summary>
         /// <param name="hotelId">The hotel ID</param>
-        /// <param name="page">Page number</param>
+        /// <param name="roomTypeId">Optional room type ID filter</param> 
+        /// <param name="minPrice">Minimum price per night</param>
+        /// <param name="maxPrice">Maximum price per night</param>
+        /// <param name="page">Page number</param>  
+        /// <param name="guests">Number of guests</param>
         /// <param name="pageSize">Number of items per page</param>
         /// <param name="searchTerm">Optional search term</param>
         /// <param name="sortColumn">Column to sort by</param>
@@ -117,6 +161,10 @@ namespace Dapper.API.Controllers
             int hotelId,
             int page = 1,
             int pageSize = 10,
+            int guests = 1,
+            int? roomTypeId = null,
+            decimal? minPrice = null,
+            decimal? maxPrice = null,
             string? searchTerm = null,
             string? sortColumn = "Id",
             string? sortDirection = "asc",
@@ -131,8 +179,26 @@ namespace Dapper.API.Controllers
                     PageSize = pageSize,
                     SearchTerm = searchTerm,
                     SortColumn = sortColumn,
-                    SortDirection = sortDirection
+                    SortDirection = sortDirection,
+                    Filters = new Dictionary<string, string>
+                    {
+                        // Always filter for available rooms with sufficient capacity
+                        { "isAvailable", "true" },
+                        { "maxOccupancy__gte"
+                        , guests.ToString() }
+                    }
                 };
+
+                // Add optional filters
+
+                if (roomTypeId.HasValue)
+                    pagination.Filters.Add("roomTypeId", roomTypeId.Value.ToString());
+
+                if (minPrice.HasValue)
+                    pagination.Filters.Add("priceMin__gte", minPrice.Value.ToString());
+
+                if (maxPrice.HasValue)
+                    pagination.Filters.Add("priceMax__lte", maxPrice.Value.ToString());
 
                 result = await _roomService.GetByHotelIdAsync(hotelId, pagination, cancellationToken);
                 if (result.StatusCode != null)
