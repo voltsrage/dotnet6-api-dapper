@@ -83,6 +83,27 @@
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>
+        <member name="M:Dapper.API.Controllers.HotelsController.GetHotelsWithRooms(System.Int32,System.Int32,System.String,System.String,System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Get all hotels with their rooms
+            </summary>
+            <param name="page">Page number</param>
+            <param name="pageSize">Number of items per page</param>
+            <param name="searchTerm">Optional search term</param>
+            <param name="sortColumn">Column to sort by</param>
+            <param name="sortDirection">Sort direction (asc/desc)</param>
+            <param name="country">Filter by country</param>
+            <param name="city">Filter by city</param>
+            <returns>Paginated list of hotels with their rooms</returns>
+        </member>
+        <member name="M:Dapper.API.Controllers.HotelsController.GetHotelWithRoomsById(System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Get a hotel with its rooms by ID
+            </summary>
+            <param name="hotelId">The hotel ID</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>The hotel with its rooms</returns>
+        </member>
         <member name="M:Dapper.API.Controllers.HotelsController.GetHotelById(System.Int32)">
             <summary>
             Get hotel by id
@@ -250,11 +271,7 @@
             <returns>A GridReader for reading multiple result sets</returns>
         </member>
         <member name="M:Dapper.API.Data.Repositories.HotelRepository.AddHotel(Dapper.API.Entities.HotelEntity)">
-            <summary>
-            Add a new hotel
-            </summary>
-            <param name="model"></param>
-            <returns></returns>
+            <inheritdoc/>
         </member>
         <member name="M:Dapper.API.Data.Repositories.HotelRepository.CreateManyAsync(System.Collections.Generic.IEnumerable{Dapper.API.Entities.HotelEntity},System.Threading.CancellationToken)">
             <inheritdoc/>
@@ -281,6 +298,12 @@
             <inheritdoc/>
         </member>
         <member name="M:Dapper.API.Data.Repositories.HotelRepository.DeleteManyAsync(System.Collections.Generic.IEnumerable{System.Int32},System.Int32,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.HotelRepository.GetHotelsWithRoomsAsync(Dapper.API.Models.Pagination.PaginationRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.HotelRepository.GetHotelWithRoomsByIdAsync(System.Int32,System.Threading.CancellationToken)">
             <inheritdoc/>
         </member>
         <member name="T:Dapper.API.Data.Repositories.Interfaces.IHotelRepository">
@@ -310,6 +333,22 @@
             <param name="pagination"></param>
             <param name="cancellationToken">Cancellation token for async operations</param>
             <returns>Paginated result containing hotels and metadata</returns>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.IHotelRepository.GetHotelsWithRoomsAsync(Dapper.API.Models.Pagination.PaginationRequest,System.Threading.CancellationToken)">
+            <summary>
+            Gets hotels with their rooms with pagination and filtering
+            </summary>
+            <param name="request">Pagination and filtering parameters</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>Paginated list of hotels with their rooms</returns>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.IHotelRepository.GetHotelWithRoomsByIdAsync(System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Gets a hotel with its rooms by hotel ID
+            </summary>
+            <param name="hotelId">The hotel ID</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>The hotel with its rooms, or null if not found</returns>
         </member>
         <member name="M:Dapper.API.Data.Repositories.Interfaces.IHotelRepository.DeleteHotel(System.Int32)">
             <summary>
@@ -607,6 +646,56 @@
         <member name="P:Dapper.API.Dtos.Rooms.AddEditRoomType.Description">
             <summary>
             Gets or sets the description of the room type.
+            </summary>
+        </member>
+        <member name="T:Dapper.API.Dtos.Rooms.HotelWithRooms">
+            <summary>
+            Represents an instance of a hotel and the rooms inside it
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Rooms.HotelWithRooms.Id">
+            <summary>
+            Gets or sets the unique identifier for the hotel.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Rooms.HotelWithRooms.Name">
+            <summary>
+            Gets or sets the name of the hotel.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Rooms.HotelWithRooms.Address">
+            <summary>
+            Gets or sets the address of the hotel.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Rooms.HotelWithRooms.City">
+            <summary>
+            Gets or sets the city where the hotel is located.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Rooms.HotelWithRooms.Country">
+            <summary>
+            Gets or sets the country where the hotel is located.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Rooms.HotelWithRooms.PhoneNumber">
+            <summary>
+            Gets or sets the phone number of the hotel.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Rooms.HotelWithRooms.Email">
+            <summary>
+            Gets or sets the email address of the hotel.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Rooms.HotelWithRooms.CreateAt">
+            <summary>
+            Gets or sets the create time for the hotel
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Rooms.HotelWithRooms.Rooms">
+            <summary>
+            Gets or sets the rooms inside of this hotel
             </summary>
         </member>
         <member name="T:Dapper.API.Dtos.Rooms.Room">
@@ -1344,13 +1433,24 @@
             <param name="result"></param>
             <returns></returns>
         </member>
-        <member name="M:Dapper.API.Helpers.PaginationHelper.#ctor(Dapper.API.Data.Dapper.IDapperHandler,Microsoft.Extensions.Logging.ILogger{Dapper.API.Helpers.PaginationHelper})">
+        <member name="T:Dapper.API.Helpers.IPaginationHelper">
             <summary>
-            Creates a new pagination helper
+            Interface for pagination helper
             </summary>
-            <param name="dapperHandler"></param>
         </member>
-        <member name="M:Dapper.API.Helpers.PaginationHelper.GetPaginatedResultAsync``1(Dapper.API.Models.Pagination.PaginationRequest,System.String,System.String,System.String[],System.Collections.Generic.Dictionary{System.String,System.String},System.String,System.String,System.String,System.Threading.CancellationToken)">
+        <member name="M:Dapper.API.Helpers.IPaginationHelper.GetPaginatedDataWithJoinsAsync``1(Dapper.API.Models.Pagination.PaginationRequest,Dapper.API.Helpers.QueryBuilder,System.String,System.Collections.Generic.Dictionary{System.String,System.String},System.String[])">
+            <summary>
+            Gets paginated data with custom joins
+            </summary>
+            <typeparam name="T">Type of entity to retrieve</typeparam>
+            <param name="request">Pagination request</param>
+            <param name="queryBuilder">Pre-configured query builder with custom joins</param>
+            <param name="mainTableName">Name of the main table</param>
+            <param name="filterableColumns">Dictionary mapping filter keys to column names</param>
+            <param name="searchableColumns">Columns to include in search</param>
+            <returns>Paginated result</returns>
+        </member>
+        <member name="M:Dapper.API.Helpers.IPaginationHelper.GetPaginatedResultAsync``1(Dapper.API.Models.Pagination.PaginationRequest,System.String,System.String,System.String[],System.Collections.Generic.Dictionary{System.String,System.String},System.String,System.String,System.String,System.Threading.CancellationToken)">
             <summary>
             Gets paginated data using a base query with optional search and filters
             </summary>
@@ -1363,16 +1463,20 @@
             <param name="baseCondition">Base WHERE condition</param>
             <param name="sortColumn">Default sort column</param>
             <param name="sortDirection">Default sort direction</param>
+            <param name="cancellationToken">Cancellation token</param>
             <returns>Paginated result</returns>
         </member>
-        <member name="M:Dapper.API.Helpers.PaginationHelper.GetPaginatedDataWithJoinsAsync``1(Dapper.API.Models.Pagination.PaginationRequest,Dapper.API.Helpers.QueryBuilder,System.String,System.Collections.Generic.Dictionary{System.String,System.String},System.String[])">
+        <member name="M:Dapper.API.Helpers.PaginationHelper.#ctor(Dapper.API.Data.Dapper.IDapperHandler,Microsoft.Extensions.Logging.ILogger{Dapper.API.Helpers.PaginationHelper})">
             <summary>
-            Gets paginated data with custom joins
+            Creates a new pagination helper
             </summary>
-            <typeparam name="T">Type of entity to retrieve</typeparam>
-            <param name="request">Pagination request</param>
-            <param name="queryBuilder">Pre-configured query builder with custom joins</param>
-            <returns>Paginated result</returns>
+            <param name="dapperHandler"></param>
+        </member>
+        <member name="M:Dapper.API.Helpers.PaginationHelper.GetPaginatedResultAsync``1(Dapper.API.Models.Pagination.PaginationRequest,System.String,System.String,System.String[],System.Collections.Generic.Dictionary{System.String,System.String},System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Dapper.API.Helpers.PaginationHelper.GetPaginatedDataWithJoinsAsync``1(Dapper.API.Models.Pagination.PaginationRequest,Dapper.API.Helpers.QueryBuilder,System.String,System.Collections.Generic.Dictionary{System.String,System.String},System.String[])">
+            <inheritdoc/>
         </member>
         <member name="M:Dapper.API.Helpers.PaginationHelper.ApplyFilters(Dapper.API.Helpers.QueryBuilder,System.Collections.Generic.Dictionary{System.String,System.String},System.Collections.Generic.Dictionary{System.String,System.String},System.String)">
             <summary>
@@ -1634,7 +1738,7 @@
             </summary>
             <typeparam name="T">The type of items in the collection</typeparam>
         </member>
-        <member name="M:Dapper.API.Models.Pagination.PaginatedResult`1.#ctor(System.Collections.Generic.IReadOnlyList{`0},System.Int32,System.Int32,System.Int32)">
+        <member name="M:Dapper.API.Models.Pagination.PaginatedResult`1.#ctor(System.Collections.Generic.List{`0},System.Int32,System.Int32,System.Int32)">
             <summary>
             Initializes a new instance of the PaginatedResult class
             </summary>
@@ -1847,6 +1951,12 @@
         <member name="M:Dapper.API.Services.HotelService.GetHotelByName(System.String)">
             <inheritdoc/>
         </member>
+        <member name="M:Dapper.API.Services.HotelService.GetHotelsWithRoomsAsync(Dapper.API.Models.Pagination.PaginationRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Dapper.API.Services.HotelService.GetHotelWithRoomsByIdAsync(System.Int32,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
         <member name="M:Dapper.API.Services.HotelService.UpdateHotel(System.Int32,Dapper.API.Dtos.Hotels.AddEditHotel)">
             <inheritdoc/>
         </member>
@@ -1877,6 +1987,22 @@
             <param name="pagination"></param>
             <param name="cancellationToken">Cancellation token for async operations</param>
             <returns>Paginated result containing hotels and metadata</returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.IHotelService.GetHotelsWithRoomsAsync(Dapper.API.Models.Pagination.PaginationRequest,System.Threading.CancellationToken)">
+            <summary>
+            Gets hotels with their rooms with pagination and filtering
+            </summary>
+            <param name="request">Pagination and filtering parameters</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>Paginated list of hotels with their rooms</returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.IHotelService.GetHotelWithRoomsByIdAsync(System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Gets a hotel with its rooms by hotel ID
+            </summary>
+            <param name="hotelId">The hotel ID</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>The hotel with its rooms, or null if not found</returns>
         </member>
         <member name="M:Dapper.API.Services.Interfaces.IHotelService.DeleteHotel(System.Int32)">
             <summary>

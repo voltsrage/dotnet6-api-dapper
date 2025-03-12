@@ -17,12 +17,12 @@ namespace Dapper.API.Data.Repositories
         private readonly IDapperHandler _dapper;
         private readonly ILogger<RoomRepository> _logger;
         private const string REPOSITORY_NAME = nameof(RoomRepository);
-        private readonly PaginationHelper _paginationHelper;
+        private readonly IPaginationHelper _paginationHelper;
 
         public RoomRepository(
             IDapperHandler dapper,
             ILogger<RoomRepository> logger,
-            PaginationHelper paginationHelper)
+            IPaginationHelper paginationHelper)
         {
             _dapper = dapper ?? throw new ArgumentNullException(nameof(dapper));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
