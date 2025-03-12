@@ -28,12 +28,36 @@ namespace Dapper.API.Services.Interfaces
             CancellationToken cancellationToken);
 
         /// <summary>
+        /// Creates a hotel with its rooms
+        /// </summary>
+        /// <param name="hotelWithRooms">The hotel data with rooms</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>The created hotel with its rooms and IDs assigned</returns>
+        Task<Response<HotelWithRooms>> CreateHotelWithRoomsAsync(AddHotelWithRooms hotelWithRooms, CancellationToken cancellationToken = default);
+
+        /// <summary>
         /// Gets paginated list of hotels
         /// </summary>
         /// <param name="pagination"></param>
         /// <param name="cancellationToken">Cancellation token for async operations</param>
         /// <returns>Paginated result containing hotels and metadata</returns>
         Task<Response<PaginatedResult<Hotel>>> GetAll(PaginationRequest pagination, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Gets hotels with their rooms with pagination and filtering
+        /// </summary>
+        /// <param name="request">Pagination and filtering parameters</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>Paginated list of hotels with their rooms</returns>
+        Task<Response<PaginatedResult<HotelWithRooms>>> GetHotelsWithRoomsAsync(PaginationRequest request, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Gets a hotel with its rooms by hotel ID
+        /// </summary>
+        /// <param name="hotelId">The hotel ID</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>The hotel with its rooms, or null if not found</returns>
+        Task<Response<HotelWithRooms>> GetHotelWithRoomsByIdAsync(int hotelId, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Delete a hotel

@@ -13,7 +13,7 @@
         /// <param name="totalCount">The total number of items across all pages</param>
         /// <param name="page">The current page (1-based)</param>
         /// <param name="pageSize">The number of items per page</param>
-        public PaginatedResult(IReadOnlyList<T> items, int totalCount, int page, int pageSize)
+        public PaginatedResult(List<T> items, int totalCount, int page, int pageSize)
         {
             Items = items ?? throw new ArgumentNullException(nameof(items));
             TotalCount = totalCount;
@@ -25,7 +25,7 @@
         /// <summary>
         /// The items on the current page
         /// </summary>
-        public IReadOnlyList<T> Items { get; }
+        public List<T> Items { get; }
 
         /// <summary>
         /// The current page number (1-based)
@@ -64,6 +64,6 @@
         /// <param name="pageSize">Number of items per page</param>
         /// <returns>Empty paged result</returns>
         public static PaginatedResult<T> Empty(int page, int pageSize) =>
-            new PaginatedResult<T>(Array.Empty<T>(), 0, page, pageSize);
+            new PaginatedResult<T>(new List<T>(), 0, page, pageSize);
     }
 }

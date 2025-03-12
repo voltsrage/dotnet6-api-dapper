@@ -83,11 +83,39 @@
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>
+        <member name="M:Dapper.API.Controllers.HotelsController.GetHotelsWithRooms(System.Int32,System.Int32,System.String,System.String,System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Get all hotels with their rooms
+            </summary>
+            <param name="page">Page number</param>
+            <param name="pageSize">Number of items per page</param>
+            <param name="searchTerm">Optional search term</param>
+            <param name="sortColumn">Column to sort by</param>
+            <param name="sortDirection">Sort direction (asc/desc)</param>
+            <param name="country">Filter by country</param>
+            <param name="city">Filter by city</param>
+            <returns>Paginated list of hotels with their rooms</returns>
+        </member>
+        <member name="M:Dapper.API.Controllers.HotelsController.GetHotelWithRoomsById(System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Get a hotel with its rooms by ID
+            </summary>
+            <param name="hotelId">The hotel ID</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>The hotel with its rooms</returns>
+        </member>
         <member name="M:Dapper.API.Controllers.HotelsController.GetHotelById(System.Int32)">
             <summary>
             Get hotel by id
             </summary>
             <param name="hotelId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Controllers.HotelsController.GetHotelsByIds(System.String)">
+            <summary>
+            Get hotels by ids
+            </summary>
+            <param name="hotelIds"></param>
             <returns></returns>
         </member>
         <member name="M:Dapper.API.Controllers.HotelsController.GetHotelByName(System.String)">
@@ -104,6 +132,22 @@
             <param name="model"></param>
             <returns></returns>
         </member>
+        <member name="M:Dapper.API.Controllers.HotelsController.CreateHotelWithRooms(Dapper.API.Dtos.Hotels.AddHotelWithRooms,System.Threading.CancellationToken)">
+            <summary>
+            Create a new hotel with rooms
+            </summary>
+            <param name="model">Hotel with rooms data</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>Created hotel with rooms</returns>
+        </member>
+        <member name="M:Dapper.API.Controllers.HotelsController.CreateManyAsync(System.Collections.Generic.IEnumerable{Dapper.API.Dtos.Hotels.AddEditHotel})">
+            <summary>
+            Creates multiple hotels in a single transaction
+            </summary>
+            <param name="hotels">Collection of hotels to create</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>Collection of created hotels with IDs assigned</returns>
+        </member>
         <member name="M:Dapper.API.Controllers.HotelsController.UpdateHotel(System.Int32,Dapper.API.Dtos.Hotels.AddEditHotel)">
             <summary>
             Update hotel by id
@@ -118,6 +162,101 @@
             </summary>
             <param name="hotelId"></param>
             <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Controllers.HotelsController.DeleteManyAsync(System.Collections.Generic.IEnumerable{System.Int32})">
+            <summary>
+            Deletes multiple hotels in a single transaction
+            </summary>
+            <param name="ids">Collection of hotel IDs to delete</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>Result of the bulk delete operation</returns>
+        </member>
+        <member name="M:Dapper.API.Controllers.RoomsController.GetRooms(System.Int32,System.Int32,System.Int32,System.Nullable{System.Boolean},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.String,System.String,System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Get all rooms
+            </summary>
+            <param name="page">Page number</param>
+            <param name="pageSize">Number of items per page</param>
+            <param name="searchTerm">Optional search term</param>
+            <param name="country">Optional country filter</param>
+            <param name="isAvailable">Optional country filter</param>
+            <param name="city">Optional city filter</param>
+            <param name="sortColumn">Column to sort by</param>
+            <param name="sortDirection">Sort direction (asc/desc)</param>   
+            <param name="guests">Number of guests</param>
+            <param name="hotelId">Optional hotel ID filter</param>
+            <param name="roomTypeId">Optional room type ID filter</param> 
+            <param name="minPrice">Minimum price per night</param>
+            <param name="maxPrice">Maximum price per night</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>Paginated list of rooms</returns>
+        </member>
+        <member name="M:Dapper.API.Controllers.RoomsController.GetRoomById(System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Get room by id
+            </summary>
+            <param name="id">The room ID</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>Room if found</returns>
+        </member>
+        <member name="M:Dapper.API.Controllers.RoomsController.GetRoomsByHotelId(System.Int32,System.Nullable{System.Boolean},System.Int32,System.Int32,System.Int32,System.Nullable{System.Int32},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Get rooms by hotel id
+            </summary>
+            <param name="hotelId">The hotel ID</param> 
+            <param name="isAvailable">Room availability</param>
+            <param name="roomTypeId">Optional room type ID filter</param> 
+            <param name="minPrice">Minimum price per night</param>
+            <param name="maxPrice">Maximum price per night</param>
+            <param name="page">Page number</param>  
+            <param name="guests">Number of guests</param>
+            <param name="pageSize">Number of items per page</param>
+            <param name="searchTerm">Optional search term</param>
+            <param name="sortColumn">Column to sort by</param>
+            <param name="sortDirection">Sort direction (asc/desc)</param>    
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>Paginated list of rooms for a hotel</returns>
+        </member>
+        <member name="M:Dapper.API.Controllers.RoomsController.CreateRoom(Dapper.API.Dtos.Rooms.AddEditRoom,System.Threading.CancellationToken)">
+            <summary>
+            Create a new room
+            </summary>
+            <param name="model">Room data</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>Created room with ID assigned</returns>
+        </member>
+        <member name="M:Dapper.API.Controllers.RoomsController.UpdateRoom(System.Int32,Dapper.API.Dtos.Rooms.AddEditRoom,System.Threading.CancellationToken)">
+            <summary>
+            Update an existing room
+            </summary>
+            <param name="id">The room ID</param>
+            <param name="model">Updated room data</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>Updated room</returns>
+        </member>
+        <member name="M:Dapper.API.Controllers.RoomsController.DeleteRoom(System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Delete a room
+            </summary>
+            <param name="id">The room ID</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>True if deleted; otherwise false</returns>
+        </member>
+        <member name="M:Dapper.API.Controllers.RoomsController.UpdateRoomAvailability(System.Int32,System.Boolean,System.Threading.CancellationToken)">
+            <summary>
+            Update room availability status
+            </summary>
+            <param name="id">The room ID</param>
+            <param name="isAvailable">New availability status</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>True if updated; otherwise false</returns>
+        </member>
+        <member name="M:Dapper.API.Controllers.RoomsController.GetRoomTypes(System.Threading.CancellationToken)">
+            <summary>
+            Get all room types
+            </summary>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>List of room types</returns>
         </member>
         <member name="M:Dapper.API.Data.Dapper.DapperHandler.QueryMultipleAsync(System.String,Dapper.DynamicParameters,System.String,System.Threading.CancellationToken)">
             <summary>
@@ -140,11 +279,7 @@
             <returns>A GridReader for reading multiple result sets</returns>
         </member>
         <member name="M:Dapper.API.Data.Repositories.HotelRepository.AddHotel(Dapper.API.Entities.HotelEntity)">
-            <summary>
-            Add a new hotel
-            </summary>
-            <param name="model"></param>
-            <returns></returns>
+            <inheritdoc/>
         </member>
         <member name="M:Dapper.API.Data.Repositories.HotelRepository.CreateManyAsync(System.Collections.Generic.IEnumerable{Dapper.API.Entities.HotelEntity},System.Threading.CancellationToken)">
             <inheritdoc/>
@@ -173,6 +308,15 @@
         <member name="M:Dapper.API.Data.Repositories.HotelRepository.DeleteManyAsync(System.Collections.Generic.IEnumerable{System.Int32},System.Int32,System.Threading.CancellationToken)">
             <inheritdoc/>
         </member>
+        <member name="M:Dapper.API.Data.Repositories.HotelRepository.GetHotelsWithRoomsAsync(Dapper.API.Models.Pagination.PaginationRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.HotelRepository.GetHotelWithRoomsByIdAsync(System.Int32,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.HotelRepository.CreateHotelWithRoomsAsync(Dapper.API.Dtos.Hotels.AddEditHotel,System.Collections.Generic.IEnumerable{Dapper.API.Dtos.Rooms.AddEditRoom},System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
         <member name="T:Dapper.API.Data.Repositories.Interfaces.IHotelRepository">
             <summary>
             Repository Interface for the hotels
@@ -193,6 +337,15 @@
             <param name="cancellationToken">Cancellation token</param>
             <returns>Created hotels with IDs assigned</returns>
         </member>
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.IHotelRepository.CreateHotelWithRoomsAsync(Dapper.API.Dtos.Hotels.AddEditHotel,System.Collections.Generic.IEnumerable{Dapper.API.Dtos.Rooms.AddEditRoom},System.Threading.CancellationToken)">
+            <summary>
+            Creates a hotel with its rooms
+            </summary>
+            <param name="hotel">The hotel data</param>
+            <param name="rooms">The list of rooms to create</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>The created hotel with its rooms and IDs assigned</returns>
+        </member>
         <member name="M:Dapper.API.Data.Repositories.Interfaces.IHotelRepository.GetAll(Dapper.API.Models.Pagination.PaginationRequest,System.Threading.CancellationToken)">
             <summary>
             Gets paginated list of hotels
@@ -200,6 +353,22 @@
             <param name="pagination"></param>
             <param name="cancellationToken">Cancellation token for async operations</param>
             <returns>Paginated result containing hotels and metadata</returns>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.IHotelRepository.GetHotelsWithRoomsAsync(Dapper.API.Models.Pagination.PaginationRequest,System.Threading.CancellationToken)">
+            <summary>
+            Gets hotels with their rooms with pagination and filtering
+            </summary>
+            <param name="request">Pagination and filtering parameters</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>Paginated list of hotels with their rooms</returns>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.IHotelRepository.GetHotelWithRoomsByIdAsync(System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Gets a hotel with its rooms by hotel ID
+            </summary>
+            <param name="hotelId">The hotel ID</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>The hotel with its rooms, or null if not found</returns>
         </member>
         <member name="M:Dapper.API.Data.Repositories.Interfaces.IHotelRepository.DeleteHotel(System.Int32)">
             <summary>
@@ -253,6 +422,110 @@
             </summary>
             <param name="model"></param>
             <returns></returns>
+        </member>
+        <member name="T:Dapper.API.Data.Repositories.Interfaces.IRoomRepository">
+            <summary>
+            Interface for room data access operations
+            </summary>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.IRoomRepository.GetByIdAsync(System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Gets a room by its ID
+            </summary>
+            <param name="id">The room ID</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>The room if found; otherwise null</returns>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.IRoomRepository.GetByHotelIdAsync(System.Int32,Dapper.API.Models.Pagination.PaginationRequest,System.Threading.CancellationToken)">
+            <summary>
+            Gets rooms by hotel ID with optional filtering
+            </summary>
+            <param name="hotelId">The hotel ID</param>
+            <param name="request">Pagination and filtering parameters</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>Paginated list of rooms</returns>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.IRoomRepository.GetAllAsync(Dapper.API.Models.Pagination.PaginationRequest,System.Threading.CancellationToken)">
+            <summary>
+            Gets all rooms with pagination and filtering
+            </summary>
+            <param name="request">Pagination and filtering parameters</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>Paginated list of rooms</returns>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.IRoomRepository.CreateAsync(Dapper.API.Entities.RoomEntity,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Creates a new room
+            </summary>
+            <param name="room">The room to create</param>
+            <param name="userId">ID of the user creating the room</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>The created room with ID assigned</returns>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.IRoomRepository.UpdateAsync(Dapper.API.Entities.RoomEntity,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Updates an existing room
+            </summary>
+            <param name="id">The room ID to update</param>
+            <param name="room">Updated room data</param>
+            <param name="userId">ID of the user updating the room</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>The updated room</returns>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.IRoomRepository.DeleteAsync(System.Int32,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Deletes a room by setting its status to deleted
+            </summary>
+            <param name="id">The room ID</param>
+            <param name="userId">ID of the user deleting the room</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>True if deleted; otherwise false</returns>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.IRoomRepository.UpdateAvailabilityAsync(System.Int32,System.Boolean,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Updates the availability status of a room
+            </summary>
+            <param name="id">The room ID</param>
+            <param name="isAvailable">New availability status</param>
+            <param name="userId">ID of the user updating the status</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>True if updated; otherwise false</returns>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.IRoomRepository.GetRoomTypesAsync(System.Threading.CancellationToken)">
+            <summary>
+            Gets all room types
+            </summary>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>List of room types</returns>
+        </member>
+        <member name="T:Dapper.API.Data.Repositories.RoomRepository">
+            <summary>
+            Repository implementation for room data access
+            </summary>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.RoomRepository.GetByIdAsync(System.Int32,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.RoomRepository.GetByHotelIdAsync(System.Int32,Dapper.API.Models.Pagination.PaginationRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.RoomRepository.GetAllAsync(Dapper.API.Models.Pagination.PaginationRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.RoomRepository.CreateAsync(Dapper.API.Entities.RoomEntity,System.Int32,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.RoomRepository.UpdateAsync(Dapper.API.Entities.RoomEntity,System.Int32,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.RoomRepository.DeleteAsync(System.Int32,System.Int32,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.RoomRepository.UpdateAvailabilityAsync(System.Int32,System.Boolean,System.Int32,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.RoomRepository.GetRoomTypesAsync(System.Threading.CancellationToken)">
+            <inheritdoc/>
         </member>
         <member name="T:Dapper.API.Dtos.Common.BaseModel">
             <summary>
@@ -310,6 +583,21 @@
             Gets or sets the email address of the hotel.
             </summary>
         </member>
+        <member name="T:Dapper.API.Dtos.Hotels.AddHotelWithRooms">
+            <summary>
+            DTO for creating a hotel with its rooms
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Hotels.AddHotelWithRooms.Hotel">
+            <summary>
+            Hotel data to create
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Hotels.AddHotelWithRooms.Rooms">
+            <summary>
+            List of rooms to create for the hotel
+            </summary>
+        </member>
         <member name="T:Dapper.API.Dtos.Hotels.Hotel">
             <summary>
             Represents a hotel data transfer object.
@@ -343,6 +631,166 @@
         <member name="P:Dapper.API.Dtos.Hotels.Hotel.Email">
             <summary>
             Gets or sets the email address of the hotel.
+            </summary>
+        </member>
+        <member name="T:Dapper.API.Dtos.Hotels.HotelWithRooms">
+            <summary>
+            Represents an instance of a hotel and the rooms inside it
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Hotels.HotelWithRooms.Id">
+            <summary>
+            Gets or sets the unique identifier for the hotel.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Hotels.HotelWithRooms.Name">
+            <summary>
+            Gets or sets the name of the hotel.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Hotels.HotelWithRooms.Address">
+            <summary>
+            Gets or sets the address of the hotel.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Hotels.HotelWithRooms.City">
+            <summary>
+            Gets or sets the city where the hotel is located.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Hotels.HotelWithRooms.Country">
+            <summary>
+            Gets or sets the country where the hotel is located.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Hotels.HotelWithRooms.PhoneNumber">
+            <summary>
+            Gets or sets the phone number of the hotel.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Hotels.HotelWithRooms.Email">
+            <summary>
+            Gets or sets the email address of the hotel.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Hotels.HotelWithRooms.CreateAt">
+            <summary>
+            Gets or sets the create time for the hotel
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Hotels.HotelWithRooms.Rooms">
+            <summary>
+            Gets or sets the rooms inside of this hotel
+            </summary>
+        </member>
+        <member name="T:Dapper.API.Dtos.Rooms.AddEditRoom">
+            <summary>
+            Use for adding or editing a room.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Rooms.AddEditRoom.HotelId">
+            <summary>
+            Gets or sets the unique identifier of the hotel to which the room belongs.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Rooms.AddEditRoom.RoomNumber">
+            <summary>
+            Gets or sets the room number.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Rooms.AddEditRoom.RoomTypeId">
+            <summary>
+            Gets or sets the type of the room (e.g., Standard, Deluxe, Suite).
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Rooms.AddEditRoom.PricePerNight">
+            <summary>
+            Gets or sets the price per night for the room.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Rooms.AddEditRoom.IsAvailable">
+            <summary>
+            Gets or sets a value indicating whether the room is available.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Rooms.AddEditRoom.MaxOccupancy">
+            <summary>
+            Gets or sets the maximum number of guests that can occupy the room.
+            </summary>
+        </member>
+        <member name="T:Dapper.API.Dtos.Rooms.AddEditRoomType">
+            <summary>
+            Represents a room type for dropdown lists and selection.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Rooms.AddEditRoomType.Name">
+            <summary>
+            Gets or sets the name of the room type.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Rooms.AddEditRoomType.Description">
+            <summary>
+            Gets or sets the description of the room type.
+            </summary>
+        </member>
+        <member name="T:Dapper.API.Dtos.Rooms.Room">
+            <summary>
+            Represents a room data transfer object.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Rooms.Room.HotelId">
+            <summary>
+            Gets or sets the unique identifier of the hotel to which the room belongs.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Rooms.Room.RoomNumber">
+            <summary>
+            Gets or sets the room number.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Rooms.Room.RoomTypeId">
+            <summary>
+            Gets or sets the type of the room (e.g., Standard, Deluxe, Suite).
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Rooms.Room.RoomTypeName">
+            <summary>
+            Gets or sets the name of the room type.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Rooms.Room.PricePerNight">
+            <summary>
+            Gets or sets the price per night for the room.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Rooms.Room.IsAvailable">
+            <summary>
+            Gets or sets a value indicating whether the room is available.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Rooms.Room.MaxOccupancy">
+            <summary>
+            Gets or sets the maximum number of guests that can occupy the room.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Rooms.Room.HotelName">
+            <summary>
+            Gets or sets the name of the hotel to which the room belongs.
+            </summary>
+        </member>
+        <member name="T:Dapper.API.Dtos.Rooms.RoomType">
+            <summary>
+            Represents a room type for dropdown lists and selection.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Rooms.RoomType.Name">
+            <summary>
+            Gets or sets the name of the room type.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Rooms.RoomType.Description">
+            <summary>
+            Gets or sets the description of the room type.
             </summary>
         </member>
         <member name="T:Dapper.API.Entities.Common.BaseModel">
@@ -416,6 +864,56 @@
             Gets or sets the email address of the hotel.
             </summary>
         </member>
+        <member name="T:Dapper.API.Entities.RoomEntity">
+            <summary>
+            Represents a room in a hotel.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Entities.RoomEntity.HotelId">
+            <summary>
+            Gets or sets the unique identifier of the hotel to which the room belongs.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Entities.RoomEntity.RoomNumber">
+            <summary>
+            Gets or sets the room number.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Entities.RoomEntity.RoomTypeId">
+            <summary>
+            Gets or sets the type of the room (e.g., Standard, Deluxe, Suite).
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Entities.RoomEntity.PricePerNight">
+            <summary>
+            Gets or sets the price per night for the room.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Entities.RoomEntity.IsAvailable">
+            <summary>
+            Gets or sets a value indicating whether the room is available.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Entities.RoomEntity.MaxOccupancy">
+            <summary>
+            Gets or sets the maximum number of guests that can occupy the room.
+            </summary>
+        </member>
+        <member name="T:Dapper.API.Entities.RoomTypeEntity">
+            <summary>
+            Represents a room type in the hotel
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Entities.RoomTypeEntity.Name">
+            <summary>
+            Name of room type
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Entities.RoomTypeEntity.Description">
+            <summary>
+            Description of room type
+            </summary>
+        </member>
         <member name="T:Dapper.API.Enums.StandardEnums.JoinType">
             <summary>
             Types of SQL joins
@@ -434,6 +932,71 @@
         <member name="F:Dapper.API.Enums.StandardEnums.JoinType.Right">
             <summary>
             RIGHT JOIN
+            </summary>
+        </member>
+        <member name="T:Dapper.API.Enums.StandardEnums.RoomType">
+            <summary>
+            Enumeration of room types in a hotel
+            </summary>
+        </member>
+        <member name="F:Dapper.API.Enums.StandardEnums.RoomType.Standard">
+            <summary>
+            Standard room with basic amenities
+            </summary>
+        </member>
+        <member name="F:Dapper.API.Enums.StandardEnums.RoomType.Deluxe">
+            <summary>
+            Deluxe room with enhanced amenities and comfort
+            </summary>
+        </member>
+        <member name="F:Dapper.API.Enums.StandardEnums.RoomType.Suite">
+            <summary>
+            Suite with separate living area and bedroom
+            </summary>
+        </member>
+        <member name="F:Dapper.API.Enums.StandardEnums.RoomType.Executive">
+            <summary>
+            Executive room with business amenities and services
+            </summary>
+        </member>
+        <member name="F:Dapper.API.Enums.StandardEnums.RoomType.Penthouse">
+            <summary>
+            Penthouse suite, typically on the top floor with premium amenities
+            </summary>
+        </member>
+        <member name="F:Dapper.API.Enums.StandardEnums.RoomType.Family">
+            <summary>
+            Family room with additional space for families
+            </summary>
+        </member>
+        <member name="F:Dapper.API.Enums.StandardEnums.RoomType.Accessible">
+            <summary>
+            Accessible room designed for guests with disabilities
+            </summary>
+        </member>
+        <member name="F:Dapper.API.Enums.StandardEnums.RoomType.Single">
+            <summary>
+            Single room designed for one person
+            </summary>
+        </member>
+        <member name="F:Dapper.API.Enums.StandardEnums.RoomType.Double">
+            <summary>
+            Double room with a queen or king-sized bed
+            </summary>
+        </member>
+        <member name="F:Dapper.API.Enums.StandardEnums.RoomType.Twin">
+            <summary>
+            Twin room with two separate beds
+            </summary>
+        </member>
+        <member name="F:Dapper.API.Enums.StandardEnums.RoomType.Presidential">
+            <summary>
+            Presidential suite, the most luxurious accommodation
+            </summary>
+        </member>
+        <member name="F:Dapper.API.Enums.StandardEnums.RoomType.Villa">
+            <summary>
+            Villa or cottage separate from the main hotel building
             </summary>
         </member>
         <member name="T:Dapper.API.Enums.SystemCodeEnum">
@@ -499,6 +1062,76 @@
         <member name="F:Dapper.API.Enums.SystemCodeEnum.HotelBulkCreateValidationError">
             <summary>
             Validation failed for one or more hotels
+            </summary>
+        </member>
+        <member name="F:Dapper.API.Enums.SystemCodeEnum.RoomCreated">
+            <summary>
+            Room created successfully
+            </summary>
+        </member>
+        <member name="F:Dapper.API.Enums.SystemCodeEnum.RoomUpdated">
+            <summary>
+            Room updated successfully
+            </summary>
+        </member>
+        <member name="F:Dapper.API.Enums.SystemCodeEnum.RoomDeleted">
+            <summary>
+            Room deleted successfully
+            </summary>
+        </member>
+        <member name="F:Dapper.API.Enums.SystemCodeEnum.RoomStatusChanged">
+            <summary>
+            Room status changed successfully
+            </summary>
+        </member>
+        <member name="F:Dapper.API.Enums.SystemCodeEnum.RoomNotFound">
+            <summary>
+            Room not found
+            </summary>
+        </member>
+        <member name="F:Dapper.API.Enums.SystemCodeEnum.RoomAlreadyExists">
+            <summary>
+            Room already exists
+            </summary>
+        </member>
+        <member name="F:Dapper.API.Enums.SystemCodeEnum.InvalidRoomData">
+            <summary>
+            Invalid room data
+            </summary>
+        </member>
+        <member name="F:Dapper.API.Enums.SystemCodeEnum.RoomOccupied">
+            <summary>
+            Room is currently occupied
+            </summary>
+        </member>
+        <member name="F:Dapper.API.Enums.SystemCodeEnum.RoomUnderMaintenance">
+            <summary>
+            Room is under maintenance
+            </summary>
+        </member>
+        <member name="F:Dapper.API.Enums.SystemCodeEnum.RoomCapacityExceeded">
+            <summary>
+            Room capacity exceeded
+            </summary>
+        </member>
+        <member name="F:Dapper.API.Enums.SystemCodeEnum.RoomNotAvailable">
+            <summary>
+            Room is not available for booking
+            </summary>
+        </member>
+        <member name="F:Dapper.API.Enums.SystemCodeEnum.InvalidRoomPrice">
+            <summary>
+            Invalid room price
+            </summary>
+        </member>
+        <member name="F:Dapper.API.Enums.SystemCodeEnum.RoomBelongsToDifferentHotel">
+            <summary>
+            Room belongs to a different hotel
+            </summary>
+        </member>
+        <member name="F:Dapper.API.Enums.SystemCodeEnum.RoomCreationFailed">
+            <summary>
+            Room creation failed
             </summary>
         </member>
         <member name="T:Dapper.API.Exceptions.BaseException">
@@ -835,13 +1468,24 @@
             <param name="result"></param>
             <returns></returns>
         </member>
-        <member name="M:Dapper.API.Helpers.PaginationHelper.#ctor(Dapper.API.Data.Dapper.IDapperHandler,Microsoft.Extensions.Logging.ILogger{Dapper.API.Helpers.PaginationHelper})">
+        <member name="T:Dapper.API.Helpers.IPaginationHelper">
             <summary>
-            Creates a new pagination helper
+            Interface for pagination helper
             </summary>
-            <param name="dapperHandler"></param>
         </member>
-        <member name="M:Dapper.API.Helpers.PaginationHelper.GetPaginatedResultAsync``1(Dapper.API.Models.Pagination.PaginationRequest,System.String,System.String,System.String[],System.Collections.Generic.Dictionary{System.String,System.String},System.String,System.String,System.String,System.Threading.CancellationToken)">
+        <member name="M:Dapper.API.Helpers.IPaginationHelper.GetPaginatedDataWithJoinsAsync``1(Dapper.API.Models.Pagination.PaginationRequest,Dapper.API.Helpers.QueryBuilder,System.String,System.Collections.Generic.Dictionary{System.String,System.String},System.String[])">
+            <summary>
+            Gets paginated data with custom joins
+            </summary>
+            <typeparam name="T">Type of entity to retrieve</typeparam>
+            <param name="request">Pagination request</param>
+            <param name="queryBuilder">Pre-configured query builder with custom joins</param>
+            <param name="mainTableName">Name of the main table</param>
+            <param name="filterableColumns">Dictionary mapping filter keys to column names</param>
+            <param name="searchableColumns">Columns to include in search</param>
+            <returns>Paginated result</returns>
+        </member>
+        <member name="M:Dapper.API.Helpers.IPaginationHelper.GetPaginatedResultAsync``1(Dapper.API.Models.Pagination.PaginationRequest,System.String,System.String,System.String[],System.Collections.Generic.Dictionary{System.String,System.String},System.String,System.String,System.String,System.Threading.CancellationToken)">
             <summary>
             Gets paginated data using a base query with optional search and filters
             </summary>
@@ -854,16 +1498,20 @@
             <param name="baseCondition">Base WHERE condition</param>
             <param name="sortColumn">Default sort column</param>
             <param name="sortDirection">Default sort direction</param>
+            <param name="cancellationToken">Cancellation token</param>
             <returns>Paginated result</returns>
         </member>
-        <member name="M:Dapper.API.Helpers.PaginationHelper.GetPaginatedDataWithJoinsAsync``1(Dapper.API.Models.Pagination.PaginationRequest,Dapper.API.Helpers.QueryBuilder,System.String,System.Collections.Generic.Dictionary{System.String,System.String})">
+        <member name="M:Dapper.API.Helpers.PaginationHelper.#ctor(Dapper.API.Data.Dapper.IDapperHandler,Microsoft.Extensions.Logging.ILogger{Dapper.API.Helpers.PaginationHelper})">
             <summary>
-            Gets paginated data with custom joins
+            Creates a new pagination helper
             </summary>
-            <typeparam name="T">Type of entity to retrieve</typeparam>
-            <param name="request">Pagination request</param>
-            <param name="queryBuilder">Pre-configured query builder with custom joins</param>
-            <returns>Paginated result</returns>
+            <param name="dapperHandler"></param>
+        </member>
+        <member name="M:Dapper.API.Helpers.PaginationHelper.GetPaginatedResultAsync``1(Dapper.API.Models.Pagination.PaginationRequest,System.String,System.String,System.String[],System.Collections.Generic.Dictionary{System.String,System.String},System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Dapper.API.Helpers.PaginationHelper.GetPaginatedDataWithJoinsAsync``1(Dapper.API.Models.Pagination.PaginationRequest,Dapper.API.Helpers.QueryBuilder,System.String,System.Collections.Generic.Dictionary{System.String,System.String},System.String[])">
+            <inheritdoc/>
         </member>
         <member name="M:Dapper.API.Helpers.PaginationHelper.ApplyFilters(Dapper.API.Helpers.QueryBuilder,System.Collections.Generic.Dictionary{System.String,System.String},System.Collections.Generic.Dictionary{System.String,System.String},System.String)">
             <summary>
@@ -1125,7 +1773,7 @@
             </summary>
             <typeparam name="T">The type of items in the collection</typeparam>
         </member>
-        <member name="M:Dapper.API.Models.Pagination.PaginatedResult`1.#ctor(System.Collections.Generic.IReadOnlyList{`0},System.Int32,System.Int32,System.Int32)">
+        <member name="M:Dapper.API.Models.Pagination.PaginatedResult`1.#ctor(System.Collections.Generic.List{`0},System.Int32,System.Int32,System.Int32)">
             <summary>
             Initializes a new instance of the PaginatedResult class
             </summary>
@@ -1267,6 +1915,11 @@
             Http Status Code
             </summary>
         </member>
+        <member name="P:Dapper.API.Models.Response.ValidationErrors">
+            <summary>
+            List of validation errors
+            </summary>
+        </member>
         <member name="T:Dapper.API.Models.Response`1">
             <summary>
             回傳資料格式，泛型
@@ -1317,6 +1970,9 @@
         <member name="M:Dapper.API.Services.HotelService.AddHotel(Dapper.API.Dtos.Hotels.AddEditHotel)">
             <inheritdoc/>
         </member>
+        <member name="M:Dapper.API.Services.HotelService.CreateHotelWithRoomsAsync(Dapper.API.Dtos.Hotels.AddHotelWithRooms,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
         <member name="M:Dapper.API.Services.HotelService.CreateManyAsync(System.Collections.Generic.IEnumerable{Dapper.API.Dtos.Hotels.AddEditHotel},System.Threading.CancellationToken)">
             <inheritdoc/>
         </member>
@@ -1336,6 +1992,12 @@
             <inheritdoc/>
         </member>
         <member name="M:Dapper.API.Services.HotelService.GetHotelByName(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Dapper.API.Services.HotelService.GetHotelsWithRoomsAsync(Dapper.API.Models.Pagination.PaginationRequest,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Dapper.API.Services.HotelService.GetHotelWithRoomsByIdAsync(System.Int32,System.Threading.CancellationToken)">
             <inheritdoc/>
         </member>
         <member name="M:Dapper.API.Services.HotelService.UpdateHotel(System.Int32,Dapper.API.Dtos.Hotels.AddEditHotel)">
@@ -1361,6 +2023,14 @@
             <param name="cancellationToken">Cancellation token</param>
             <returns>Created hotels with IDs assigned</returns>
         </member>
+        <member name="M:Dapper.API.Services.Interfaces.IHotelService.CreateHotelWithRoomsAsync(Dapper.API.Dtos.Hotels.AddHotelWithRooms,System.Threading.CancellationToken)">
+            <summary>
+            Creates a hotel with its rooms
+            </summary>
+            <param name="hotelWithRooms">The hotel data with rooms</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>The created hotel with its rooms and IDs assigned</returns>
+        </member>
         <member name="M:Dapper.API.Services.Interfaces.IHotelService.GetAll(Dapper.API.Models.Pagination.PaginationRequest,System.Threading.CancellationToken)">
             <summary>
             Gets paginated list of hotels
@@ -1368,6 +2038,22 @@
             <param name="pagination"></param>
             <param name="cancellationToken">Cancellation token for async operations</param>
             <returns>Paginated result containing hotels and metadata</returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.IHotelService.GetHotelsWithRoomsAsync(Dapper.API.Models.Pagination.PaginationRequest,System.Threading.CancellationToken)">
+            <summary>
+            Gets hotels with their rooms with pagination and filtering
+            </summary>
+            <param name="request">Pagination and filtering parameters</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>Paginated list of hotels with their rooms</returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.IHotelService.GetHotelWithRoomsByIdAsync(System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Gets a hotel with its rooms by hotel ID
+            </summary>
+            <param name="hotelId">The hotel ID</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>The hotel with its rooms, or null if not found</returns>
         </member>
         <member name="M:Dapper.API.Services.Interfaces.IHotelService.DeleteHotel(System.Int32)">
             <summary>
@@ -1490,6 +2176,82 @@
             </summary>
             <param name="pattern"></param>
             <returns></returns>
+        </member>
+        <member name="T:Dapper.API.Services.Interfaces.IRoomService">
+            <summary>
+            Interface for room management operations
+            </summary>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.IRoomService.GetByIdAsync(System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Gets a room by its ID
+            </summary>
+            <param name="id">The room ID</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>The room if found; otherwise null</returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.IRoomService.GetByHotelIdAsync(System.Int32,Dapper.API.Models.Pagination.PaginationRequest,System.Threading.CancellationToken)">
+            <summary>
+            Gets rooms by hotel ID with pagination and filtering
+            </summary>
+            <param name="hotelId">The hotel ID</param>
+            <param name="request">Pagination and filtering parameters</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>Paginated list of rooms</returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.IRoomService.GetAllAsync(Dapper.API.Models.Pagination.PaginationRequest,System.Threading.CancellationToken)">
+            <summary>
+            Gets all rooms with pagination and filtering
+            </summary>
+            <param name="request">Pagination and filtering parameters</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>Paginated list of rooms</returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.IRoomService.CreateAsync(Dapper.API.Dtos.Rooms.AddEditRoom,System.Threading.CancellationToken)">
+            <summary>
+            Creates a new room
+            </summary>
+            <param name="room">The room to create</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>The created room with ID assigned</returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.IRoomService.UpdateAsync(System.Int32,Dapper.API.Dtos.Rooms.AddEditRoom,System.Threading.CancellationToken)">
+            <summary>
+            Updates an existing room
+            </summary>
+            <param name="id">The room ID to update</param>
+            <param name="room">Updated room data</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>The updated room</returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.IRoomService.DeleteAsync(System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Deletes a room
+            </summary>
+            <param name="id">The room ID</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>True if deleted; otherwise false</returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.IRoomService.UpdateAvailabilityAsync(System.Int32,System.Boolean,System.Threading.CancellationToken)">
+            <summary>
+            Updates the availability status of a room
+            </summary>
+            <param name="id">The room ID</param>
+            <param name="isAvailable">New availability status</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>True if updated; otherwise false</returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.IRoomService.GetRoomTypesAsync(System.Threading.CancellationToken)">
+            <summary>
+            Gets all room types
+            </summary>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>List of room types</returns>
+        </member>
+        <member name="T:Dapper.API.Validators.HotelWithRoomsValidator">
+            <summary>
+            Validator for AddHotelWithRooms DTO
+            </summary>
         </member>
     </members>
 </doc>

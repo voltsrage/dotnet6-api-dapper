@@ -116,7 +116,7 @@ try
 
     builder.Services.AddSingleton<IHelperFunctions, HelperFunctions>();
 
-    builder.Services.AddScoped<PaginationHelper>();
+    builder.Services.AddScoped<IPaginationHelper, PaginationHelper>();
     #endregion
 
     #region AutoFac

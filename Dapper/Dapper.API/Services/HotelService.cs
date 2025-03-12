@@ -72,6 +72,28 @@ namespace Dapper.API.Services
         }
 
         ///<inheritdoc/>
+        public async Task<Response<HotelWithRooms>> CreateHotelWithRoomsAsync(AddHotelWithRooms hotelWithRooms, CancellationToken cancellationToken = default)
+        {
+            var result = new Response<HotelWithRooms>();
+
+            HotelWithRoomsValidator validator = new HotelWithRoomsValidator(new HotelValidator(), new RoomForHotelWithRoomsValidator());
+
+            result = await _helperFunctions.ProcessValidation<AddHotelWithRooms, HotelWithRooms>(validator, hotelWithRooms, result);
+
+            if (!result.IsSuccess)
+            {
+                result.IsSuccess = false;
+                result.StatusCode = StatusCodeEnum.BadRequest.Value;
+                return result;
+            }
+
+            var createdHotels = await _hotelRepository.CreateHotelWithRoomsAsync(hotelWithRooms.Hotel, hotelWithRooms.Rooms, cancellationToken);
+
+            return Response<HotelWithRooms>.Success(createdHotels);
+
+        }
+
+        ///<inheritdoc/>
         public async Task<Response<IEnumerable<Hotel>>> CreateManyAsync(IEnumerable<AddEditHotel> hotels, CancellationToken cancellationToken)
         {
             if(hotels is null || !hotels.Any())
@@ -176,6 +198,24 @@ namespace Dapper.API.Services
             }
 
             return Response<Hotel>.Success(hotel);
+        }
+
+        ///<inheritdoc/>
+        public async Task<Response<PaginatedResult<HotelWithRooms>>> GetHotelsWithRoomsAsync(PaginationRequest request, CancellationToken cancellationToken = default)
+        {
+            var hotelsWithRooms = await _hotelRepository.GetHotelsWithRoomsAsync(request, cancellationToken);
+
+            return Response<PaginatedResult<HotelWithRooms>>.Success(hotelsWithRooms);
+        }
+
+        ///<inheritdoc/>
+        public async Task<Response<HotelWithRooms>> GetHotelWithRoomsByIdAsync(int hotelId, CancellationToken cancellationToken = default)
+        {
+            var hotelWithRooms = await _hotelRepository.GetHotelWithRoomsByIdAsync(hotelId, cancellationToken);
+
+            if (hotelWithRooms is null) return Response<HotelWithRooms>.Failure(SystemCodeEnum.HotelNotFound);
+
+            return Response<HotelWithRooms>.Success(hotelWithRooms);
         }
 
         ///<inheritdoc/>

@@ -1,4 +1,5 @@
 ﻿using Dapper.API.Dtos.Hotels;
+using Dapper.API.Dtos.Rooms;
 using Dapper.API.Entities;
 using Dapper.API.Models;
 using Dapper.API.Models.Pagination;
@@ -28,12 +29,37 @@ namespace Dapper.API.Data.Repositories.Interfaces
             CancellationToken cancellationToken);
 
         /// <summary>
+        /// Creates a hotel with its rooms
+        /// </summary>
+        /// <param name="hotel">The hotel data</param>
+        /// <param name="rooms">The list of rooms to create</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>The created hotel with its rooms and IDs assigned</returns>
+        Task<HotelWithRooms> CreateHotelWithRoomsAsync(AddEditHotel hotel, IEnumerable<AddEditRoom> rooms, CancellationToken cancellationToken = default);
+
+        /// <summary>
         /// Gets paginated list of hotels
         /// </summary>
         /// <param name="pagination"></param>
         /// <param name="cancellationToken">Cancellation token for async operations</param>
         /// <returns>Paginated result containing hotels and metadata</returns>
         Task<PaginatedResult<Hotel>> GetAll(PaginationRequest pagination, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Gets hotels with their rooms with pagination and filtering
+        /// </summary>
+        /// <param name="request">Pagination and filtering parameters</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>Paginated list of hotels with their rooms</returns>
+        Task<PaginatedResult<HotelWithRooms>> GetHotelsWithRoomsAsync(PaginationRequest request, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Gets a hotel with its rooms by hotel ID
+        /// </summary>
+        /// <param name="hotelId">The hotel ID</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>The hotel with its rooms, or null if not found</returns>
+        Task<HotelWithRooms> GetHotelWithRoomsByIdAsync(int hotelId, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Delete a hotel

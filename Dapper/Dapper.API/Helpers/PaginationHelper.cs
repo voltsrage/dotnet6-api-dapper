@@ -8,7 +8,7 @@ using System.Threading;
 
 namespace Dapper.API.Helpers
 {
-    public class PaginationHelper
+    public class PaginationHelper : IPaginationHelper
     {
         private readonly IDapperHandler _dataAccess;
         private readonly ILogger<PaginationHelper> _logger;
@@ -26,24 +26,12 @@ namespace Dapper.API.Helpers
             _logger = logger;
         }
 
-        /// <summary>
-        /// Gets paginated data using a base query with optional search and filters
-        /// </summary>
-        /// <typeparam name="T">Type of entity to retrieve</typeparam>
-        /// <param name="request">Pagination request</param>
-        /// <param name="tableName">Name of the database table</param>
-        /// <param name="columns">Columns to select</param>
-        /// <param name="searchableColumns">Columns to include in search</param>
-        /// <param name="filterableColumns">Dictionary mapping filter keys to column names</param>
-        /// <param name="baseCondition">Base WHERE condition</param>
-        /// <param name="sortColumn">Default sort column</param>
-        /// <param name="sortDirection">Default sort direction</param>
-        /// <returns>Paginated result</returns>
+        /// <inheritdoc/>
         public async Task<PaginatedResult<T>> GetPaginatedResultAsync<T>(
-            PaginationRequest request, 
+            PaginationRequest request,
             string tableName,
             string columns = "*",
-            string[] searchableColumns = null, 
+            string[] searchableColumns = null,
             Dictionary<string, string> filterableColumns = null,
             string baseCondition = null,
             string sortColumn = null,
@@ -88,7 +76,7 @@ namespace Dapper.API.Helpers
                 // Apply filters if provided
                 if (request.HasFilters && filterableColumns != null)
                 {
-                    ApplyFilters(queryBuilder, request.Filters, filterableColumns,tableName);
+                    ApplyFilters(queryBuilder, request.Filters, filterableColumns, tableName);
                 }
 
                 // Apply sorting
@@ -195,18 +183,13 @@ namespace Dapper.API.Helpers
 
         }
 
-        /// <summary>
-        /// Gets paginated data with custom joins
-        /// </summary>
-        /// <typeparam name="T">Type of entity to retrieve</typeparam>
-        /// <param name="request">Pagination request</param>
-        /// <param name="queryBuilder">Pre-configured query builder with custom joins</param>
-        /// <returns>Paginated result</returns>
+        /// <inheritdoc/>
         public async Task<PaginatedResult<T>> GetPaginatedDataWithJoinsAsync<T>(
             PaginationRequest request,
             QueryBuilder queryBuilder,
             string mainTableName,
-            Dictionary<string, string> filterableColumns = null
+            Dictionary<string, string> filterableColumns = null,
+            string[] searchableColumns = null
             )
         {
             try
@@ -218,10 +201,30 @@ namespace Dapper.API.Helpers
                 if (queryBuilder == null)
                     throw new ArgumentNullException(nameof(queryBuilder));
 
+                // Apply search if needed
+                if (request.HasSearch && searchableColumns != null && searchableColumns.Length > 0)
+                {
+                    try
+                    {
+                        queryBuilder.WithSearch(request.SearchTerm, searchableColumns);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new SearchException(
+                            "Error applying search criteria",
+                            COMPONENT_NAME,
+                            nameof(GetPaginatedResultAsync),
+                            mainTableName,
+                            request.SearchTerm,
+                            searchableColumns,
+                            ex);
+                    }
+                }
+
                 // Apply filters if provided
                 if (request.HasFilters && filterableColumns != null)
                 {
-                    ApplyFilters(queryBuilder, request.Filters, filterableColumns,mainTableName);
+                    ApplyFilters(queryBuilder, request.Filters, filterableColumns, mainTableName);
                 }
 
 
@@ -525,7 +528,7 @@ namespace Dapper.API.Helpers
             QueryBuilder queryBuilder,
             int page,
             int skip,
-            int pageSize, 
+            int pageSize,
             string tableName,
             CancellationToken cancellationToken = default)
         {
@@ -551,7 +554,7 @@ namespace Dapper.API.Helpers
             try
             {
                 using (var multiQuery = await _dataAccess.QueryMultipleAsync(
-                 sql.ToString(),
+                 sqlQuery,
                  queryBuilder.Parameters,
                  cancellationToken: cancellationToken))
                 {
@@ -573,7 +576,7 @@ namespace Dapper.API.Helpers
                 _logger.LogError(ex, "SQL Error executing query: {Query}", sqlQuery);
 
                 // In development, you might want to include the SQL, but in production it's a security risk
-                #if DEBUG
+#if DEBUG
                 throw new PaginationDatabaseException(
                     "Database error during pagination",
                     COMPONENT_NAME,
@@ -581,7 +584,7 @@ namespace Dapper.API.Helpers
                     tableName,
                     sqlQuery,
                     ex);
-                #else
+#else
                 throw new PaginationDatabaseException(
                     "Database error during pagination",
                     COMPONENT_NAME,
@@ -589,7 +592,7 @@ namespace Dapper.API.Helpers
                     tableName,
                     "SQL error", // Don't include actual SQL for security
                     ex);
-                #endif
+#endif
             }
             catch (Exception ex)
             {
