@@ -1,5 +1,4 @@
 ﻿using Dapper.API.Dtos.Hotels;
-using Dapper.API.Dtos.Rooms;
 using Dapper.API.Entities;
 using Dapper.API.Models;
 using Dapper.API.Models.Pagination;
@@ -27,6 +26,14 @@ namespace Dapper.API.Services.Interfaces
         Task<Response<IEnumerable<Hotel>>> CreateManyAsync(
             IEnumerable<AddEditHotel> hotels,
             CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Creates a hotel with its rooms
+        /// </summary>
+        /// <param name="hotelWithRooms">The hotel data with rooms</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>The created hotel with its rooms and IDs assigned</returns>
+        Task<Response<HotelWithRooms>> CreateHotelWithRoomsAsync(AddHotelWithRooms hotelWithRooms, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets paginated list of hotels

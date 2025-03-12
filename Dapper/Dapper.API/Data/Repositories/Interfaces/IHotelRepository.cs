@@ -29,6 +29,15 @@ namespace Dapper.API.Data.Repositories.Interfaces
             CancellationToken cancellationToken);
 
         /// <summary>
+        /// Creates a hotel with its rooms
+        /// </summary>
+        /// <param name="hotel">The hotel data</param>
+        /// <param name="rooms">The list of rooms to create</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>The created hotel with its rooms and IDs assigned</returns>
+        Task<HotelWithRooms> CreateHotelWithRoomsAsync(AddEditHotel hotel, IEnumerable<AddEditRoom> rooms, CancellationToken cancellationToken = default);
+
+        /// <summary>
         /// Gets paginated list of hotels
         /// </summary>
         /// <param name="pagination"></param>

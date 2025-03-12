@@ -11,6 +11,16 @@ namespace Dapper.API.Helpers
 
             if (!validationResult.IsValid)
             {
+                foreach(var error in validationResult.Errors)
+                {
+                    result.ValidationErrors.Add(new ValidationError
+                    {
+                        Property = error.PropertyName,
+                        Error = error.ErrorMessage,
+                        AttemptedValue = error.AttemptedValue
+                    });
+                }
+
                 var errorToReturn = validationResult.Errors.FirstOrDefault();
                 result.IsSuccess = false;
 

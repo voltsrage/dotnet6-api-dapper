@@ -1,4 +1,6 @@
-﻿namespace Dapper.API.Dtos.Rooms
+﻿using Dapper.API.Dtos.Rooms;
+
+namespace Dapper.API.Dtos.Hotels
 {
     /// <summary>
     /// Represents an instance of a hotel and the rooms inside it

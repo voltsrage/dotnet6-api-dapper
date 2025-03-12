@@ -1,5 +1,4 @@
 ﻿using Dapper.API.Dtos.Hotels;
-using Dapper.API.Dtos.Rooms;
 using Dapper.API.Models;
 using Dapper.API.Models.Pagination;
 using Dapper.API.Services.Interfaces;
@@ -280,6 +279,42 @@ namespace Dapper.API.Controllers
         }
 
         /// <summary>
+        /// Create a new hotel with rooms
+        /// </summary>
+        /// <param name="model">Hotel with rooms data</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>Created hotel with rooms</returns>
+        [HttpPost("withRooms")]
+        [ProducesResponseType(typeof(Response<HotelWithRooms>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> CreateHotelWithRooms([FromBody] AddHotelWithRooms model, CancellationToken cancellationToken = default)
+        {
+            var result = new Response<HotelWithRooms>();
+            try
+            {
+                result = await _hotelService.CreateHotelWithRoomsAsync(model, cancellationToken);
+
+                if (result.StatusCode != null)
+                {
+                    return StatusCode(result.StatusCode.Value, result);
+                }
+
+                if (result.StatusCode != null)
+                {
+                    return StatusCode(result.StatusCode.Value, result);
+                }
+
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred during hotel with rooms creation");
+                result.ErrorMessage = ex.Message;
+                throw;
+            }
+        }
+
+        /// <summary>
         /// Creates multiple hotels in a single transaction
         /// </summary>
         /// <param name="hotels">Collection of hotels to create</param>
@@ -307,6 +342,8 @@ namespace Dapper.API.Controllers
                 throw;
             }
         }
+
+
 
         /// <summary>
         /// Update hotel by id

@@ -576,12 +576,13 @@ namespace Dapper.API.Data.Repositories
                 var roomsQuery = new StringBuilder();
 
                 roomsQuery.Append(@"SELECT
-                            r.Id, r.HotelId, r.RoomNumber, 
+                            r.Id, r.HotelId, h.Name as HotelName, r.RoomNumber, r.MaxOccupancy,
                             r.RoomTypeId, rt.Name as RoomTypeName, r.PricePerNight, r.CreatedAt, 
                             r.CreatedBy, r.UpdatedAt, 
-                            r.UpdatedBy, r.EntityStatusId 
+                            r.UpdatedBy, r.EntityStatusId, r.IsAvailable
                         FROM Rooms r
                         INNER JOIN RoomTypes rt ON r.RoomTypeId = rt.Id
+                        INNER JOIN Hotels h ON h.Id = r.HotelId
                         WHERE r.EntityStatusId = 1 AND r.HotelId IN @HotelIds ");
 
                 DynamicParameters parameters = new();
@@ -653,12 +654,13 @@ namespace Dapper.API.Data.Repositories
                 var roomsQuery = new StringBuilder();
 
                 roomsQuery.Append(@"SELECT
-                            r.Id, r.HotelId, r.RoomNumber, 
+                            r.Id, r.HotelId, h.Name as HotelName, r.RoomNumber, r.MaxOccupancy,
                             r.RoomTypeId, rt.Name as RoomTypeName, r.PricePerNight, r.CreatedAt, 
                             r.CreatedBy, r.UpdatedAt, 
-                            r.UpdatedBy, r.EntityStatusId 
+                            r.UpdatedBy, r.EntityStatusId, r.IsAvailable
                         FROM Rooms r
-                        INNER JOIN RoomTypes rt ON r.RoomTypeId = rt.Id
+                        INNER JOIN RoomTypes rt ON r.RoomTypeId = rt.Id 
+                        INNER JOIN Hotels h ON h.Id = r.HotelId
                         WHERE r.EntityStatusId = 1 AND r.HotelId =  @HotelId ");
 
                 var rooms = await _dataAccess.ReturnListSql<Room>(roomsQuery.ToString(), parameters);
@@ -684,6 +686,123 @@ namespace Dapper.API.Data.Repositories
                     REPOSITORY_NAME,
                     nameof(GetHotelWithRoomsByIdAsync),
                     "GetHotelWithRoomsById",
+                    ex);
+            }
+        }
+
+        /// <inheritdoc/>
+        public async Task<HotelWithRooms> CreateHotelWithRoomsAsync(AddEditHotel hotel, IEnumerable<AddEditRoom> rooms, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                var hotelId = 0;
+                await _dataAccess.ExecuteInTransaction(async (connection, transaction, token) =>
+                {
+                    // Set Id parameter for output
+                    var parameters = new DynamicParameters();
+                    parameters.Add("@Name", hotel.Name);
+                    parameters.Add("@Address", hotel.Address);
+                    parameters.Add("@City", hotel.City);
+                    parameters.Add("@Country", hotel.Country);
+                    parameters.Add("@PhoneNumber", hotel.PhoneNumber);
+                    parameters.Add("@Email", hotel.Email);
+                    parameters.Add("@CreatedAt", DateTime.UtcNow);
+                    parameters.Add("@CreatedBy", 0);
+
+                    StringBuilder sql = new StringBuilder();
+
+                    // Create the insert query using a parametized query
+                    sql.Append(@"INSERT INTO Hotels
+                            (
+                            Name,
+                            Address, 
+                            City, 
+                            Country, 
+                            PhoneNumber, 
+                            Email, 
+                            CreatedAt, 
+                            CreatedBy
+                        ) 
+                        Values 
+                        (
+                            @Name,
+                            @Address, 
+                            @City, 
+                            @Country, 
+                            @PhoneNumber, 
+                            @Email, 
+                            @CreatedAt, 
+                            @CreatedBy
+                        );  
+                        SELECT CAST(SCOPE_IDENTITY() as int)");
+                    // The last query tells SQL Server to return id of the recently created Hotel
+
+                    hotelId = await _dataAccess.ReturnRowSqlInTransaction<int>(sql.ToString(), transaction, parameters, token);
+
+                    if(hotelId != 0)
+                    {
+                        // Create rooms for the hotel
+                        if (rooms is not null && rooms.Any())
+                        {
+                            foreach (var room in rooms)
+                            {
+                                var roomParameters = new DynamicParameters();
+                                parameters.Add("@HotelId", hotelId);
+                                parameters.Add("@RoomNumber", room.RoomNumber);
+                                parameters.Add("@RoomTypeId", room.RoomTypeId);
+                                parameters.Add("@PricePerNight", room.PricePerNight);
+                                parameters.Add("@IsAvailable", room.IsAvailable);
+                                parameters.Add("@MaxOccupancy", room.MaxOccupancy);
+                                parameters.Add("@EntityStatusId", 1); // Active
+                                parameters.Add("@CreatedAt", DateTime.UtcNow);
+                                parameters.Add("@CreatedBy", 0);
+
+                                StringBuilder roomSql = new StringBuilder();
+
+                                roomSql.Append(
+                                    @"INSERT INTO Rooms
+                                    (
+                                        HotelId,
+                                        RoomNumber,
+                                        RoomTypeId,
+                                        PricePerNight,
+                                        IsAvailable,
+                                        MaxOccupancy,
+                                        EntityStatusId,
+                                        CreatedAt,
+                                        CreatedBy
+                                    )
+                                    VALUES
+                                    (
+                                        @HotelId,
+                                        @RoomNumber,
+                                        @RoomTypeId,
+                                        @PricePerNight,
+                                        @IsAvailable,
+                                        @MaxOccupancy,
+                                        @EntityStatusId,
+                                        @CreatedAt,
+                                        @CreatedBy
+                                    )");
+
+                                await _dataAccess.ExecuteWithoutReturnSqlInTransaction(roomSql.ToString(), transaction, parameters);
+                            }
+                        }
+                    }     
+                });
+
+                var hotelWithRooms = await GetHotelWithRoomsByIdAsync(hotelId, cancellationToken);
+
+                return hotelWithRooms;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error creating hotel with rooms");
+                throw new RepositoryException(
+                    "Failed to create hotel with rooms",
+                    REPOSITORY_NAME,
+                    nameof(CreateHotelWithRoomsAsync),
+                    "CreateHotelWithRooms",
                     ex);
             }
         }

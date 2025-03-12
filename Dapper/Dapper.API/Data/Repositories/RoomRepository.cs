@@ -236,17 +236,16 @@ namespace Dapper.API.Data.Repositories
                 parameters.Add("@EntityStatusId", 1); // Active
                 parameters.Add("@CreatedAt", DateTime.UtcNow);
                 parameters.Add("@CreatedBy", userId);
-                parameters.Add("@UpdatedBy", userId);
                 parameters.Add("@Id", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
                 const string insertSql = @"
                 INSERT INTO Rooms (
                     HotelId, RoomNumber, RoomTypeId, PricePerNight, IsAvailable, MaxOccupancy, 
-                    EntityStatusId, CreatedAt, CreatedBy, UpdatedBy
+                    EntityStatusId, CreatedAt, CreatedBy
                 ) 
                 VALUES (
                     @HotelId, @RoomNumber, @RoomTypeId, @PricePerNight, @IsAvailable, @MaxOccupancy, 
-                    @EntityStatusId, @CreatedAt, @CreatedBy, @UpdatedBy
+                    @EntityStatusId, @CreatedAt, @CreatedBy
                 );
                 SET @Id = SCOPE_IDENTITY();";
 

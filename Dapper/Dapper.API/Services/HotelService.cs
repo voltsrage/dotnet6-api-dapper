@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Dapper.API.Data.Repositories.Interfaces;
 using Dapper.API.Dtos.Hotels;
-using Dapper.API.Dtos.Rooms;
 using Dapper.API.Entities;
 using Dapper.API.Enums;
 using Dapper.API.Helpers;
@@ -70,6 +69,28 @@ namespace Dapper.API.Services
             }
 
             return Response<Hotel>.Success(hotel);
+        }
+
+        ///<inheritdoc/>
+        public async Task<Response<HotelWithRooms>> CreateHotelWithRoomsAsync(AddHotelWithRooms hotelWithRooms, CancellationToken cancellationToken = default)
+        {
+            var result = new Response<HotelWithRooms>();
+
+            HotelWithRoomsValidator validator = new HotelWithRoomsValidator(new HotelValidator(), new RoomForHotelWithRoomsValidator());
+
+            result = await _helperFunctions.ProcessValidation<AddHotelWithRooms, HotelWithRooms>(validator, hotelWithRooms, result);
+
+            if (!result.IsSuccess)
+            {
+                result.IsSuccess = false;
+                result.StatusCode = StatusCodeEnum.BadRequest.Value;
+                return result;
+            }
+
+            var createdHotels = await _hotelRepository.CreateHotelWithRoomsAsync(hotelWithRooms.Hotel, hotelWithRooms.Rooms, cancellationToken);
+
+            return Response<HotelWithRooms>.Success(createdHotels);
+
         }
 
         ///<inheritdoc/>

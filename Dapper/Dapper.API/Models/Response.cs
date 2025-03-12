@@ -37,7 +37,10 @@ namespace Dapper.API.Models
         /// </summary>
         public int? StatusCode { get; set; }
 
-
+        /// <summary>
+        /// List of validation errors
+        /// </summary>
+        public List<ValidationError>? ValidationErrors { get; set; } = new List<ValidationError>();
 
     }
     /// <summary>

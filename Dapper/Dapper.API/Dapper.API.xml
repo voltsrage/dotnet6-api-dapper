@@ -132,6 +132,14 @@
             <param name="model"></param>
             <returns></returns>
         </member>
+        <member name="M:Dapper.API.Controllers.HotelsController.CreateHotelWithRooms(Dapper.API.Dtos.Hotels.AddHotelWithRooms,System.Threading.CancellationToken)">
+            <summary>
+            Create a new hotel with rooms
+            </summary>
+            <param name="model">Hotel with rooms data</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>Created hotel with rooms</returns>
+        </member>
         <member name="M:Dapper.API.Controllers.HotelsController.CreateManyAsync(System.Collections.Generic.IEnumerable{Dapper.API.Dtos.Hotels.AddEditHotel})">
             <summary>
             Creates multiple hotels in a single transaction
@@ -306,6 +314,9 @@
         <member name="M:Dapper.API.Data.Repositories.HotelRepository.GetHotelWithRoomsByIdAsync(System.Int32,System.Threading.CancellationToken)">
             <inheritdoc/>
         </member>
+        <member name="M:Dapper.API.Data.Repositories.HotelRepository.CreateHotelWithRoomsAsync(Dapper.API.Dtos.Hotels.AddEditHotel,System.Collections.Generic.IEnumerable{Dapper.API.Dtos.Rooms.AddEditRoom},System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
         <member name="T:Dapper.API.Data.Repositories.Interfaces.IHotelRepository">
             <summary>
             Repository Interface for the hotels
@@ -325,6 +336,15 @@
             <param name="hotels">Collection of hotels to create</param>
             <param name="cancellationToken">Cancellation token</param>
             <returns>Created hotels with IDs assigned</returns>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.IHotelRepository.CreateHotelWithRoomsAsync(Dapper.API.Dtos.Hotels.AddEditHotel,System.Collections.Generic.IEnumerable{Dapper.API.Dtos.Rooms.AddEditRoom},System.Threading.CancellationToken)">
+            <summary>
+            Creates a hotel with its rooms
+            </summary>
+            <param name="hotel">The hotel data</param>
+            <param name="rooms">The list of rooms to create</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>The created hotel with its rooms and IDs assigned</returns>
         </member>
         <member name="M:Dapper.API.Data.Repositories.Interfaces.IHotelRepository.GetAll(Dapper.API.Models.Pagination.PaginationRequest,System.Threading.CancellationToken)">
             <summary>
@@ -563,6 +583,21 @@
             Gets or sets the email address of the hotel.
             </summary>
         </member>
+        <member name="T:Dapper.API.Dtos.Hotels.AddHotelWithRooms">
+            <summary>
+            DTO for creating a hotel with its rooms
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Hotels.AddHotelWithRooms.Hotel">
+            <summary>
+            Hotel data to create
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Hotels.AddHotelWithRooms.Rooms">
+            <summary>
+            List of rooms to create for the hotel
+            </summary>
+        </member>
         <member name="T:Dapper.API.Dtos.Hotels.Hotel">
             <summary>
             Represents a hotel data transfer object.
@@ -596,6 +631,56 @@
         <member name="P:Dapper.API.Dtos.Hotels.Hotel.Email">
             <summary>
             Gets or sets the email address of the hotel.
+            </summary>
+        </member>
+        <member name="T:Dapper.API.Dtos.Hotels.HotelWithRooms">
+            <summary>
+            Represents an instance of a hotel and the rooms inside it
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Hotels.HotelWithRooms.Id">
+            <summary>
+            Gets or sets the unique identifier for the hotel.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Hotels.HotelWithRooms.Name">
+            <summary>
+            Gets or sets the name of the hotel.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Hotels.HotelWithRooms.Address">
+            <summary>
+            Gets or sets the address of the hotel.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Hotels.HotelWithRooms.City">
+            <summary>
+            Gets or sets the city where the hotel is located.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Hotels.HotelWithRooms.Country">
+            <summary>
+            Gets or sets the country where the hotel is located.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Hotels.HotelWithRooms.PhoneNumber">
+            <summary>
+            Gets or sets the phone number of the hotel.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Hotels.HotelWithRooms.Email">
+            <summary>
+            Gets or sets the email address of the hotel.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Hotels.HotelWithRooms.CreateAt">
+            <summary>
+            Gets or sets the create time for the hotel
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Hotels.HotelWithRooms.Rooms">
+            <summary>
+            Gets or sets the rooms inside of this hotel
             </summary>
         </member>
         <member name="T:Dapper.API.Dtos.Rooms.AddEditRoom">
@@ -646,56 +731,6 @@
         <member name="P:Dapper.API.Dtos.Rooms.AddEditRoomType.Description">
             <summary>
             Gets or sets the description of the room type.
-            </summary>
-        </member>
-        <member name="T:Dapper.API.Dtos.Rooms.HotelWithRooms">
-            <summary>
-            Represents an instance of a hotel and the rooms inside it
-            </summary>
-        </member>
-        <member name="P:Dapper.API.Dtos.Rooms.HotelWithRooms.Id">
-            <summary>
-            Gets or sets the unique identifier for the hotel.
-            </summary>
-        </member>
-        <member name="P:Dapper.API.Dtos.Rooms.HotelWithRooms.Name">
-            <summary>
-            Gets or sets the name of the hotel.
-            </summary>
-        </member>
-        <member name="P:Dapper.API.Dtos.Rooms.HotelWithRooms.Address">
-            <summary>
-            Gets or sets the address of the hotel.
-            </summary>
-        </member>
-        <member name="P:Dapper.API.Dtos.Rooms.HotelWithRooms.City">
-            <summary>
-            Gets or sets the city where the hotel is located.
-            </summary>
-        </member>
-        <member name="P:Dapper.API.Dtos.Rooms.HotelWithRooms.Country">
-            <summary>
-            Gets or sets the country where the hotel is located.
-            </summary>
-        </member>
-        <member name="P:Dapper.API.Dtos.Rooms.HotelWithRooms.PhoneNumber">
-            <summary>
-            Gets or sets the phone number of the hotel.
-            </summary>
-        </member>
-        <member name="P:Dapper.API.Dtos.Rooms.HotelWithRooms.Email">
-            <summary>
-            Gets or sets the email address of the hotel.
-            </summary>
-        </member>
-        <member name="P:Dapper.API.Dtos.Rooms.HotelWithRooms.CreateAt">
-            <summary>
-            Gets or sets the create time for the hotel
-            </summary>
-        </member>
-        <member name="P:Dapper.API.Dtos.Rooms.HotelWithRooms.Rooms">
-            <summary>
-            Gets or sets the rooms inside of this hotel
             </summary>
         </member>
         <member name="T:Dapper.API.Dtos.Rooms.Room">
@@ -1880,6 +1915,11 @@
             Http Status Code
             </summary>
         </member>
+        <member name="P:Dapper.API.Models.Response.ValidationErrors">
+            <summary>
+            List of validation errors
+            </summary>
+        </member>
         <member name="T:Dapper.API.Models.Response`1">
             <summary>
             回傳資料格式，泛型
@@ -1928,6 +1968,9 @@
             </summary>
         </member>
         <member name="M:Dapper.API.Services.HotelService.AddHotel(Dapper.API.Dtos.Hotels.AddEditHotel)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Dapper.API.Services.HotelService.CreateHotelWithRoomsAsync(Dapper.API.Dtos.Hotels.AddHotelWithRooms,System.Threading.CancellationToken)">
             <inheritdoc/>
         </member>
         <member name="M:Dapper.API.Services.HotelService.CreateManyAsync(System.Collections.Generic.IEnumerable{Dapper.API.Dtos.Hotels.AddEditHotel},System.Threading.CancellationToken)">
@@ -1979,6 +2022,14 @@
             <param name="hotels">Collection of hotels to create</param>
             <param name="cancellationToken">Cancellation token</param>
             <returns>Created hotels with IDs assigned</returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.IHotelService.CreateHotelWithRoomsAsync(Dapper.API.Dtos.Hotels.AddHotelWithRooms,System.Threading.CancellationToken)">
+            <summary>
+            Creates a hotel with its rooms
+            </summary>
+            <param name="hotelWithRooms">The hotel data with rooms</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>The created hotel with its rooms and IDs assigned</returns>
         </member>
         <member name="M:Dapper.API.Services.Interfaces.IHotelService.GetAll(Dapper.API.Models.Pagination.PaginationRequest,System.Threading.CancellationToken)">
             <summary>
@@ -2196,6 +2247,11 @@
             </summary>
             <param name="cancellationToken">Cancellation token</param>
             <returns>List of room types</returns>
+        </member>
+        <member name="T:Dapper.API.Validators.HotelWithRoomsValidator">
+            <summary>
+            Validator for AddHotelWithRooms DTO
+            </summary>
         </member>
     </members>
 </doc>
