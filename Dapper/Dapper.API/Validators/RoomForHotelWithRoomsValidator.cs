@@ -3,13 +3,10 @@ using FluentValidation;
 
 namespace Dapper.API.Validators
 {
-    public class RoomValidator:AbstractValidator<AddEditRoom>
+    public class RoomForHotelWithRoomsValidator : AbstractValidator<AddEditRoom>
     {
-        public RoomValidator()
+        public RoomForHotelWithRoomsValidator()
         {
-            RuleFor(r => r.HotelId)
-            .NotEmpty().WithMessage("Hotel ID is required.")
-            .GreaterThan(0).WithMessage("Hotel ID must be a positive number.");
 
             RuleFor(r => r.RoomNumber)
                 .NotEmpty().WithMessage("Room number is required.")
