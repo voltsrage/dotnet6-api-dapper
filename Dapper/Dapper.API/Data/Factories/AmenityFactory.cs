@@ -5,8 +5,12 @@ using Dapper.API.Models;
 
 namespace Dapper.API.Data.Factories
 {
+    /// <summary>
+    /// Factory for creating amenities
+    /// </summary>
     public class AmenityFactory : IAmenityFactory
     {
+        /// <inheritdoc />
         public BaseAmenity CreateAmenity(AmenityTypeEnum amenityType, Dictionary<string, object> properties)
         {
             // Extract common properties
@@ -64,6 +68,7 @@ namespace Dapper.API.Data.Factories
             }
         }
 
+        /// <inheritdoc />
         public IAmenity CreateDecorator(DecoratorTypeEnum decoratorType, IAmenity baseAmenity, Dictionary<string, object> properties)
         {
             switch (decoratorType) 
