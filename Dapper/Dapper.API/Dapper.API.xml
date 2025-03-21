@@ -317,6 +317,273 @@
         <member name="M:Dapper.API.Data.Repositories.HotelRepository.CreateHotelWithRoomsAsync(Dapper.API.Dtos.Hotels.AddEditHotel,System.Collections.Generic.IEnumerable{Dapper.API.Dtos.Rooms.AddEditRoom},System.Threading.CancellationToken)">
             <inheritdoc/>
         </member>
+        <member name="T:Dapper.API.Data.Repositories.Interfaces.Amenities.IAmenityRepository">
+            <summary>
+            Interface for Amenity Repository
+            </summary>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.Amenities.IAmenityRepository.GetAllAmenitiesAsync">
+            <summary>
+            Get all amenities
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.Amenities.IAmenityRepository.GetAmenityByIdAsync(System.Int32)">
+            <summary>
+            Get amenity by id
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.Amenities.IAmenityRepository.GetAmenityByNameAsync(System.String)">
+            <summary>
+            Get amenity by name
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.Amenities.IAmenityRepository.GetStandardAmenitiesAsync">
+            <summary>
+            Get all standard amenities
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.Amenities.IAmenityRepository.GetDecoratedAmenityAsync(System.Int32)">
+            <summary>
+            Get all decorated amenities by id
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.Amenities.IAmenityRepository.AddAmenityAsync(Dapper.API.Entities.Amentities.BaseAmenity)">
+            <summary>
+            Add amenity
+            </summary>
+            <param name="amenity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.Amenities.IAmenityRepository.UpdateAmenityAsync(Dapper.API.Entities.Amentities.BaseAmenity)">
+            <summary>
+            Update amenity
+            </summary>
+            <param name="amenity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.Amenities.IAmenityRepository.DeleteAmenityAsync(System.Int32)">
+            <summary>
+            Delete amenity
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.Amenities.IAmenityRepository.GetAllWifiAmenitiesAsync">
+            <summary>
+            Get all wifi amenities
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.Amenities.IAmenityRepository.GetWifiAmenityByIdAsync(System.Int32)">
+            <summary>
+            Get wifi amenity by id
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.Amenities.IAmenityRepository.GetAllMiniBarAmenitiesAsync">
+            <summary>
+            Get all mini bar amenities
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.Amenities.IAmenityRepository.GetMiniBarAmenityByIdAsync(System.Int32)">
+            <summary>
+            Get mini bar amenity by id
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.Amenities.IAmenityRepository.GetAllRoomServiceAmenitiesAsync">
+            <summary>
+            Get all room service amenities
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.Amenities.IAmenityRepository.GetRoomServiceAmenityByIdAsync(System.Int32)">
+            <summary>
+            Get room service amenity by id
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.Amenities.IAmenityRepository.AddPremiumDecoratorAsync(Dapper.API.Entities.Amentities.PremiumAmenityDecorator)">
+            <summary>
+            Add premium decorator
+            </summary>
+            <param name="decorator"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.Amenities.IAmenityRepository.AddSeasonalDecoratorAsync(Dapper.API.Entities.Amentities.SeasonalAmenityDecorator)">
+            <summary>
+            Add seasonal decorator
+            </summary>
+            <param name="decorator"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.Amenities.IAmenityRepository.GetPremiumDecoratorsForAmenityAsync(System.Int32)">
+            <summary>
+            Get all premium decorators for amenity
+            </summary>
+            <param name="amenityId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.Amenities.IAmenityRepository.GetSeasonalDecoratorsForAmenityAsync(System.Int32)">
+            <summary>
+            Get all seasonal decorators for amenity
+            </summary>
+            <param name="amenityId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.Amenities.IAmenityRepository.RemoveDecoratorAsync(System.Int32)">
+            <summary>
+            Remove decorator
+            </summary>
+            <param name="decoratorId"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Dapper.API.Data.Repositories.Interfaces.Amenities.IRoomAmenityRepository">
+            <summary>
+            Interface for Room Amenity Repository
+            </summary>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.Amenities.IRoomAmenityRepository.GetByRoomIdAsync(System.Int32)">
+            <summary>
+            Get all room amenities by room id
+            </summary>
+            <param name="roomId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.Amenities.IRoomAmenityRepository.GetAmenitiesForRoomAsync(System.Int32)">
+            <summary>
+            Get all amenities for room
+            </summary>
+            <param name="roomId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.Amenities.IRoomAmenityRepository.GetOverriddenAmenitiesForRoomAsync(System.Int32)">
+            <summary>
+            Get all overridden amenities for room
+            </summary>
+            <param name="roomId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.Amenities.IRoomAmenityRepository.GetByRoomAndAmenityIdAsync(System.Int32,System.Int32)">
+            <summary>
+            Get room amenity by room and amenity id
+            </summary>
+            <param name="roomId"></param>
+            <param name="amenityId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.Amenities.IRoomAmenityRepository.AddRoomAmenityAsync(Dapper.API.Entities.Amentities.RoomAmenity)">
+            <summary>
+            Add room amenity
+            </summary>
+            <param name="roomAmenity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.Amenities.IRoomAmenityRepository.UpdateRoomAmenityAsync(Dapper.API.Entities.Amentities.RoomAmenity)">
+            <summary>
+            Update room amenity
+            </summary>
+            <param name="roomAmenity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.Amenities.IRoomAmenityRepository.RemoveRoomAmenityAsync(System.Int32,System.Int32)">
+            <summary>
+            Remove room amenity
+            </summary>
+            <param name="roomId"></param>
+            <param name="amenityId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.Amenities.IRoomAmenityRepository.ResetRoomToRoomTypeDefaultsAsync(System.Int32)">
+            <summary>
+            Reset room to room type defaults 
+            </summary>
+            <param name="roomId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.Amenities.IRoomAmenityRepository.GetAllEffectiveAmenitiesForRoomAsync(System.Guid)">
+            <summary>
+            Method to get all amenities for a room, combining room-specific and room type defaults
+            </summary>
+            <param name="roomId"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Dapper.API.Data.Repositories.Interfaces.Amenities.IRoomTypeAmenityRepository">
+            <summary>
+            Interface for Room Type Amenity Repository
+            </summary>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.Amenities.IRoomTypeAmenityRepository.GetByRoomTypeIdAsync(System.Int32)">
+            <summary>
+            Get all room type amenities
+            </summary>
+            <param name="roomTypeId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.Amenities.IRoomTypeAmenityRepository.GetAmenitiesForRoomTypeAsync(System.Int32)">
+            <summary>
+            Get all amenities for room type
+            </summary>
+            <param name="roomTypeId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.Amenities.IRoomTypeAmenityRepository.GetDefaultAmenitiesForRoomTypeAsync(System.Int32)">
+            <summary>
+            Get all default amenities for room type
+            </summary>
+            <param name="roomTypeId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.Amenities.IRoomTypeAmenityRepository.GetByRoomTypeAndAmenityIdAsync(System.Int32,System.Int32)">
+            <summary>
+            Get room type amenity by room type and amenity id
+            </summary>
+            <param name="roomTypeId"></param>
+            <param name="amenityId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.Amenities.IRoomTypeAmenityRepository.AddRoomTypeAmenityAsync(Dapper.API.Entities.Amentities.RoomTypeAmenity)">
+            <summary>
+            Add room type amenity
+            </summary>
+            <param name="roomTypeAmenity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.Amenities.IRoomTypeAmenityRepository.UpdateRoomTypeAmenityAsync(Dapper.API.Entities.Amentities.RoomTypeAmenity)">
+            <summary>
+            Update room type amenity
+            </summary>
+            <param name="roomTypeAmenity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.Amenities.IRoomTypeAmenityRepository.RemoveRoomTypeAmenityAsync(System.Int32,System.Int32)">
+            <summary>
+            Remove room type amenity
+            </summary>
+            <param name="roomTypeId"></param>
+            <param name="amenityId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Data.Repositories.Interfaces.Amenities.IRoomTypeAmenityRepository.SetAllRoomTypeAmenitiesDefaultStatusAsync(System.Int32,System.Boolean)">
+            <summary>
+            Set all room type amenities default status
+            </summary>
+            <param name="roomTypeId"></param>
+            <param name="isDefault"></param>
+            <returns></returns>
+        </member>
         <member name="T:Dapper.API.Data.Repositories.Interfaces.IHotelRepository">
             <summary>
             Repository Interface for the hotels
@@ -527,24 +794,299 @@
         <member name="M:Dapper.API.Data.Repositories.RoomRepository.GetRoomTypesAsync(System.Threading.CancellationToken)">
             <inheritdoc/>
         </member>
-        <member name="P:Dapper.API.Dtos.Amenities.AddEditAmenity.Name">
+        <member name="T:Dapper.API.Dtos.Amenities.AddRoomAmenityDto">
             <summary>
-            Name of amenity`
+            DTO for adding a room amenity
             </summary>
         </member>
-        <member name="P:Dapper.API.Dtos.Amenities.AddEditAmenity.Description">
+        <member name="P:Dapper.API.Dtos.Amenities.AddRoomAmenityDto.RoomId">
             <summary>
-            Description of amenity
+            Room Id
             </summary>
         </member>
-        <member name="P:Dapper.API.Dtos.Amenities.Amenity.Name">
+        <member name="P:Dapper.API.Dtos.Amenities.AddRoomAmenityDto.AmenityId">
             <summary>
-            Name of amenity`
+            Amenity Id
             </summary>
         </member>
-        <member name="P:Dapper.API.Dtos.Amenities.Amenity.Description">
+        <member name="P:Dapper.API.Dtos.Amenities.AddRoomAmenityDto.IsOverridden">
             <summary>
-            Description of amenity
+            Whether the amenity is overridden
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Amenities.AddRoomAmenityDto.CustomPriceModifier">
+            <summary>
+            Custom price modifier for the amenity
+            </summary>
+        </member>
+        <member name="T:Dapper.API.Dtos.Amenities.AddRoomTypeAmenityDto">
+            <summary>
+            Data transfer object for adding a room type amenity
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Amenities.AddRoomTypeAmenityDto.RoomTypeId">
+            <summary>
+            Id of the room type amenity
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Amenities.AddRoomTypeAmenityDto.AmenityId">
+            <summary>
+            Id of the amenity
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Amenities.AddRoomTypeAmenityDto.IsDefault">
+            <summary>
+            Is the amenity included in the room type
+            </summary>
+        </member>
+        <member name="T:Dapper.API.Dtos.Amenities.AmenityDto">
+            <summary>
+            Data transfer object for the amenity
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Amenities.AmenityDto.Name">
+            <summary>
+            Name of the amenity
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Amenities.AmenityDto.Description">
+            <summary>
+            Description of the amenity
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Amenities.AmenityDto.PriceModifier">
+            <summary>
+            Price modifier for the amenity
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Amenities.AmenityDto.IsStandard">
+            <summary>
+            Whether the amenity is a standard amenity
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Amenities.AmenityDto.AmenityType">
+            <summary>
+            Type of amenity to create
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Amenities.AmenityDto.SpecialProperties">
+            <summary>
+            Special properties for the amenity
+            </summary>
+        </member>
+        <member name="T:Dapper.API.Dtos.Amenities.CreateAmenityDto">
+            <summary>
+            Data transfer object for creating an amenity
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Amenities.CreateAmenityDto.Name">
+            <summary>
+            Name of the amenity
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Amenities.CreateAmenityDto.Description">
+            <summary>
+            Description of the amenity
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Amenities.CreateAmenityDto.PriceModifier">
+            <summary>
+            Price modifier for the amenity
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Amenities.CreateAmenityDto.IsStandard">
+            <summary>
+            Whether the amenity is a standard amenity
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Amenities.CreateAmenityDto.AmenityType">
+            <summary>
+            Type of amenity to create
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Amenities.CreateAmenityDto.SpecialProperties">
+            <summary>
+            Special properties for the amenity
+            </summary>
+        </member>
+        <member name="T:Dapper.API.Dtos.Amenities.MiniBarAmenityDto">
+            <summary>
+            Data transfer object for the mini bar amenity
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Amenities.MiniBarAmenityDto.IsComplimentary">
+            <summary>
+            Is the mini bar complimentary
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Amenities.MiniBarAmenityDto.Items">
+            <summary>
+            List of items in the mini bar
+            </summary>
+        </member>
+        <member name="T:Dapper.API.Dtos.Amenities.RoomAmenityDto">
+            <summary>
+            DTO for RoomAmenity entity
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Amenities.RoomAmenityDto.RoomId">
+            <summary>
+            Room Id
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Amenities.RoomAmenityDto.AmenityId">
+            <summary>
+            Amenity Id
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Amenities.RoomAmenityDto.IsOverridden">
+            <summary>
+            Whether the amenity is overridden
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Amenities.RoomAmenityDto.CustomPriceModifier">
+            <summary>
+            Custom price modifier for the amenity
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Amenities.RoomAmenityDto.Amenity">
+            <summary>
+            For displaying room details
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Amenities.RoomServiceAmenityDto.HoursAvailable">
+            <summary>
+            Hours available for room service
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Amenities.RoomServiceAmenityDto.Is24Hours">
+            <summary>
+            Is the room service available 24 hours
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Amenities.RoomTypeAmenityDto.RoomTypeId">
+            <summary>
+            Id of the room type amenity
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Amenities.RoomTypeAmenityDto.AmenityId">
+            <summary>
+            Id of the amenity
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Amenities.RoomTypeAmenityDto.IsDefault">
+            <summary>
+            Is the amenity included in the room type
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Amenities.RoomTypeAmenityDto.Amenity">
+            <summary>
+            Amenity details
+            </summary>
+        </member>
+        <member name="T:Dapper.API.Dtos.Amenities.SeasonalAmenityDto">
+            <summary>
+            Data transfer object for the seasonal amenity
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Amenities.SeasonalAmenityDto.BaseAmenityId">
+            <summary>
+            Id of the base amenity
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Amenities.SeasonalAmenityDto.Season">
+            <summary>
+            Seasonal amenity name
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Amenities.SeasonalAmenityDto.StartDate">
+            <summary>
+            Start date of the seasonal amenity
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Amenities.SeasonalAmenityDto.EndDate">
+            <summary>
+            End date of the seasonal amenity
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Amenities.SeasonalAmenityDto.SeasonalPriceAdjustment">
+            <summary>
+            Price adjustment for the seasonal amenity
+            </summary>
+        </member>
+        <member name="T:Dapper.API.Dtos.Amenities.UpdateAmenityDto">
+            <summary>
+            Data transfer object for updating an amenity
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Amenities.UpdateAmenityDto.Name">
+            <summary>
+            Name of the amenity
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Amenities.UpdateAmenityDto.Description">
+            <summary>
+            Description of the amenity
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Amenities.UpdateAmenityDto.PriceModifier">
+            <summary>
+            Price modifier for the amenity
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Amenities.UpdateAmenityDto.IsStandard">
+            <summary>
+            Whether the amenity is a standard amenity
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Amenities.UpdateAmenityDto.SpecialProperties">
+            <summary>
+            Special properties for the amenity
+            </summary>
+        </member>
+        <member name="T:Dapper.API.Dtos.Amenities.UpdateRoomAmenityDto">
+            <summary>
+            DTO for updating a room amenity
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Amenities.UpdateRoomAmenityDto.IsOverridden">
+            <summary>
+            Whether the amenity is overridden
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Amenities.UpdateRoomAmenityDto.CustomPriceModifier">
+            <summary>
+            Custom price modifier for the amenity
+            </summary>
+        </member>
+        <member name="T:Dapper.API.Dtos.Amenities.UpdateRoomTypeAmenityDto">
+            <summary>
+            Data transfer object for updating a room type amenity
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Amenities.UpdateRoomTypeAmenityDto.IsDefault">
+            <summary>
+            Is the amenity included in the room type
+            </summary>
+        </member>
+        <member name="T:Dapper.API.Dtos.Amenities.WifiAmenityDto">
+            <summary>
+            Data transfer object for the WIFI amenity
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Amenities.WifiAmenityDto.NetworkName">
+            <summary>
+            Name of the network
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Amenities.WifiAmenityDto.Password">
+            <summary>
+            Password for the network
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Amenities.WifiAmenityDto.SpeedMbps">
+            <summary>
+            Speed of the network in Mbps
             </summary>
         </member>
         <member name="T:Dapper.API.Dtos.Common.BaseModel">
@@ -1039,38 +1581,202 @@
             Used for decorator pattern
             </summary>
         </member>
-        <member name="T:Dapper.API.Entities.Common.BaseModel">
+        <member name="T:Dapper.API.Entities.Amentities.PremiumAmenityDecorator">
+            <summary>
+            Decorator class for premium amenities
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Entities.Amentities.PremiumAmenityDecorator.PremiumFeature">
+            <summary>
+            Name of the premium feature
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Entities.Amentities.PremiumAmenityDecorator.AdditionalCost">
+            <summary>
+            Additional cost for the premium feature
+            </summary>
+        </member>
+        <member name="M:Dapper.API.Entities.Amentities.PremiumAmenityDecorator.#ctor(Dapper.API.Entities.Amentities.IAmenity,System.String,System.Decimal)">
+            <summary>
+            Constructor for the PremiumAmenityDecorator class
+            </summary>
+            <param name="baseAmenity"></param>
+            <param name="premiumFeature"></param>
+            <param name="additionalCost"></param>
+        </member>
+        <member name="P:Dapper.API.Entities.Amentities.PremiumAmenityDecorator.PriceModifier">
+            <summary>
+            Price modifier for the premium amenity
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Entities.Amentities.PremiumAmenityDecorator.Description">
+            <summary>
+            Description of the premium amenity
+            </summary>
+        </member>
+        <member name="T:Dapper.API.Entities.Amentities.RoomAmenity">
+            <summary>
+            Represents a room amenity
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Entities.Amentities.RoomAmenity.RoomId">
+            <summary>
+            Gets the unique identifier of the room.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Entities.Amentities.RoomAmenity.AmenityId">
+            <summary>
+            Gets the unique identifier of the amenity.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Entities.Amentities.RoomAmenity.IsOverridden">
+            <summary>
+            Gets a value indicating whether the amenity is overridden.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Entities.Amentities.RoomAmenity.CustomPriceModifier">
+            <summary>
+            Gets the custom price modifier for the amenity.
+            </summary>
+        </member>
+        <member name="M:Dapper.API.Entities.Amentities.RoomAmenity.#ctor(System.Int32,System.Int32,System.Boolean,System.Decimal)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Dapper.API.Entities.Amentities.RoomAmenity"/> class.
+            </summary>
+            <param name="roomId"></param>
+            <param name="amenityId"></param>
+            <param name="isOverridden"></param>
+            <param name="customPriceModifier"></param>
+        </member>
+        <member name="M:Dapper.API.Entities.Amentities.RoomAmenity.SetOverride(System.Boolean)">
+            <summary>
+            Sets the amenity as overridden.
+            </summary>
+            <param name="isOverridden"></param>
+        </member>
+        <member name="M:Dapper.API.Entities.Amentities.RoomAmenity.UpdateCustomPrice(System.Decimal)">
+            <summary>
+            Updates the custom price modifier for the amenity.
+            </summary>
+            <param name="customPriceModifier"></param>
+        </member>
+        <member name="T:Dapper.API.Entities.Amentities.RoomTypeAmenity">
+            <summary>
+            Represents the relationship between a room type and an amenity.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Entities.Amentities.RoomTypeAmenity.RoomTypeId">
+            <summary>
+            The unique identifier of the room type.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Entities.Amentities.RoomTypeAmenity.AmenityId">
+            <summary>
+            The unique identifier of the amenity.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Entities.Amentities.RoomTypeAmenity.IsDefault">
+            <summary>
+            Indicates whether the amenity is the default for the room type.
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Entities.Amentities.RoomTypeAmenity.AmenityInternalId">
+            <summary>
+            Store internal identifiers for the decorators
+            </summary>
+        </member>
+        <member name="M:Dapper.API.Entities.Amentities.RoomTypeAmenity.#ctor(System.Int32,System.Int32,System.String,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Dapper.API.Entities.Amentities.RoomTypeAmenity"/> class.
+            </summary>
+            <param name="roomTypeId"></param>
+            <param name="amenityId"></param>
+            <param name="amenityInternalId"></param>
+            <param name="isDefault"></param>
+        </member>
+        <member name="M:Dapper.API.Entities.Amentities.RoomTypeAmenity.SetAsDefault(System.Boolean)">
+            <summary>
+            Sets the amenity as the default for the room type.
+            </summary>
+            <param name="isDefault"></param>
+        </member>
+        <member name="T:Dapper.API.Entities.Amentities.SeasonalAmenityDecorator">
+            <summary>
+            Decorator class for seasonal amenities
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Entities.Amentities.SeasonalAmenityDecorator.Season">
+            <summary>
+            Season for the amenity
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Entities.Amentities.SeasonalAmenityDecorator.StartDate">
+            <summary>
+            Start date for the season
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Entities.Amentities.SeasonalAmenityDecorator.EndDate">
+            <summary>
+            End date for the season
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Entities.Amentities.SeasonalAmenityDecorator.SeasonalPriceAdjustment">
+            <summary>
+            Price adjustment for the season
+            </summary>
+        </member>
+        <member name="M:Dapper.API.Entities.Amentities.SeasonalAmenityDecorator.#ctor(Dapper.API.Entities.Amentities.IAmenity,System.String,System.DateTime,System.DateTime,System.Decimal)">
+            <summary>
+            Constructor for the SeasonalAmenityDecorator class
+            </summary>
+            <param name="baseAmenity"></param>
+            <param name="season"></param>
+            <param name="startDate"></param>
+            <param name="endDate"></param>
+            <param name="seasonalPriceAdjustment"></param>
+        </member>
+        <member name="P:Dapper.API.Entities.Amentities.SeasonalAmenityDecorator.PriceModifier">
+            <summary>
+            Price modifier for the seasonal amenity
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Entities.Amentities.SeasonalAmenityDecorator.Description">
+            <summary>
+            Description of the seasonal amenity
+            </summary>
+        </member>
+        <member name="T:Dapper.API.Entities.Common.BaseEntity">
             <summary>
             Contains common properties for all entities
             </summary>
         </member>
-        <member name="P:Dapper.API.Entities.Common.BaseModel.Id">
+        <member name="P:Dapper.API.Entities.Common.BaseEntity.Id">
             <summary>
             Numeric Id of the entity/model
             </summary>
         </member>
-        <member name="P:Dapper.API.Entities.Common.BaseModel.EntityStatusId">
+        <member name="P:Dapper.API.Entities.Common.BaseEntity.EntityStatusId">
             <summary>
             The status of the entity
             1 = Active, 2 = Inactive, 3 = DeletedForEveryone, 4 = Pending, 5 = Archived, 6 = Suspended, 7 = DeletedForMe
             </summary>
         </member>
-        <member name="P:Dapper.API.Entities.Common.BaseModel.CreatedAt">
+        <member name="P:Dapper.API.Entities.Common.BaseEntity.CreatedAt">
             <summary>
             The datetime the record was created
             </summary>
         </member>
-        <member name="P:Dapper.API.Entities.Common.BaseModel.CreatedBy">
+        <member name="P:Dapper.API.Entities.Common.BaseEntity.CreatedBy">
             <summary>
             The person who created the record
             </summary>
         </member>
-        <member name="P:Dapper.API.Entities.Common.BaseModel.UpdatedAt">
+        <member name="P:Dapper.API.Entities.Common.BaseEntity.UpdatedAt">
             <summary>
             The datetime the record was updated
             </summary>
         </member>
-        <member name="P:Dapper.API.Entities.Common.BaseModel.UpdatedBy">
+        <member name="P:Dapper.API.Entities.Common.BaseEntity.UpdatedBy">
             <summary>
             The person who last updated the record
             </summary>
@@ -2248,6 +2954,415 @@
         </member>
         <member name="M:Dapper.API.Services.HotelService.UpdateHotel(System.Int32,Dapper.API.Dtos.Hotels.AddEditHotel)">
             <inheritdoc/>
+        </member>
+        <member name="T:Dapper.API.Services.Interfaces.Amenities.IAmenityService">
+            <summary>
+            Interface for Amenity Service
+            </summary>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.Amenities.IAmenityService.GetAmenityByIdAsync(System.Int32)">
+            <summary>
+            Get amenity by id
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.Amenities.IAmenityService.GetAllAmenitiesAsync">
+            <summary>
+            Get all amenities
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.Amenities.IAmenityService.GetAmenityByNameAsync(System.String)">
+            <summary>
+            Get amenity by name
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.Amenities.IAmenityService.GetStandardAmenitiesAsync">
+            <summary>
+            Get all standard amenities
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.Amenities.IAmenityService.GetDecoratedAmenityAsync(System.Int32)">
+            <summary>
+            Get all decorated amenities by id
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.Amenities.IAmenityService.CreateAmenityAsync(System.String,System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            Add amenity
+            </summary>
+            <param name="amenityType"></param>
+            <param name="properties"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.Amenities.IAmenityService.UpdateAmenityAsync(System.Int32,System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            Update amenity
+            </summary>
+            <param name="id"></param>
+            <param name="properties"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.Amenities.IAmenityService.DeleteAmenityAsync(System.Int32)">
+            <summary>
+            Delete amenity
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.Amenities.IAmenityService.GetAllWifiAmenitiesAsync">
+            <summary>
+            Get all wifi amenities
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.Amenities.IAmenityService.GetWifiAmenityByIdAsync(System.Int32)">
+            <summary>
+            Get wifi amenity by id
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.Amenities.IAmenityService.CreateWifiAmenityAsync(System.String,System.String,System.Decimal,System.Boolean,System.String,System.String,System.Int32)">
+            <summary>
+            Create wifi amenity
+            </summary>
+            <param name="name"></param>
+            <param name="description"></param>
+            <param name="priceModifier"></param>
+            <param name="isStandard"></param>
+            <param name="networkName"></param>
+            <param name="password"></param>
+            <param name="speedMbps"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.Amenities.IAmenityService.UpdateWifiAmenityAsync(System.Int32,System.String,System.String,System.Decimal,System.Boolean,System.String,System.String,System.Int32)">
+            <summary>
+            Update wifi amenity
+            </summary>
+            <param name="id"></param>
+            <param name="name"></param>
+            <param name="description"></param>
+            <param name="priceModifier"></param>
+            <param name="isStandard"></param>
+            <param name="networkName"></param>
+            <param name="password"></param>
+            <param name="speedMbps"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.Amenities.IAmenityService.GetAllMiniBarAmenitiesAsync">
+            <summary>
+            Get all mini bar amenities
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.Amenities.IAmenityService.GetMiniBarAmenityByIdAsync(System.Int32)">
+            <summary>
+            Get mini bar amenity by id
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.Amenities.IAmenityService.CreateMiniBarAmenityAsync(System.String,System.String,System.Decimal,System.Boolean,System.Boolean,System.Collections.Generic.List{System.String})">
+            <summary>
+            Create mini bar amenity
+            </summary>
+            <param name="name"></param>
+            <param name="description"></param>
+            <param name="priceModifier"></param>
+            <param name="isStandard"></param>
+            <param name="isComplimentary"></param>
+            <param name="items"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.Amenities.IAmenityService.UpdateMiniBarAmenityAsync(System.Int32,System.String,System.String,System.Decimal,System.Boolean,System.Boolean,System.Collections.Generic.List{System.String})">
+            <summary>
+            Update mini bar amenity
+            </summary>
+            <param name="id"></param>
+            <param name="name"></param>
+            <param name="description"></param>
+            <param name="priceModifier"></param>
+            <param name="isStandard"></param>
+            <param name="isComplimentary"></param>
+            <param name="items"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.Amenities.IAmenityService.GetAllRoomServiceAmenitiesAsync">
+            <summary>
+            Get all room service amenities
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.Amenities.IAmenityService.GetRoomServiceAmenityByIdAsync(System.Int32)">
+            <summary>
+            Get room service amenity by id
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.Amenities.IAmenityService.CreateRoomServiceAmenityAsync(System.String,System.String,System.Decimal,System.Boolean,System.Int32,System.Boolean)">
+            <summary>
+            Create room service amenity
+            </summary>
+            <param name="name"></param>
+            <param name="description"></param>
+            <param name="priceModifier"></param>
+            <param name="isStandard"></param>
+            <param name="hoursAvailable"></param>
+            <param name="is24Hours"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.Amenities.IAmenityService.UpdateRoomServiceAmenityAsync(System.Int32,System.String,System.String,System.Decimal,System.Boolean,System.Int32,System.Boolean)">
+            <summary>
+            Update room service amenity
+            </summary>
+            <param name="id"></param>
+            <param name="name"></param>
+            <param name="description"></param>
+            <param name="priceModifier"></param>
+            <param name="isStandard"></param>
+            <param name="hoursAvailable"></param>
+            <param name="is24Hours"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.Amenities.IAmenityService.AddPremiumDecoratorAsync(System.Int32,System.String,System.Decimal)">
+            <summary>
+            Add premium decorator
+            </summary>
+            <param name="baseAmenityId"></param>
+            <param name="premiumFeature"></param>
+            <param name="additionalCost"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.Amenities.IAmenityService.AddSeasonalDecoratorAsync(System.Int32,System.String,System.DateTime,System.DateTime,System.Decimal)">
+            <summary>
+            Add seasonal decorator
+            </summary>
+            <param name="baseAmenityId"></param>
+            <param name="season"></param>
+            <param name="startDate"></param>
+            <param name="endDate"></param>
+            <param name="seasonalPriceAdjustment"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.Amenities.IAmenityService.GetPremiumDecoratorsForAmenityAsync(System.Int32)">
+            <summary>
+            Get all premium decorators for amenity
+            </summary>
+            <param name="amenityId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.Amenities.IAmenityService.GetSeasonalDecoratorsForAmenityAsync(System.Int32)">
+            <summary>
+            Get all seasonal decorators for amenity
+            </summary>
+            <param name="amenityId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.Amenities.IAmenityService.RemoveDecoratorAsync(System.Int32)">
+            <summary>
+            Remove premium decorator
+            </summary>
+            <param name="decoratorId"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Dapper.API.Services.Interfaces.Amenities.IRoomAmenityService">
+            <summary>
+            Interface for Room Amenity Service
+            </summary>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.Amenities.IRoomAmenityService.GetAmenitiesByRoomIdAsync(System.Int32)">
+            <summary>
+            Get all amenities for a room
+            </summary>
+            <param name="roomId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.Amenities.IRoomAmenityService.GetAmenityDetailsForRoomAsync(System.Int32)">
+            <summary>
+            Get all amenities for a room
+            </summary>
+            <param name="roomId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.Amenities.IRoomAmenityService.GetOverriddenAmenityDetailsForRoomAsync(System.Int32)">
+            <summary>
+            Get all overridden amenities for a room
+            </summary>
+            <param name="roomId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.Amenities.IRoomAmenityService.GetRoomAmenityAsync(System.Int32,System.Int32)">
+            <summary>
+            Get all amenities for a room
+            </summary>
+            <param name="roomId"></param>
+            <param name="amenityId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.Amenities.IRoomAmenityService.AddAmenityToRoomAsync(System.Int32,System.Int32,System.Boolean,System.Decimal)">
+            <summary>
+            Add an amenity to a room
+            </summary>
+            <param name="roomId"></param>
+            <param name="amenityId"></param>
+            <param name="isOverridden"></param>
+            <param name="customPriceModifier"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.Amenities.IRoomAmenityService.UpdateRoomAmenityAsync(System.Int32,System.Int32,System.Boolean,System.Decimal)">
+            <summary>
+            Update an amenity for a room
+            </summary>
+            <param name="roomId"></param>
+            <param name="amenityId"></param>
+            <param name="isOverridden"></param>
+            <param name="customPriceModifier"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.Amenities.IRoomAmenityService.RemoveAmenityFromRoomAsync(System.Int32,System.Int32)">
+            <summary>
+            Remove an amenity from a room
+            </summary>
+            <param name="roomId"></param>
+            <param name="amenityId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.Amenities.IRoomAmenityService.ResetRoomToRoomTypeDefaultsAsync(System.Int32)">
+            <summary>
+            Reset all amenities for a room to room type defaults
+            </summary>
+            <param name="roomId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.Amenities.IRoomAmenityService.GetAllEffectiveAmenitiesForRoomAsync(System.Int32)">
+            <summary>
+            Get all effective amenities for a room (combines room-specific and room type defaults)
+            </summary>
+            <param name="roomId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.Amenities.IRoomAmenityService.CalculateTotalAmenityPriceModifierForRoomAsync(System.Int32)">
+            <summary>
+            Calculate total price impact of all amenities for a room
+            </summary>
+            <param name="roomId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.Amenities.IRoomAmenityService.CopyAmenitiesFromRoomAsync(System.Int32,System.Int32,System.Boolean)">
+            <summary>
+            Copy amenities from one room to another
+            </summary>
+            <param name="sourceRoomId"></param>
+            <param name="targetRoomId"></param>
+            <param name="replaceExisting"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.Amenities.IRoomAmenityService.GetRoomsWithAmenityAsync(System.Int32)">
+            <summary>
+            Get all rooms with a specific amenity
+            </summary>
+            <param name="amenityId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.Amenities.IRoomAmenityService.ApplyRoomTypeDefaultsToRoomAsync(System.Int32,System.Boolean)">
+            <summary>
+            Apply room type defaults to a room
+            </summary>
+            <param name="roomId"></param>
+            <param name="preserveOverrides"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Dapper.API.Services.Interfaces.Amenities.IRoomTypeAmenityService">
+            <summary>
+            Interface for Room Type Amenity Service
+            </summary>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.Amenities.IRoomTypeAmenityService.GetAmenitiesByRoomTypeIdAsync(System.Int32)">
+            <summary>
+            Get all room type amenities
+            </summary>
+            <param name="roomTypeId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.Amenities.IRoomTypeAmenityService.GetAmenityDetailsForRoomTypeAsync(System.Int32)">
+            <summary>
+            Get all amenities for room type
+            </summary>
+            <param name="roomTypeId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.Amenities.IRoomTypeAmenityService.GetDefaultAmenityDetailsForRoomTypeAsync(System.Int32)">
+            <summary>
+            Get all default amenities for room type
+            </summary>
+            <param name="roomTypeId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.Amenities.IRoomTypeAmenityService.GetRoomTypeAmenityAsync(System.Int32,System.Int32)">
+            <summary>
+            Get room type amenity by room type and amenity id
+            </summary>
+            <param name="roomTypeId"></param>
+            <param name="amenityId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.Amenities.IRoomTypeAmenityService.AddAmenityToRoomTypeAsync(System.Int32,System.Int32,System.Boolean)">
+            <summary>
+            Add room type amenity
+            </summary>
+            <param name="roomTypeId"></param>
+            <param name="amenityId"></param>
+            <param name="isDefault"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.Amenities.IRoomTypeAmenityService.UpdateRoomTypeAmenityAsync(System.Int32,System.Int32,System.Boolean)">
+            <summary>
+            Update room type amenity
+            </summary>
+            <param name="roomTypeId"></param>
+            <param name="amenityId"></param>
+            <param name="isDefault"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.Amenities.IRoomTypeAmenityService.RemoveAmenityFromRoomTypeAsync(System.Int32,System.Int32)">
+            <summary>
+            Remove room type amenity
+            </summary>
+            <param name="roomTypeId"></param>
+            <param name="amenityId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.Amenities.IRoomTypeAmenityService.SetAllRoomTypeAmenitiesDefaultStatusAsync(System.Int32,System.Boolean)">
+            <summary>
+            Set all room type amenities default status
+            </summary>
+            <param name="roomTypeId"></param>
+            <param name="isDefault"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.Amenities.IRoomTypeAmenityService.CopyAmenitiesFromRoomTypeAsync(System.Int32,System.Int32,System.Boolean)">
+            <summary>
+            Copy amenities from one room type to another
+            </summary>
+            <param name="sourceRoomTypeId"></param>
+            <param name="targetRoomTypeId"></param>
+            <param name="replaceExisting"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.API.Services.Interfaces.Amenities.IRoomTypeAmenityService.GetRoomTypesWithAmenityAsync(System.Int32)">
+            <summary>
+            Get room types with amenity
+            </summary>
+            <param name="amenityId"></param>
+            <returns></returns>
         </member>
         <member name="T:Dapper.API.Services.Interfaces.IHotelService">
             <summary>

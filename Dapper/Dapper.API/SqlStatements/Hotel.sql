@@ -245,3 +245,226 @@ VALUES
     ('Twin', 'Twin room with two separate beds', 1, GETDATE(), 1, GETDATE(), 1),
     ('Presidential', 'Presidential suite, the most luxurious accommodation', 1, GETDATE(), 1, GETDATE(), 1),
     ('Villa', 'Villa or cottage separate from the main hotel building', 1, GETDATE(), 1, GETDATE(), 1);
+
+
+-- Amenity Related Tables
+
+-- Amenity Type Tables
+CREATE TABLE AmenityTypes (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    AmenityType NVARCHAR(50) NOT NULL UNIQUE,
+    EntityStatusId INT NOT NULL DEFAULT 1,
+    CreatedAt DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    CreatedBy INT NULL,
+    UpdatedAt DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    UpdatedBy INT NULL
+);
+
+
+-- Amenities Table with integer IDs
+DROP TABLE IF EXISTS Amenities;
+CREATE TABLE Amenities (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    Name NVARCHAR(100) NOT NULL,
+    Description NVARCHAR(MAX),
+    PriceModifier DECIMAL(18, 2) NOT NULL DEFAULT 0,
+    IsStandard BIT NOT NULL DEFAULT 0,
+    AmenityTypeId INT NOT NULL,
+    InternalIdentifier NVARCHAR(50) NOT NULL UNIQUE,
+    EntityStatusId INT NOT NULL DEFAULT 1,
+    CreatedAt DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    CreatedBy INT NULL,
+    UpdatedAt DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    UpdatedBy INT NULL,
+    CONSTRAINT FK_Amenities_AmenityTypes FOREIGN KEY (AmenityTypeId) REFERENCES AmenityTypes(Id)
+);
+
+-- Type-specific Amenity Tables
+DROP TABLE IF EXISTS RoomAmenities;
+CREATE TABLE WifiAmenities (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    AmenityId INT NOT NULL,
+    NetworkName NVARCHAR(100) NOT NULL,
+    Password NVARCHAR(100),
+    SpeedMbps INT NOT NULL DEFAULT 100,
+    EntityStatusId INT NOT NULL DEFAULT 1,
+    CreatedAt DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    CreatedBy INT NULL,
+    UpdatedAt DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    UpdatedBy INT NULL,
+    CONSTRAINT FK_WifiAmenities_Amenities FOREIGN KEY (AmenityId) REFERENCES Amenities(Id) ON DELETE CASCADE
+);
+
+
+DROP TABLE IF EXISTS MiniBarAmenities;
+CREATE TABLE MiniBarAmenities (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    AmenityId INT NOT NULL,
+    IsComplimentary BIT NOT NULL DEFAULT 0,
+    EntityStatusId INT NOT NULL DEFAULT 1,
+    CreatedAt DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    CreatedBy INT NULL,
+    UpdatedAt DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    UpdatedBy INT NULL,
+    CONSTRAINT FK_MiniBarAmenities_Amenities FOREIGN KEY (AmenityId) REFERENCES Amenities(Id) ON DELETE CASCADE
+);
+
+DROP TABLE IF EXISTS MiniBarItems;
+CREATE TABLE MiniBarItems (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    MiniBarAmenityId INT NOT NULL,
+    Item NVARCHAR(100) NOT NULL,
+    EntityStatusId INT NOT NULL DEFAULT 1,
+    CreatedAt DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    CreatedBy INT NULL,
+    UpdatedAt DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    UpdatedBy INT NULL,
+    CONSTRAINT FK_MiniBarItems_MiniBarAmenities FOREIGN KEY (MiniBarAmenityId) REFERENCES MiniBarAmenities(Id) ON DELETE CASCADE
+);
+
+DROP TABLE IF EXISTS RoomServiceAmenities;
+CREATE TABLE RoomServiceAmenities (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    AmenityId INT NOT NULL,
+    HoursAvailable INT NOT NULL DEFAULT 12,
+    Is24Hours BIT NOT NULL DEFAULT 0,
+    EntityStatusId INT NOT NULL DEFAULT 1,
+    CreatedAt DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    CreatedBy INT NULL,
+    UpdatedAt DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    UpdatedBy INT NULL,
+    CONSTRAINT FK_RoomServiceAmenities_Amenities FOREIGN KEY (AmenityId) REFERENCES Amenities(Id) ON DELETE CASCADE
+);
+
+-- Amenity Decorator Tables
+
+DROP TABLE IF EXISTS PremiumAmenityDecorators;
+CREATE TABLE PremiumAmenityDecorators (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    BaseAmenityId INT NOT NULL,
+    BaseAmenityInternalId NVARCHAR(50) NOT NULL,
+    PremiumFeature NVARCHAR(100) NOT NULL,
+    AdditionalCost DECIMAL(18, 2) NOT NULL DEFAULT 0,
+    InternalIdentifier NVARCHAR(50) NOT NULL UNIQUE,
+    EntityStatusId INT NOT NULL DEFAULT 1,
+    CreatedAt DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    CreatedBy INT NULL,
+    UpdatedAt DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    UpdatedBy INT NULL,
+    CONSTRAINT FK_PremiumAmenityDecorators_Amenities FOREIGN KEY (BaseAmenityId) REFERENCES Amenities(Id) ON DELETE CASCADE
+);
+
+DROP TABLE IF EXISTS SeasonalAmenityDecorators;
+CREATE TABLE SeasonalAmenityDecorators (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    BaseAmenityId INT NOT NULL,
+    BaseAmenityInternalId NVARCHAR(50) NOT NULL,
+    Season NVARCHAR(50) NOT NULL,
+    StartDate DATETIME2 NOT NULL,
+    EndDate DATETIME2 NOT NULL,
+    SeasonalPriceAdjustment DECIMAL(18, 2) NOT NULL DEFAULT 0,
+    InternalIdentifier NVARCHAR(50) NOT NULL UNIQUE,
+    EntityStatusId INT NOT NULL DEFAULT 1,
+    CreatedAt DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    CreatedBy INT NULL,
+    UpdatedAt DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    UpdatedBy INT NULL,
+    CONSTRAINT FK_SeasonalAmenityDecorators_Amenities FOREIGN KEY (BaseAmenityId) REFERENCES Amenities(Id) ON DELETE CASCADE
+);
+
+
+-- Room Type Amenities Junction Table
+
+DROP TABLE IF EXISTS RoomTypeAmenities;
+CREATE TABLE RoomTypeAmenities (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    RoomTypeId INT NOT NULL,
+    AmenityId INT NOT NULL,
+    AmenityInternalId NVARCHAR(50) NOT NULL,
+    IsDefault BIT NOT NULL DEFAULT 0,
+    EntityStatusId INT NOT NULL DEFAULT 1,
+    CreatedAt DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    CreatedBy INT NULL,
+    UpdatedAt DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    UpdatedBy INT NULL,
+    CONSTRAINT UK_RoomTypeAmenities UNIQUE (RoomTypeId, AmenityId),
+    CONSTRAINT FK_RoomTypeAmenities_RoomTypes FOREIGN KEY (RoomTypeId) REFERENCES RoomTypes(Id) ON DELETE CASCADE,
+    CONSTRAINT FK_RoomTypeAmenities_Amenities FOREIGN KEY (AmenityId) REFERENCES Amenities(Id) ON DELETE CASCADE
+);
+
+-- Room Amenities Junction Table
+DROP TABLE IF EXISTS RoomAmenities;
+CREATE TABLE RoomAmenities (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    RoomId INT NOT NULL,
+    AmenityId INT NOT NULL,
+    AmenityInternalId NVARCHAR(50) NOT NULL,
+    IsOverridden BIT NOT NULL DEFAULT 0,
+    CustomPriceModifier DECIMAL(18, 2) NOT NULL DEFAULT 0,
+    EntityStatusId INT NOT NULL DEFAULT 1,
+    CreatedAt DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    CreatedBy INT NULL,
+    UpdatedAt DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    UpdatedBy INT NULL,
+    CONSTRAINT UK_RoomAmenities UNIQUE (RoomId, AmenityId),
+    CONSTRAINT FK_RoomAmenities_Rooms FOREIGN KEY (RoomId) REFERENCES Rooms(Id) ON DELETE CASCADE,
+    CONSTRAINT FK_RoomAmenities_Amenities FOREIGN KEY (AmenityId) REFERENCES Amenities(Id) ON DELETE CASCADE
+);
+
+-- Indexes for better performance
+CREATE INDEX IX_Amenities_AmenityTypeId ON Amenities(AmenityTypeId);
+CREATE INDEX IX_Amenities_IsStandard ON Amenities(IsStandard);
+CREATE INDEX IX_Amenities_EntityStatusId ON Amenities(EntityStatusId);
+CREATE INDEX IX_WifiAmenities_AmenityId ON WifiAmenities(AmenityId);
+CREATE INDEX IX_WifiAmenities_EntityStatusId ON WifiAmenities(EntityStatusId);
+CREATE INDEX IX_MiniBarAmenities_AmenityId ON MiniBarAmenities(AmenityId);
+CREATE INDEX IX_MiniBarAmenities_EntityStatusId ON MiniBarAmenities(EntityStatusId);
+CREATE INDEX IX_MiniBarItems_EntityStatusId ON MiniBarItems(EntityStatusId);
+CREATE INDEX IX_RoomServiceAmenities_AmenityId ON RoomServiceAmenities(AmenityId);
+CREATE INDEX IX_RoomServiceAmenities_EntityStatusId ON RoomServiceAmenities(EntityStatusId);
+CREATE INDEX IX_PremiumAmenityDecorators_BaseAmenityId ON PremiumAmenityDecorators(BaseAmenityId);
+CREATE INDEX IX_PremiumAmenityDecorators_EntityStatusId ON PremiumAmenityDecorators(EntityStatusId);
+CREATE INDEX IX_PremiumAmenityDecorators_InternalIdentifier ON PremiumAmenityDecorators(InternalIdentifier);
+CREATE INDEX IX_SeasonalAmenityDecorators_BaseAmenityId ON SeasonalAmenityDecorators(BaseAmenityId);
+CREATE INDEX IX_SeasonalAmenityDecorators_DateRange ON SeasonalAmenityDecorators(StartDate, EndDate);
+CREATE INDEX IX_SeasonalAmenityDecorators_EntityStatusId ON SeasonalAmenityDecorators(EntityStatusId);
+CREATE INDEX IX_SeasonalAmenityDecorators_InternalIdentifier ON SeasonalAmenityDecorators(InternalIdentifier);
+CREATE INDEX IX_RoomTypeAmenities_RoomTypeId ON RoomTypeAmenities(RoomTypeId);
+CREATE INDEX IX_RoomTypeAmenities_AmenityId ON RoomTypeAmenities(AmenityId);
+CREATE INDEX IX_RoomTypeAmenities_IsDefault ON RoomTypeAmenities(IsDefault);
+CREATE INDEX IX_RoomTypeAmenities_EntityStatusId ON RoomTypeAmenities(EntityStatusId);
+CREATE INDEX IX_RoomAmenities_RoomId ON RoomAmenities(RoomId);
+CREATE INDEX IX_RoomAmenities_AmenityId ON RoomAmenities(AmenityId);
+CREATE INDEX IX_RoomAmenities_IsOverridden ON RoomAmenities(IsOverridden);
+CREATE INDEX IX_RoomAmenities_EntityStatusId ON RoomAmenities(EntityStatusId);
+
+-- Sample Data Insertion
+
+-- Insert Amenity Types
+INSERT INTO AmenityTypes (AmenityType, EntityStatusId, CreatedBy, UpdatedBy)
+VALUES 
+    ('wifi', 1, 1, 1),
+    ('minibar', 1, 1, 1),
+    ('roomservice', 1, 1, 1);
+
+-- Insert Base Amenities
+DECLARE @WifiTypeId INT = (SELECT Id FROM AmenityTypes WHERE AmenityType = 'wifi');
+DECLARE @MiniBarTypeId INT = (SELECT Id FROM AmenityTypes WHERE AmenityType = 'minibar');
+DECLARE @RoomServiceTypeId INT = (SELECT Id FROM AmenityTypes WHERE AmenityType = 'roomservice');
+
+-- WiFi Amenities
+DECLARE @StandardWifiId INT;
+INSERT INTO Amenities (Name, Description, PriceModifier, IsStandard, AmenityTypeId, InternalIdentifier, EntityStatusId, CreatedBy, UpdatedBy)
+VALUES ('Standard WiFi', 'Basic WiFi access', 0.00, 1, @WifiTypeId, NEWID(), 1, 1, 1);
+SET @StandardWifiId = SCOPE_IDENTITY();
+
+INSERT INTO WifiAmenities (AmenityId, NetworkName, Password, SpeedMbps, EntityStatusId, CreatedBy, UpdatedBy)
+VALUES (@StandardWifiId, 'Hotel-Guest', 'guest123', 50, 1, 1, 1);
+
+DECLARE @PremiumWifiId INT;
+INSERT INTO Amenities (Name, Description, PriceModifier, IsStandard, AmenityTypeId, InternalIdentifier, EntityStatusId, CreatedBy, UpdatedBy)
+VALUES ('Premium WiFi', 'High-speed WiFi access', 15.00, 0, @WifiTypeId, NEWID(), 1, 1, 1);
+SET @PremiumWifiId = SCOPE_IDENTITY();
+
+INSERT INTO WifiAmenities (AmenityId, NetworkName, Password, SpeedMbps, EntityStatusId, CreatedBy, UpdatedBy)
+VALUES (@PremiumWifiId, 'Hotel-Premium', 'premium123', 200, 1, 1, 1);
