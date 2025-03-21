@@ -1,0 +1,65 @@
+If in the future I add amenities for each room type, with the ability to later edit for a particular room, which design patter would be best. No need for implementation. Just explanation
+
+For adding and editing amenities for room types and specific rooms, I recommend using the **Decorator** pattern combined with a **Strategy** pattern approach.
+
+## Design Pattern Recommendation
+
+The **Decorator** pattern would be ideal because:
+
+1. It allows you to attach additional responsibilities (amenities) to objects dynamically
+2. It provides flexibility to add or remove amenities for specific rooms without modifying the base room type
+3. It supports layering of amenities (e.g., a room can have both "WiFi" and "MiniBar" amenities)
+4. It respects the Open/Closed Principle by allowing extension without modifying existing code
+
+The **Strategy** pattern complements this approach by:
+
+1. Defining a family of algorithms (pricing strategies, availability rules) that can vary independently from the clients that use them
+2. Making the amenity behaviors interchangeable and configurable
+
+## Conceptual Implementation
+
+You would create:
+
+1. A base `RoomAmenity` interface or abstract class
+2. Concrete amenity implementations (WiFi, MiniBar, RoomService, etc.)
+3. A way to compose these amenities with rooms
+
+Each room would have:
+- A base room type (defining standard features)
+- A collection of additional amenities (decorators)
+- The ability to add/remove specific amenities
+
+## Benefits of This Approach
+
+- **Flexibility**: Easy to add new amenity types without changing existing code
+- **Granularity**: Specific rooms can override their type's default amenities
+- **Maintainability**: Clean separation between room types and their amenities
+- **Scalability**: As your amenity system grows, it remains manageable
+- **Business Rules**: Easily implement rules like "Penthouse rooms always include RoomService"
+
+This design would allow you to define default amenities for each room type, while still maintaining the flexibility to customize amenities for individual rooms as needed.
+
+Why will a factory design pattern not work?
+
+The Factory pattern isn't necessarily wrong for this scenario, but it has limitations compared to the Decorator pattern when dealing with amenities that can be dynamically combined.
+
+A Factory pattern would work well for:
+- Creating different room types with their default amenities
+- Ensuring consistency in how rooms of a particular type are created
+- Centralizing the creation logic for rooms
+
+However, it has these limitations for your amenity customization requirements:
+
+1. **Limited Flexibility in Combinations**: Factories typically produce complete, pre-configured objects. For each unique combination of amenities, you would need a different factory method or subclass.
+As the number of amenities grows, the number of possible combinations grows exponentially.
+
+2. **Difficulty with Runtime Changes**: Factories aren't designed for modifying objects after creation. If you need to add or remove amenities from a specific room after it's 
+created (which seems to be a requirement), a Factory alone wouldn't support this well.
+
+3. **Static vs. Dynamic Composition**: The Factory pattern creates objects with a fixed set of characteristics. When you need to modify individual rooms with custom amenity combinations, you lose the dynamic composition benefit that Decorator provides.
+
+4. **Granularity Issues**: To support every possible room + amenity combination with a Factory, you would either need a complex parameter-driven factory (which becomes unwieldy) or an explosion of factory methods/subclasses.
+
+A Factory could still be useful in this design as part of the solution - particularly for creating the initial room types with their default amenities. Then the Decorator pattern would allow for the runtime customization of individual rooms.
+
+If the combinations are actually limited and well-defined, then a Factory might be sufficient. But for a system where rooms can have any combination of amenities and these can change over time, the Decorator pattern offers more flexibility.

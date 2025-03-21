@@ -266,7 +266,7 @@ DROP TABLE IF EXISTS Amenities;
 CREATE TABLE Amenities (
     Id INT IDENTITY(1,1) PRIMARY KEY,
     Name NVARCHAR(100) NOT NULL,
-    Description NVARCHAR(MAX),
+    Description NVARCHAR(250),
     PriceModifier DECIMAL(18, 2) NOT NULL DEFAULT 0,
     IsStandard BIT NOT NULL DEFAULT 0,
     AmenityTypeId INT NOT NULL,
@@ -468,3 +468,112 @@ SET @PremiumWifiId = SCOPE_IDENTITY();
 
 INSERT INTO WifiAmenities (AmenityId, NetworkName, Password, SpeedMbps, EntityStatusId, CreatedBy, UpdatedBy)
 VALUES (@PremiumWifiId, 'Hotel-Premium', 'premium123', 200, 1, 1, 1);
+
+-- MiniBar Amenities
+DECLARE @BasicMiniBarId INT;
+INSERT INTO Amenities (Name, Description, PriceModifier, IsStandard, AmenityTypeId, InternalIdentifier, EntityStatusId, CreatedBy, UpdatedBy)
+VALUES ('Basic Mini Bar', 'Basic assortment of beverages', 10.00, 1, @MiniBarTypeId, NEWID(), 1, 1, 1);
+SET @BasicMiniBarId = SCOPE_IDENTITY();
+
+DECLARE @BasicMiniBarDetailId INT;
+INSERT INTO MiniBarAmenities (AmenityId, IsComplimentary, EntityStatusId, CreatedBy, UpdatedBy)
+VALUES (@BasicMiniBarId, 0, 1, 1, 1);
+SET @BasicMiniBarDetailId = SCOPE_IDENTITY();
+
+INSERT INTO MiniBarItems (MiniBarAmenityId, Item, EntityStatusId, CreatedBy, UpdatedBy)
+VALUES 
+    (@BasicMiniBarDetailId, 'Water', 1, 1, 1),
+    (@BasicMiniBarDetailId, 'Soda', 1, 1, 1),
+    (@BasicMiniBarDetailId, 'Beer', 1, 1, 1);
+
+DECLARE @DeluxeMiniBarId INT;
+INSERT INTO Amenities (Name, Description, PriceModifier, IsStandard, AmenityTypeId, InternalIdentifier, EntityStatusId, CreatedBy, UpdatedBy)
+VALUES ('Deluxe Mini Bar', 'Premium selection of beverages and snacks', 25.00, 0, @MiniBarTypeId, NEWID(), 1, 1, 1);
+SET @DeluxeMiniBarId = SCOPE_IDENTITY();
+
+DECLARE @DeluxeMiniBarDetailId INT;
+INSERT INTO MiniBarAmenities (AmenityId, IsComplimentary, EntityStatusId, CreatedBy, UpdatedBy)
+VALUES (@DeluxeMiniBarId, 0, 1, 1, 1);
+SET @DeluxeMiniBarDetailId = SCOPE_IDENTITY();
+
+INSERT INTO MiniBarItems (MiniBarAmenityId, Item, EntityStatusId, CreatedBy, UpdatedBy)
+VALUES 
+    (@DeluxeMiniBarDetailId, 'Sparkling Water', 1, 1, 1),
+    (@DeluxeMiniBarDetailId, 'Premium Soda', 1, 1, 1),
+    (@DeluxeMiniBarDetailId, 'Craft Beer', 1, 1, 1),
+    (@DeluxeMiniBarDetailId, 'Wine', 1, 1, 1),
+    (@DeluxeMiniBarDetailId, 'Chocolate', 1, 1, 1),
+    (@DeluxeMiniBarDetailId, 'Nuts', 1, 1, 1);
+
+-- Room Service Amenities
+DECLARE @LimitedRoomServiceId INT;
+INSERT INTO Amenities (Name, Description, PriceModifier, IsStandard, AmenityTypeId, InternalIdentifier, EntityStatusId, CreatedBy, UpdatedBy)
+VALUES ('Limited Room Service', 'Available during restaurant hours', 0.00, 1, @RoomServiceTypeId, NEWID(), 1, 1, 1);
+SET @LimitedRoomServiceId = SCOPE_IDENTITY();
+
+INSERT INTO RoomServiceAmenities (AmenityId, HoursAvailable, Is24Hours, EntityStatusId, CreatedBy, UpdatedBy)
+VALUES (@LimitedRoomServiceId, 12, 0, 1, 1, 1);
+
+DECLARE @FullRoomServiceId INT;
+INSERT INTO Amenities (Name, Description, PriceModifier, IsStandard, AmenityTypeId, InternalIdentifier, EntityStatusId, CreatedBy, UpdatedBy)
+VALUES ('24/7 Room Service', 'Available anytime', 20.00, 0, @RoomServiceTypeId, NEWID(), 1, 1, 1);
+SET @FullRoomServiceId = SCOPE_IDENTITY();
+
+INSERT INTO RoomServiceAmenities (AmenityId, HoursAvailable, Is24Hours, EntityStatusId, CreatedBy, UpdatedBy)
+VALUES (@FullRoomServiceId, 24, 1, 1, 1, 1);
+
+-- Add decorators
+-- Get internal identifiers first 
+DECLARE @PremiumWifiInternalId NVARCHAR(50) = (SELECT InternalIdentifier FROM Amenities WHERE Id = @PremiumWifiId);
+DECLARE @DeluxeMiniBarInternalId NVARCHAR(50) = (SELECT InternalIdentifier FROM Amenities WHERE Id = @DeluxeMiniBarId);
+DECLARE @FullRoomServiceInternalId NVARCHAR(50) = (SELECT InternalIdentifier FROM Amenities WHERE Id = @FullRoomServiceId);
+
+INSERT INTO PremiumAmenityDecorators (BaseAmenityId, BaseAmenityInternalId, PremiumFeature, AdditionalCost, InternalIdentifier, EntityStatusId, CreatedBy, UpdatedBy)
+VALUES 
+    (@PremiumWifiId, @PremiumWifiInternalId, 'Unlimited Devices', 5.00, NEWID(), 1, 1, 1),
+    (@DeluxeMiniBarId, @DeluxeMiniBarInternalId, 'Premium Spirits', 15.00, NEWID(), 1, 1, 1);
+
+INSERT INTO SeasonalAmenityDecorators (BaseAmenityId, BaseAmenityInternalId, Season, StartDate, EndDate, SeasonalPriceAdjustment, InternalIdentifier, EntityStatusId, CreatedBy, UpdatedBy)
+VALUES 
+    (@FullRoomServiceId, @FullRoomServiceInternalId, 'Holiday Season', '2024-12-20', '2025-01-05', 10.00, NEWID(), 1, 1, 1),
+    (@DeluxeMiniBarId, @DeluxeMiniBarInternalId, 'Summer Special', '2024-06-01', '2024-08-31', -5.00, NEWID(), 1, 1, 1);
+
+-- Connect amenities to room types
+-- Assuming RoomTypes table has already been converted to use INT IDs
+DECLARE @StandardRoomTypeId INT = (SELECT Id FROM RoomTypes WHERE Name = 'Standard');
+DECLARE @DeluxeRoomTypeId INT = (SELECT Id FROM RoomTypes WHERE Name = 'Deluxe');
+DECLARE @SuiteRoomTypeId INT = (SELECT Id FROM RoomTypes WHERE Name = 'Suite');
+
+-- Get internal identifiers for amenities
+DECLARE @StandardWifiInternalId NVARCHAR(50) = (SELECT InternalIdentifier FROM Amenities WHERE Id = @StandardWifiId);
+DECLARE @BasicMiniBarInternalId NVARCHAR(50) = (SELECT InternalIdentifier FROM Amenities WHERE Id = @BasicMiniBarId);
+DECLARE @LimitedRoomServiceInternalId NVARCHAR(50) = (SELECT InternalIdentifier FROM Amenities WHERE Id = @LimitedRoomServiceId);
+
+-- Standard room amenities
+INSERT INTO RoomTypeAmenities (RoomTypeId, AmenityId, AmenityInternalId, IsDefault, EntityStatusId, CreatedBy, UpdatedBy)
+VALUES 
+    (@StandardRoomTypeId, @StandardWifiId, @StandardWifiInternalId, 1, 1, 1, 1),
+    (@StandardRoomTypeId, @BasicMiniBarId, @BasicMiniBarInternalId, 0, 1, 1, 1),
+    (@StandardRoomTypeId, @LimitedRoomServiceId, @LimitedRoomServiceInternalId, 1, 1, 1, 1);
+
+-- Deluxe room amenities
+INSERT INTO RoomTypeAmenities (RoomTypeId, AmenityId, AmenityInternalId, IsDefault, EntityStatusId, CreatedBy, UpdatedBy)
+VALUES 
+    (@DeluxeRoomTypeId, @PremiumWifiId, @PremiumWifiInternalId, 1, 1, 1, 1),
+    (@DeluxeRoomTypeId, @BasicMiniBarId, @BasicMiniBarInternalId, 1, 1, 1, 1),
+    (@DeluxeRoomTypeId, @LimitedRoomServiceId, @LimitedRoomServiceInternalId, 1, 1, 1, 1);
+
+-- Suite room amenities
+INSERT INTO RoomTypeAmenities (RoomTypeId, AmenityId, AmenityInternalId, IsDefault, EntityStatusId, CreatedBy, UpdatedBy)
+VALUES 
+    (@SuiteRoomTypeId, @PremiumWifiId, @PremiumWifiInternalId, 1, 1, 1, 1),
+    (@SuiteRoomTypeId, @DeluxeMiniBarId, @DeluxeMiniBarInternalId, 1, 1, 1, 1),
+    (@SuiteRoomTypeId, @FullRoomServiceId, @FullRoomServiceInternalId, 1, 1, 1, 1);
+
+-- Add room-specific overrides
+-- Example: A specific standard room has premium wifi as an upgrade
+DECLARE @SampleRoomId INT = (SELECT TOP 1 Id FROM Rooms WHERE RoomTypeId = @StandardRoomTypeId);
+
+INSERT INTO RoomAmenities (RoomId, AmenityId, AmenityInternalId, IsOverridden, CustomPriceModifier, EntityStatusId, CreatedBy, UpdatedBy)
+VALUES 
+    (@SampleRoomId, @PremiumWifiId, @PremiumWifiInternalId, 1, 10.00, 1, 1, 1);  -- Discounted premium wifi
