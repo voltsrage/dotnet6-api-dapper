@@ -527,6 +527,26 @@
         <member name="M:Dapper.API.Data.Repositories.RoomRepository.GetRoomTypesAsync(System.Threading.CancellationToken)">
             <inheritdoc/>
         </member>
+        <member name="P:Dapper.API.Dtos.Amenities.AddEditAmenity.Name">
+            <summary>
+            Name of amenity`
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Amenities.AddEditAmenity.Description">
+            <summary>
+            Description of amenity
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Amenities.Amenity.Name">
+            <summary>
+            Name of amenity`
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Amenities.Amenity.Description">
+            <summary>
+            Description of amenity
+            </summary>
+        </member>
         <member name="T:Dapper.API.Dtos.Common.BaseModel">
             <summary>
             Base model for dtos
@@ -546,6 +566,21 @@
         <member name="P:Dapper.API.Dtos.Common.BaseModel.CreatedAt">
             <summary>
             The datetime the record was created
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Common.BaseModel.CreatedBy">
+            <summary>
+            The user who created the record
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Common.BaseModel.UpdatedAt">
+            <summary>
+            The datetime the record was last updated
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Dtos.Common.BaseModel.UpdatedBy">
+            <summary>
+            The user who last updated the record
             </summary>
         </member>
         <member name="T:Dapper.API.Dtos.Hotels.AddEditHotel">
@@ -791,6 +826,217 @@
         <member name="P:Dapper.API.Dtos.Rooms.RoomType.Description">
             <summary>
             Gets or sets the description of the room type.
+            </summary>
+        </member>
+        <member name="T:Dapper.API.Entities.Amentities.AmenityDecorator">
+            <summary>
+            Decorator class for amenities
+            </summary>
+        </member>
+        <member name="F:Dapper.API.Entities.Amentities.AmenityDecorator._baseAmenity">
+            <summary>
+            Base amenity
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Entities.Amentities.AmenityDecorator.Id">
+            <summary>
+            Id of the amenity
+            </summary>
+        </member>
+        <member name="T:Dapper.API.Entities.Amentities.BaseAmenity">
+            <summary>
+            Base class for all amenities
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Entities.Amentities.BaseAmenity.Name">
+            <summary>
+            Name of amenity`
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Entities.Amentities.BaseAmenity.Description">
+            <summary>
+            Description of amenity
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Entities.Amentities.BaseAmenity.PriceModifier">
+            <summary>
+            Price modifier for the amenity
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Entities.Amentities.BaseAmenity.IsStandard">
+            <summary>
+            Is the amenity standard
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Entities.Amentities.BaseAmenity.InternalIdentifier">
+            <summary>
+            Used for decorator pattern
+            </summary>
+        </member>
+        <member name="M:Dapper.API.Entities.Amentities.BaseAmenity.#ctor(System.String,System.String,System.Decimal,System.Boolean)">
+            <summary>
+            Constructor for the BaseAmenity class
+            </summary>
+            <param name="name"></param>
+            <param name="description"></param>
+            <param name="priceModifier"></param>
+            <param name="isStandard"></param>
+            <exception cref="T:System.ArgumentNullException"></exception>
+        </member>
+        <member name="M:Dapper.API.Entities.Amentities.BaseAmenity.UpdateDetails(System.String,System.String,System.Decimal)">
+            <summary>
+            Updates the details of the amenity
+            </summary>
+            <param name="name"></param>
+            <param name="description"></param>
+            <param name="priceModifier"></param>
+            <exception cref="T:System.ArgumentNullException"></exception>
+        </member>
+        <member name="M:Dapper.API.Entities.Amentities.BaseAmenity.SetAsStandard(System.Boolean)">
+            <summary>
+            Sets the amenity as standard
+            </summary>
+            <param name="isStandard"></param>
+        </member>
+        <member name="T:Dapper.API.Entities.Amentities.WIFIAmenity">
+            <summary>
+            WIFI amenity
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Entities.Amentities.WIFIAmenity.NetworkName">
+            <summary>
+            Name of the network
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Entities.Amentities.WIFIAmenity.Password">
+            <summary>
+            Password for the network
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Entities.Amentities.WIFIAmenity.SpeedMbps">
+            <summary>
+            Speed of the network in Mbps
+            </summary>
+        </member>
+        <member name="M:Dapper.API.Entities.Amentities.WIFIAmenity.#ctor(System.String,System.String,System.Decimal,System.Boolean,System.String,System.String,System.Int32)">
+            <summary>
+            Constructor for the WIFIAmenity class
+            </summary>
+            <param name="name"></param>
+            <param name="description"></param>
+            <param name="priceModifier"></param>
+            <param name="isStandard"></param>
+            <param name="networkName"></param>
+            <param name="password"></param>
+            <param name="speedMbps"></param>
+        </member>
+        <member name="M:Dapper.API.Entities.Amentities.WIFIAmenity.UpdateNetworkDetails(System.String,System.String,System.Int32)">
+            <summary>
+            Updates the details of the network
+            </summary>
+            <param name="networkName"></param>
+            <param name="password"></param>
+            <param name="speedMbps"></param>
+        </member>
+        <member name="T:Dapper.API.Entities.Amentities.MiniBarAmenity">
+            <summary>
+            Mini bar amenity
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Entities.Amentities.MiniBarAmenity.IsComplimentary">
+            <summary>
+            Is the mini bar complimentary
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Entities.Amentities.MiniBarAmenity.Items">
+            <summary>
+            List of items in the mini bar
+            </summary>
+        </member>
+        <member name="M:Dapper.API.Entities.Amentities.MiniBarAmenity.#ctor(System.String,System.String,System.Decimal,System.Boolean,System.Boolean,System.Collections.Generic.List{System.String})">
+            <summary>
+            Constructor for the MiniBarAmenity class
+            </summary>
+            <param name="name"></param>
+            <param name="description"></param>
+            <param name="priceModifier"></param>
+            <param name="isStandard"></param>
+            <param name="isComplimentary"></param>
+            <param name="items"></param>
+        </member>
+        <member name="M:Dapper.API.Entities.Amentities.MiniBarAmenity.UpdateMiniBarDetails(System.Boolean,System.Collections.Generic.List{System.String})">
+            <summary>
+            Updates the details of the mini bar
+            </summary>
+            <param name="isComplimentary"></param>
+            <param name="items"></param>
+        </member>
+        <member name="T:Dapper.API.Entities.Amentities.RoomServiceAmenity">
+            <summary>
+            Room service amenity
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Entities.Amentities.RoomServiceAmenity.HoursAvailable">
+            <summary>
+            Hours available for room service
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Entities.Amentities.RoomServiceAmenity.Is24Hours">
+            <summary>
+            Is the room service available 24 hours
+            </summary>
+        </member>
+        <member name="M:Dapper.API.Entities.Amentities.RoomServiceAmenity.#ctor(System.String,System.String,System.Decimal,System.Boolean,System.Int32,System.Boolean)">
+            <summary>
+            Constructor for the RoomServiceAmenity class
+            </summary>
+            <param name="name"></param>
+            <param name="description"></param>
+            <param name="priceModifier"></param>
+            <param name="isStandard"></param>
+            <param name="hoursAvailable"></param>
+            <param name="is24Hours"></param>
+        </member>
+        <member name="M:Dapper.API.Entities.Amentities.RoomServiceAmenity.UpdateAvailability(System.Int32,System.Boolean)">
+            <summary>
+            Updates the availability of room service
+            </summary>
+            <param name="hoursAvailable"></param>
+            <param name="is24Hours"></param>
+        </member>
+        <member name="T:Dapper.API.Entities.Amentities.IAmenity">
+            <summary>
+            Interface for all amenities
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Entities.Amentities.IAmenity.Id">
+            <summary>
+            Numeric Id of amenity
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Entities.Amentities.IAmenity.Name">
+            <summary>
+            Name of amenity`
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Entities.Amentities.IAmenity.Description">
+            <summary>
+            Description of amenity
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Entities.Amentities.IAmenity.PriceModifier">
+            <summary>
+            Price modifier for the amenity
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Entities.Amentities.IAmenity.IsStandard">
+            <summary>
+            Is the amenity standard
+            </summary>
+        </member>
+        <member name="P:Dapper.API.Entities.Amentities.IAmenity.InternalIdentifier">
+            <summary>
+            Used for decorator pattern
             </summary>
         </member>
         <member name="T:Dapper.API.Entities.Common.BaseModel">

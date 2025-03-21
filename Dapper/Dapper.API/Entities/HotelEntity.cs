@@ -6,7 +6,7 @@ namespace Dapper.API.Entities
     /// <summary>
     /// Represents a hotel entity.
     /// </summary>
-    public class HotelEntity: BaseModel
+    public class HotelEntity: BaseEntity
     {
         /// <summary>
         /// Gets or sets the name of the hotel.

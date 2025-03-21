@@ -1,11 +1,13 @@
-﻿using Dapper.API.Dtos.Common;
+﻿
+
+using Dapper.API.Entities.Common;
 
 namespace Dapper.API.Entities
 {
     /// <summary>
     /// Represents a room in a hotel.
     /// </summary>
-    public class RoomEntity: BaseModel
+    public class RoomEntity: BaseEntity
     {
         /// <summary>
         /// Gets or sets the unique identifier of the hotel to which the room belongs.

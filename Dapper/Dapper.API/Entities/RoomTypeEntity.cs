@@ -1,11 +1,11 @@
-﻿using Dapper.API.Dtos.Common;
+﻿using Dapper.API.Entities.Common;
 
 namespace Dapper.API.Entities
 {
     /// <summary>
     /// Represents a room type in the hotel
     /// </summary>
-    public class RoomTypeEntity : BaseModel
+    public class RoomTypeEntity : BaseEntity
     {
         /// <summary>
         /// Name of room type

@@ -3,7 +3,7 @@
     /// <summary>
     /// Contains common properties for all entities
     /// </summary>
-    public class BaseModel
+    public class BaseEntity
     {
         /// <summary>
         /// Numeric Id of the entity/model
