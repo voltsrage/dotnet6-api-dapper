@@ -3,6 +3,7 @@ using Dapper.API.Data.Repositories.Interfaces.Amenities;
 using Dapper.API.Entities.Amentities;
 using Dapper.API.Enums.StandardEnums;
 using Dapper.API.Exceptions;
+using Dapper.API.Models;
 using System.Data;
 using System.Text;
 
@@ -98,19 +99,144 @@ namespace Dapper.API.Data.Repositories.Amenities
         /// <inheritdoc/>
         public async Task<int> AddPremiumDecoratorAsync(PremiumAmenityDecorator decorator)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _logger.LogInformation($"Processing {REPOSITORY_NAME}.{nameof(AddPremiumDecoratorAsync)}");
+
+                // Get base amenity's internal identifier
+                DynamicParameters getIdParam = new DynamicParameters();
+                getIdParam.Add("Id", decorator.Id);
+
+                string internalIdQuery = "SELECT InternalIdentifier FROM Amenities WHERE Id = @Id AND EntityStatusId = 1";
+                string baseAmenityInternalId = await _dataAccess.ReturnRowSql<string>(internalIdQuery, getIdParam);
+
+                // Insert the decorator
+                DynamicParameters param = new DynamicParameters();
+                param.Add("BaseAmenityId", decorator.Id);
+                param.Add("BaseAmenityInternalId", baseAmenityInternalId);
+                param.Add("PremiumFeature", decorator.PremiumFeature);
+                param.Add("AdditionalCost", decorator.AdditionalCost);
+                param.Add("InternalIdentifier", decorator.InternalIdentifier);
+                param.Add("EntityStatusId", 1); // Active
+                param.Add("CreatedAt", DateTime.UtcNow);
+                param.Add("CreatedBy", 0); // Add when authentication added
+                param.Add("UpdatedAt", DateTime.UtcNow);
+                param.Add("UpdatedBy", 0); // Add when authentication added
+
+                StringBuilder sql = new StringBuilder();
+                sql.Append(@"
+                    INSERT INTO PremiumAmenityDecorators 
+                        (BaseAmenityId, BaseAmenityInternalId, PremiumFeature, AdditionalCost, 
+                         InternalIdentifier, EntityStatusId, CreatedAt, CreatedBy, UpdatedAt, UpdatedBy)
+                    VALUES 
+                        (@BaseAmenityId, @BaseAmenityInternalId, @PremiumFeature, @AdditionalCost, 
+                         @InternalIdentifier, @EntityStatusId, @CreatedAt, @CreatedBy, @UpdatedAt, @UpdatedBy);
+                    SELECT CAST(SCOPE_IDENTITY() as int)");
+
+                int decoratorId = await _dataAccess.ReturnRowSql<int>(sql.ToString(), param);
+
+                return decoratorId;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error in {REPOSITORY_NAME}.{nameof(AddPremiumDecoratorAsync)}");
+                throw new RepositoryException(
+                    "Failed to add premium decorator",
+                    REPOSITORY_NAME,
+                    nameof(AddPremiumDecoratorAsync),
+                    "AddPremiumDecorator",
+                    ex);
+            }
         }
 
         /// <inheritdoc/>
         public async Task<int> AddSeasonalDecoratorAsync(SeasonalAmenityDecorator decorator)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _logger.LogInformation($"Processing {REPOSITORY_NAME}.{nameof(AddSeasonalDecoratorAsync)}");
+
+                // Get base amenity's internal identifier
+                DynamicParameters getIdParam = new DynamicParameters();
+                getIdParam.Add("Id", decorator.Id);
+
+                string internalIdQuery = "SELECT InternalIdentifier FROM Amenities WHERE Id = @Id AND EntityStatusId = 1";
+                string baseAmenityInternalId = await _dataAccess.ReturnRowSql<string>(internalIdQuery, getIdParam);
+
+                // Insert the decorator
+                DynamicParameters param = new DynamicParameters();
+                param.Add("BaseAmenityId", decorator.Id);
+                param.Add("BaseAmenityInternalId", baseAmenityInternalId);
+                param.Add("Season", decorator.Season);
+                param.Add("StartDate", decorator.StartDate);
+                param.Add("EndDate", decorator.EndDate);
+                param.Add("SeasonalPriceAdjustment", decorator.SeasonalPriceAdjustment);
+                param.Add("InternalIdentifier", decorator.InternalIdentifier);
+                param.Add("EntityStatusId", 1); // Active
+                param.Add("CreatedAt", DateTime.UtcNow);
+                param.Add("CreatedBy", 0); // Add when authentication added
+                param.Add("UpdatedAt", DateTime.UtcNow);
+                param.Add("UpdatedBy", 0); // Add when authentication added
+
+                StringBuilder sql = new StringBuilder();
+                sql.Append(@"
+                    INSERT INTO SeasonalAmenityDecorators 
+                        (BaseAmenityId, BaseAmenityInternalId, Season, StartDate, EndDate, SeasonalPriceAdjustment, 
+                         InternalIdentifier, EntityStatusId, CreatedAt, CreatedBy, UpdatedAt, UpdatedBy)
+                    VALUES 
+                        (@BaseAmenityId, @BaseAmenityInternalId, @Season, @StartDate, @EndDate, @SeasonalPriceAdjustment, 
+                         @InternalIdentifier, @EntityStatusId, @CreatedAt, @CreatedBy, @UpdatedAt, @UpdatedBy);
+                    SELECT CAST(SCOPE_IDENTITY() as int)");
+
+                int decoratorId = await _dataAccess.ReturnRowSql<int>(sql.ToString(), param);
+
+                return decoratorId;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error in {REPOSITORY_NAME}.{nameof(AddSeasonalDecoratorAsync)}");
+                throw new RepositoryException(
+                    "Failed to add seasonal decorator",
+                    REPOSITORY_NAME,
+                    nameof(AddSeasonalDecoratorAsync),
+                    "AddSeasonalDecorator",
+                    ex);
+            }
         }
 
         /// <inheritdoc/>
         public async Task DeleteAmenityAsync(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _logger.LogInformation($"Processing {REPOSITORY_NAME}.{nameof(DeleteAmenityAsync)}");
+
+                DynamicParameters param = new DynamicParameters();
+                param.Add("Id", id);
+                param.Add("UpdatedAt", DateTime.UtcNow);
+                param.Add("UpdatedBy", 0); // Replace with actual user ID when available
+                param.Add("EntityStatusId", (int)EntityStatusEnum.DeletedForEveryone); // DeletedForEveryone
+
+                StringBuilder sql = new StringBuilder();
+                sql.Append(@"
+                    UPDATE Amenities 
+                    SET EntityStatusId = @EntityStatusId,
+                        UpdatedAt = @UpdatedAt,
+                        UpdatedBy = @UpdatedBy
+                    WHERE Id = @Id");
+
+                await _dataAccess.ExecuteWithoutReturnSql(sql.ToString(), param);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error in {REPOSITORY_NAME}.{nameof(DeleteAmenityAsync)}");
+                throw new RepositoryException(
+                    "Failed to delete amenity",
+                    REPOSITORY_NAME,
+                    nameof(DeleteAmenityAsync),
+                    "Delete",
+                    ex);
+            }
         }
 
         /// <inheritdoc/>
@@ -161,20 +287,148 @@ namespace Dapper.API.Data.Repositories.Amenities
         /// <inheritdoc/>
         public async Task<IEnumerable<MiniBarAmenity>> GetAllMiniBarAmenitiesAsync()
         {
-            throw new NotImplementedException();
-        }
+            try
+            {
+                _logger.LogInformation($"Processing {REPOSITORY_NAME}.{nameof(GetAllMiniBarAmenitiesAsync)}");
 
+                var query = $@"
+                    SELECT a.*, at.AmenityType, mb.Id as MiniBarId, mb.IsComplimentary
+                    FROM Amenities a
+                    INNER JOIN AmenityTypes at ON a.AmenityTypeId = at.Id
+                    INNER JOIN MiniBarAmenities mb ON a.Id = mb.AmenityId
+                    WHERE at.AmenityType = {AmenityTypeLookup.minibar} AND a.EntityStatusId = 1 AND mb.EntityStatusId = 1";
+
+                var results = await _dataAccess.ReturnListSql<dynamic>(query);
+                var amenities = new List<MiniBarAmenity>();
+
+                foreach (var result in results)
+                {
+                    // Get items for this minibar
+                    DynamicParameters param = new DynamicParameters();
+                    param.Add("MiniBarAmenityId", result.MiniBarId);
+
+                    var itemsQuery = @"
+                        SELECT Item 
+                        FROM MiniBarItems 
+                        WHERE MiniBarAmenityId = @MiniBarAmenityId AND EntityStatusId = 1";
+
+                    var items = await _dataAccess.ReturnListSql<string>(itemsQuery, param);
+
+                    var amenity = new MiniBarAmenity
+                    (
+                    result.Name,
+                    result.Description,
+                    result.PriceModifier,
+                    result.IsStandard,
+                    result.IsComplimentary,
+                    items.ToList()
+                    );
+
+                    amenities.Add(amenity);
+                }
+
+                return amenities;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error in {REPOSITORY_NAME}.{nameof(GetAllMiniBarAmenitiesAsync)}");
+                throw new RepositoryException(
+                    "Failed to get all MiniBar amenities",
+                    REPOSITORY_NAME,
+                    nameof(GetAllMiniBarAmenitiesAsync),
+                    "GetAllMiniBar",
+                    ex);
+            }
+        }
 
         /// <inheritdoc/>
         public async Task<IEnumerable<RoomServiceAmenity>> GetAllRoomServiceAmenitiesAsync()
         {
-            throw new NotImplementedException();
+            try
+            {
+                _logger.LogInformation($"Processing {REPOSITORY_NAME}.{nameof(GetAllRoomServiceAmenitiesAsync)}");
+
+                var query = $@"
+                    SELECT a.*, at.AmenityType, rs.HoursAvailable, rs.Is24Hours
+                    FROM Amenities a
+                    INNER JOIN AmenityTypes at ON a.AmenityTypeId = at.Id
+                    INNER JOIN RoomServiceAmenities rs ON a.Id = rs.AmenityId
+                    WHERE at.AmenityType = {AmenityTypeLookup.roomservice} AND a.EntityStatusId = 1 AND rs.EntityStatusId = 1";
+
+                var results = await _dataAccess.ReturnListSql<dynamic>(query);
+                var amenities = new List<RoomServiceAmenity>();
+
+                foreach (var result in results)
+                {
+                    var amenity = new RoomServiceAmenity(
+                        result.Name, 
+                        result.Description, 
+                        result.PriceModifier, 
+                        result.IsStandard, 
+                        result.HoursAvailable,
+                        result.Is24Hours
+                    );
+
+                    amenities.Add(amenity);
+                }
+
+                return amenities;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error in {REPOSITORY_NAME}.{nameof(GetAllRoomServiceAmenitiesAsync)}");
+                throw new RepositoryException(
+                    "Failed to get all RoomService amenities",
+                    REPOSITORY_NAME,
+                    nameof(GetAllRoomServiceAmenitiesAsync),
+                    "GetAllRoomService",
+                    ex);
+            }
         }
 
         /// <inheritdoc/>
         public async Task<IEnumerable<WIFIAmenity>> GetAllWifiAmenitiesAsync()
         {
-            throw new NotImplementedException();
+            try
+            {
+                _logger.LogInformation($"Processing {REPOSITORY_NAME}.{nameof(GetAllWifiAmenitiesAsync)}");
+
+                var query = $@"
+                    SELECT a.*, at.AmenityType, w.NetworkName, w.Password, w.SpeedMbps
+                    FROM Amenities a
+                    INNER JOIN AmenityTypes at ON a.AmenityTypeId = at.Id
+                    INNER JOIN WifiAmenities w ON a.Id = w.AmenityId
+                    WHERE at.AmenityType = {AmenityTypeLookup.wifi} AND a.EntityStatusId = 1 AND w.EntityStatusId = 1";
+
+                var results = await _dataAccess.ReturnListSql<dynamic>(query);
+                var amenities = new List<WIFIAmenity>();
+
+                foreach (var result in results)
+                {
+                    var amenity = new WIFIAmenity(
+                    result.Name,
+                    result.Description,
+                    result.PriceModifier,
+                    result.IsStandard,
+                    result.NetworkName,
+                    result.Password,
+                    result.SpeedMbps);
+
+                    amenities.Add(amenity);
+                }
+
+                return amenities;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error in {REPOSITORY_NAME}.{nameof(GetAllWifiAmenitiesAsync)}");
+                throw new RepositoryException(
+                    "Failed to get all WiFi amenities",
+                    REPOSITORY_NAME,
+                    nameof(GetAllWifiAmenitiesAsync),
+                    "GetAllWifi",
+                    ex);
+            }
         }
 
         /// <inheritdoc/>
@@ -340,25 +594,219 @@ namespace Dapper.API.Data.Repositories.Amenities
         /// <inheritdoc/>
         public async Task<MiniBarAmenity> GetMiniBarAmenityByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _logger.LogInformation($"Processing {REPOSITORY_NAME}.{nameof(GetMiniBarAmenityByIdAsync)}");
+
+                DynamicParameters param = new DynamicParameters();
+                param.Add("Id", id);
+
+                var query = $@"
+                    SELECT a.*, at.AmenityType, mb.Id as MiniBarId, mb.IsComplimentary
+                    FROM Amenities a
+                    INNER JOIN AmenityTypes at ON a.AmenityTypeId = at.Id
+                    INNER JOIN MiniBarAmenities mb ON a.Id = mb.AmenityId
+                    WHERE a.Id = @Id AND at.AmenityType = {AmenityTypeLookup.minibar}
+                        AND a.EntityStatusId = 1 AND mb.EntityStatusId = 1";
+
+                var result = await _dataAccess.ReturnRowSql<dynamic>(query, param);
+                if (result == null)
+                    return null;
+
+                // Get items for this minibar
+                param = new DynamicParameters();
+                param.Add("MiniBarAmenityId", result.MiniBarId);
+
+                var itemsQuery = @"
+                    SELECT Item 
+                    FROM MiniBarItems 
+                    WHERE MiniBarAmenityId = @MiniBarAmenityId AND EntityStatusId = 1";
+
+                var items = await _dataAccess.ReturnListSql<string>(itemsQuery, param);
+
+                return new MiniBarAmenity
+                    (
+                    result.Name,
+                    result.Description,
+                    result.PriceModifier,
+                    result.IsStandard,
+                    result.IsComplimentary,
+                    items.ToList()                    
+                    );
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error in {REPOSITORY_NAME}.{nameof(GetMiniBarAmenityByIdAsync)}");
+                throw new RepositoryException(
+                    "Failed to get MiniBar amenity by id",
+                    REPOSITORY_NAME,
+                    nameof(GetMiniBarAmenityByIdAsync),
+                    "GetMiniBarById",
+                    ex);
+            }
         }
 
         /// <inheritdoc/>
         public async Task<IEnumerable<PremiumAmenityDecorator>> GetPremiumDecoratorsForAmenityAsync(int amenityId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _logger.LogInformation($"Processing {REPOSITORY_NAME}.{nameof(GetPremiumDecoratorsForAmenityAsync)}");
+
+                // Get base amenity first
+                var baseAmenity = await GetAmenityByIdAsync(amenityId);
+                if (baseAmenity == null)
+                {
+                    return Enumerable.Empty<PremiumAmenityDecorator>();
+                }
+
+                // Get premium decorators
+                DynamicParameters param = new DynamicParameters();
+                param.Add("BaseAmenityId", amenityId);
+
+                string internalIdQuery = "SELECT InternalIdentifier FROM Amenities WHERE Id = @BaseAmenityId AND EntityStatusId = 1";
+                string baseAmenityInternalId = await _dataAccess.ReturnRowSql<string>(internalIdQuery, param);
+
+                if (!string.IsNullOrEmpty(baseAmenityInternalId))
+                {
+                    param.Add("BaseAmenityInternalId", baseAmenityInternalId);
+                }
+
+                var query = @"
+                    SELECT Id, BaseAmenityId, PremiumFeature, AdditionalCost, InternalIdentifier, 
+                           EntityStatusId, CreatedAt, CreatedBy, UpdatedAt, UpdatedBy
+                    FROM PremiumAmenityDecorators
+                    WHERE (BaseAmenityId = @BaseAmenityId 
+                          OR (@BaseAmenityInternalId IS NOT NULL AND BaseAmenityInternalId = @BaseAmenityInternalId))
+                          AND EntityStatusId = 1";
+
+                var results = await _dataAccess.ReturnListSql<dynamic>(query, param);
+                var decorators = new List<PremiumAmenityDecorator>();
+
+                foreach (var result in results)
+                {
+                    var decorator = new PremiumAmenityDecorator(baseAmenity, result.PremiumFeature, result.AdditionalCost);
+
+                    decorators.Add(decorator);
+                }
+
+                return decorators;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error in {REPOSITORY_NAME}.{nameof(GetPremiumDecoratorsForAmenityAsync)}");
+                throw new RepositoryException(
+                    "Failed to get premium decorators for amenity",
+                    REPOSITORY_NAME,
+                    nameof(GetPremiumDecoratorsForAmenityAsync),
+                    "GetPremiumDecoratorsForAmenity",
+                    ex);
+            }
         }
 
         /// <inheritdoc/>
         public async Task<RoomServiceAmenity> GetRoomServiceAmenityByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _logger.LogInformation($"Processing {REPOSITORY_NAME}.{nameof(GetRoomServiceAmenityByIdAsync)}");
+
+                DynamicParameters param = new DynamicParameters();
+                param.Add("Id", id);
+
+                var query = $@"
+                    SELECT a.*, at.AmenityType, rs.HoursAvailable, rs.Is24Hours
+                    FROM Amenities a
+                    INNER JOIN AmenityTypes at ON a.AmenityTypeId = at.Id
+                    INNER JOIN RoomServiceAmenities rs ON a.Id = rs.AmenityId
+                    WHERE a.Id = @Id AND at.AmenityType = {AmenityTypeLookup.roomservice}
+                        AND a.EntityStatusId = 1 AND rs.EntityStatusId = 1";
+
+                var result = await _dataAccess.ReturnRowSql<dynamic>(query, param);
+                if (result == null)
+                    return null;
+
+                return new RoomServiceAmenity(
+                    result.Name,
+                    result.Description,
+                    result.PriceModifier, 
+                    result.IsStandard, 
+                    result.HoursAvailable, 
+                    result.Is24Hours);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error in {REPOSITORY_NAME}.{nameof(GetRoomServiceAmenityByIdAsync)}");
+                throw new RepositoryException(
+                    "Failed to get RoomService amenity by id",
+                    REPOSITORY_NAME,
+                    nameof(GetRoomServiceAmenityByIdAsync),
+                    "GetRoomServiceById",
+                    ex);
+            }
         }
 
         /// <inheritdoc/>
         public async Task<IEnumerable<SeasonalAmenityDecorator>> GetSeasonalDecoratorsForAmenityAsync(int amenityId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _logger.LogInformation($"Processing {REPOSITORY_NAME}.{nameof(GetSeasonalDecoratorsForAmenityAsync)}");
+
+                // Get base amenity first
+                var baseAmenity = await GetAmenityByIdAsync(amenityId);
+                if (baseAmenity == null)
+                {
+                    return Enumerable.Empty<SeasonalAmenityDecorator>();
+                }
+
+                // Get seasonal decorators
+                DynamicParameters param = new DynamicParameters();
+                param.Add("BaseAmenityId", amenityId);
+
+                string internalIdQuery = "SELECT InternalIdentifier FROM Amenities WHERE Id = @BaseAmenityId AND EntityStatusId = 1";
+                string baseAmenityInternalId = await _dataAccess.ReturnRowSql<string>(internalIdQuery, param);
+
+                if (!string.IsNullOrEmpty(baseAmenityInternalId))
+                {
+                    param.Add("BaseAmenityInternalId", baseAmenityInternalId);
+                }
+
+                var query = @"
+                    SELECT Id, BaseAmenityId, Season, StartDate, EndDate, SeasonalPriceAdjustment, InternalIdentifier, 
+                           EntityStatusId, CreatedAt, CreatedBy, UpdatedAt, UpdatedBy
+                    FROM SeasonalAmenityDecorators
+                    WHERE (BaseAmenityId = @BaseAmenityId 
+                          OR (@BaseAmenityInternalId IS NOT NULL AND BaseAmenityInternalId = @BaseAmenityInternalId))
+                          AND EntityStatusId = 1";
+
+                var results = await _dataAccess.ReturnListSql<dynamic>(query, param);
+                var decorators = new List<SeasonalAmenityDecorator>();
+
+                foreach (var result in results)
+                {
+                    var decorator = new SeasonalAmenityDecorator(
+                        baseAmenity,
+                        result.Season,
+                        result.StartDate,
+                        result.EndDate,
+                        result.SeasonalPriceAdjustment); 
+
+                    decorators.Add(decorator);
+                }
+
+                return decorators;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error in {REPOSITORY_NAME}.{nameof(GetSeasonalDecoratorsForAmenityAsync)}");
+                throw new RepositoryException(
+                    "Failed to get seasonal decorators for amenity",
+                    REPOSITORY_NAME,
+                    nameof(GetSeasonalDecoratorsForAmenityAsync),
+                    "GetSeasonalDecoratorsForAmenity",
+                    ex);
+            }
         }
 
         /// <inheritdoc/>
@@ -413,19 +861,153 @@ namespace Dapper.API.Data.Repositories.Amenities
         /// <inheritdoc/>
         public async Task<WIFIAmenity> GetWifiAmenityByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _logger.LogInformation($"Processing {REPOSITORY_NAME}.{nameof(GetWifiAmenityByIdAsync)}");
+
+                DynamicParameters param = new DynamicParameters();
+                param.Add("Id", id);
+
+                var query = $@"
+                    SELECT a.*, at.AmenityType, w.NetworkName, w.Password, w.SpeedMbps
+                    FROM Amenities a
+                    INNER JOIN AmenityTypes at ON a.AmenityTypeId = at.Id
+                    INNER JOIN WifiAmenities w ON a.Id = w.AmenityId
+                    WHERE a.Id = @Id AND at.AmenityType = {AmenityTypeLookup.wifi} 
+                        AND a.EntityStatusId = 1 AND w.EntityStatusId = 1";
+
+                var result = await _dataAccess.ReturnRowSql<dynamic>(query, param);
+                if (result == null)
+                    return null;
+
+                return new WIFIAmenity(
+                    result.Name, 
+                    result.Description, 
+                    result.PriceModifier, 
+                    result.IsStandard, 
+                    result.NetworkName, 
+                    result.Password, 
+                    result.SpeedMbps);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error in {REPOSITORY_NAME}.{nameof(GetWifiAmenityByIdAsync)}");
+                throw new RepositoryException(
+                    "Failed to get WiFi amenity by id",
+                    REPOSITORY_NAME,
+                    nameof(GetWifiAmenityByIdAsync),
+                    "GetWifiById",
+                    ex);
+            }
         }
 
         /// <inheritdoc/>
         public async Task RemoveDecoratorAsync(int decoratorId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _logger.LogInformation($"Processing {REPOSITORY_NAME}.{nameof(RemoveDecoratorAsync)}");
+
+                await _dataAccess.ExecuteInTransaction(async (connection, transaction, token) =>
+                {
+                    // Try to delete from both decorator tables (only one will succeed)
+                    DynamicParameters param = new DynamicParameters();
+                    param.Add("Id", decoratorId);
+                    param.Add("UpdatedAt", DateTime.UtcNow);
+                    param.Add("UpdatedBy", 0); // Replace with actual user ID when available
+                    param.Add("EntityStatusId", (int)EntityStatusEnum.DeletedForEveryone); // DeletedForEveryone
+
+                    // Update premium decorators
+                    string premiumSql = @"
+                        UPDATE PremiumAmenityDecorators 
+                        SET EntityStatusId = @EntityStatusId,
+                            UpdatedAt = @UpdatedAt,
+                            UpdatedBy = @UpdatedBy
+                        WHERE Id = @Id";
+
+                    await _dataAccess.ExecuteWithoutReturnSqlInTransaction(premiumSql, transaction, param, token);
+
+                    // Update seasonal decorators
+                    string seasonalSql = @"
+                        UPDATE SeasonalAmenityDecorators 
+                        SET EntityStatusId = @EntityStatusId,
+                            UpdatedAt = @UpdatedAt,
+                            UpdatedBy = @UpdatedBy
+                        WHERE Id = @Id";
+
+                    await _dataAccess.ExecuteWithoutReturnSqlInTransaction(seasonalSql, transaction, param, token);
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error in {REPOSITORY_NAME}.{nameof(RemoveDecoratorAsync)}");
+                throw new RepositoryException(
+                    "Failed to remove decorator",
+                    REPOSITORY_NAME,
+                    nameof(RemoveDecoratorAsync),
+                    "RemoveDecorator",
+                    ex);
+            }
         }
 
         /// <inheritdoc/>
         public async Task UpdateAmenityAsync(BaseAmenity amenity)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _logger.LogInformation($"Processing {REPOSITORY_NAME}.{nameof(UpdateAmenityAsync)}");
+
+                await _dataAccess.ExecuteInTransaction(async (connection, transaction, token) =>
+                {
+                    // Update the base amenity
+                    DynamicParameters param = new DynamicParameters();
+                    param.Add("Id", amenity.Id);
+                    param.Add("Name", amenity.Name);
+                    param.Add("Description", amenity.Description);
+                    param.Add("PriceModifier", amenity.PriceModifier);
+                    param.Add("IsStandard", amenity.IsStandard);
+                    param.Add("UpdatedAt", DateTime.UtcNow);
+                    param.Add("UpdatedBy", amenity.UpdatedBy);
+
+                    StringBuilder sql = new StringBuilder();
+                    sql.Append(@"
+                        UPDATE Amenities 
+                        SET Name = @Name,
+                            Description = @Description,
+                            PriceModifier = @PriceModifier,
+                            IsStandard = @IsStandard,
+                            UpdatedAt = @UpdatedAt,
+                            UpdatedBy = @UpdatedBy
+                        WHERE Id = @Id AND EntityStatusId = 1");
+
+                    await _dataAccess.ExecuteWithoutReturnSqlInTransaction(
+                        sql.ToString(), transaction, param, token);
+
+                    // Now update type-specific details
+                    if (amenity is WIFIAmenity wifiAmenity)
+                    {
+                        await UpdateWifiAmenityDetails(transaction, amenity.Id, wifiAmenity, token);
+                    }
+                    else if (amenity is MiniBarAmenity miniBarAmenity)
+                    {
+                        await UpdateMiniBarAmenityDetails(transaction, amenity.Id, miniBarAmenity, token);
+                    }
+                    else if (amenity is RoomServiceAmenity roomServiceAmenity)
+                    {
+                        await UpdateRoomServiceAmenityDetails(transaction, amenity.Id, roomServiceAmenity, token);
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error in {REPOSITORY_NAME}.{nameof(UpdateAmenityAsync)}");
+                throw new RepositoryException(
+                    "Failed to update amenity",
+                    REPOSITORY_NAME,
+                    nameof(UpdateAmenityAsync),
+                    "Update",
+                    ex);
+            }
         }
 
         #region Helper Methods
@@ -439,15 +1021,15 @@ namespace Dapper.API.Data.Repositories.Amenities
 
                 switch (amenityType)
                 {
-                    case "wifi":
+                    case AmenityTypeLookup.wifi:
                         amenity = await GetWifiAmenityByIdAsync(result.Id);
                         break;
 
-                    case "minibar":
+                    case AmenityTypeLookup.minibar:
                         amenity = await GetMiniBarAmenityByIdAsync(result.Id);
                         break;
 
-                    case "roomservice":
+                    case AmenityTypeLookup.roomservice:
                         amenity = await GetRoomServiceAmenityByIdAsync(result.Id);
                         break;
                     default:
@@ -621,6 +1203,108 @@ namespace Dapper.API.Data.Repositories.Amenities
                     (AmenityId, HoursAvailable, Is24Hours, EntityStatusId, CreatedAt, CreatedBy, UpdatedAt, UpdatedBy)
                 VALUES 
                     (@AmenityId, @HoursAvailable, @Is24Hours, @EntityStatusId, @CreatedAt, @CreatedBy, @UpdatedAt, @UpdatedBy)";
+
+            await _dataAccess.ExecuteWithoutReturnSqlInTransaction(sql, transaction, param, cancellationToken: token.Value);
+        }
+
+        private async Task UpdateWifiAmenityDetails(IDbTransaction transaction, int amenityId, WIFIAmenity wifiAmenity, System.Threading.CancellationToken? token = null)
+        {
+            DynamicParameters param = new DynamicParameters();
+            param.Add("AmenityId", amenityId);
+            param.Add("NetworkName", wifiAmenity.NetworkName);
+            param.Add("Password", wifiAmenity.Password);
+            param.Add("SpeedMbps", wifiAmenity.SpeedMbps);
+            param.Add("UpdatedAt", DateTime.UtcNow);
+            param.Add("UpdatedBy", wifiAmenity.UpdatedBy);
+
+            string sql = @"
+                UPDATE WifiAmenities 
+                SET NetworkName = @NetworkName,
+                    Password = @Password,
+                    SpeedMbps = @SpeedMbps,
+                    UpdatedAt = @UpdatedAt,
+                    UpdatedBy = @UpdatedBy
+                WHERE AmenityId = @AmenityId AND EntityStatusId = 1";
+
+            await _dataAccess.ExecuteWithoutReturnSqlInTransaction(sql, transaction, param, cancellationToken: token.Value);
+        }
+
+        private async Task UpdateMiniBarAmenityDetails(IDbTransaction transaction, int amenityId, MiniBarAmenity miniBarAmenity, System.Threading.CancellationToken? token = null)
+        {
+            // Update MiniBar details
+            DynamicParameters param = new DynamicParameters();
+            param.Add("AmenityId", amenityId);
+            param.Add("IsComplimentary", miniBarAmenity.IsComplimentary);
+            param.Add("UpdatedAt", DateTime.UtcNow);
+            param.Add("UpdatedBy", miniBarAmenity.UpdatedBy);
+
+            string sql = @"
+                UPDATE MiniBarAmenities 
+                SET IsComplimentary = @IsComplimentary,
+                    UpdatedAt = @UpdatedAt,
+                    UpdatedBy = @UpdatedBy
+                WHERE AmenityId = @AmenityId AND EntityStatusId = 1";
+
+            await _dataAccess.ExecuteWithoutReturnSqlInTransaction(sql, transaction, param, cancellationToken: token.Value);
+
+            // Get the MiniBarAmenityId
+            string idQuery = "SELECT Id FROM MiniBarAmenities WHERE AmenityId = @AmenityId AND EntityStatusId = 1";
+            int miniBarId = await _dataAccess.ReturnRowSqlInTransaction<int>(idQuery, transaction, param, cancellationToken: token.Value);
+
+            // Delete existing items
+            DynamicParameters deleteParam = new DynamicParameters();
+            deleteParam.Add("MiniBarAmenityId", miniBarId);
+
+            string deleteSql = @"
+                UPDATE MiniBarItems 
+                SET EntityStatusId = 3,
+                    UpdatedAt = @UpdatedAt,
+                    UpdatedBy = @UpdatedBy
+                WHERE MiniBarAmenityId = @MiniBarAmenityId";
+
+            await _dataAccess.ExecuteWithoutReturnSqlInTransaction(deleteSql, transaction, deleteParam, cancellationToken: token.Value);
+
+            // Add new items
+            if (miniBarAmenity.Items != null && miniBarAmenity.Items.Any())
+            {
+                foreach (var item in miniBarAmenity.Items)
+                {
+                    DynamicParameters itemParam = new DynamicParameters();
+                    itemParam.Add("MiniBarAmenityId", miniBarId);
+                    itemParam.Add("Item", item);
+                    itemParam.Add("EntityStatusId", 1); // Active
+                    itemParam.Add("CreatedAt", DateTime.UtcNow);
+                    itemParam.Add("CreatedBy", miniBarAmenity.CreatedBy);
+                    itemParam.Add("UpdatedAt", DateTime.UtcNow);
+                    itemParam.Add("UpdatedBy", miniBarAmenity.UpdatedBy);
+
+                    string itemSql = @"
+                        INSERT INTO MiniBarItems 
+                            (MiniBarAmenityId, Item, EntityStatusId, CreatedAt, CreatedBy, UpdatedAt, UpdatedBy)
+                        VALUES 
+                            (@MiniBarAmenityId, @Item, @EntityStatusId, @CreatedAt, @CreatedBy, @UpdatedAt, @UpdatedBy)";
+
+                    await _dataAccess.ExecuteWithoutReturnSqlInTransaction(itemSql, transaction, itemParam, cancellationToken: token.Value);
+                }
+            }
+        }
+
+        private async Task UpdateRoomServiceAmenityDetails(IDbTransaction transaction, int amenityId, RoomServiceAmenity roomServiceAmenity, System.Threading.CancellationToken? token = null)
+        {
+            DynamicParameters param = new DynamicParameters();
+            param.Add("AmenityId", amenityId);
+            param.Add("HoursAvailable", roomServiceAmenity.HoursAvailable);
+            param.Add("Is24Hours", roomServiceAmenity.Is24Hours);
+            param.Add("UpdatedAt", DateTime.UtcNow);
+            param.Add("UpdatedBy", roomServiceAmenity.UpdatedBy);
+
+            string sql = @"
+                UPDATE RoomServiceAmenities 
+                SET HoursAvailable = @HoursAvailable,
+                    Is24Hours = @Is24Hours,
+                    UpdatedAt = @UpdatedAt,
+                    UpdatedBy = @UpdatedBy
+                WHERE AmenityId = @AmenityId AND EntityStatusId = 1";
 
             await _dataAccess.ExecuteWithoutReturnSqlInTransaction(sql, transaction, param, cancellationToken: token.Value);
         }
